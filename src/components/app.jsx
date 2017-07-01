@@ -1,10 +1,11 @@
 import { h, Component } from 'preact';
 
-import './app.css';
+import styles from './app.css';
+
 export default class App extends Component {
   render() {
     return (
-      <div styleName="card">
+      <div className={styles.default.card}>
         <h1>Hello, World</h1>
       </div>
     );
