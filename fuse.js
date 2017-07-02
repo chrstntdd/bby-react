@@ -23,7 +23,12 @@ Sparky.task('config', () => {
     plugins: [
       [CSSModules(), CSSPlugin()],
       BabelPlugin(),
-      WebIndexPlugin({ template: 'src/index.html' })
+      WebIndexPlugin({ template: 'src/index.html' }),
+      isProduction &&
+        QuantumPlugin({
+          removeExportsInterop: false,
+          uglify: true
+        })
     ]
   });
   // VENDOR BUNDLE (FOR REACT)
