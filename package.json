@@ -16,6 +16,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "enzyme": "^2.9.1",
+    "flow": "^0.2.3",
     "fuse-box": "^2.1.0",
     "jest": "^20.0.4",
     "node-sass": "^4.5.3",
@@ -24,6 +25,7 @@
   },
   "scripts": {
     "start": "node fuse",
-    "dist": "node fuse dist"
+    "dist": "node fuse dist",
+    "watch": "nodemon server/index.js || node server/index.js"
   }
 }

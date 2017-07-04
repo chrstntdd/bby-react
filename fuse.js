@@ -16,14 +16,14 @@ let fuse,
 
 Sparky.task('config', () => {
   fuse = new FuseBox({
-    homeDir: 'src/',
-    output: 'dist/$name.js',
+    homeDir: 'client/src',
+    output: 'client/dist/$name.js',
     hash: isProduction,
     sourceMaps: !isProduction,
     plugins: [
       [CSSModules(), CSSPlugin()],
       BabelPlugin(),
-      WebIndexPlugin({ template: 'src/index.html' }),
+      WebIndexPlugin({ template: 'client/src/index.html' }),
       isProduction &&
         QuantumPlugin({
           removeExportsInterop: false,
