@@ -1,7 +1,8 @@
 require('dotenv').config();
-const jwt = require('jsonwebtoken'),
-  crypto = require('crypto'),
-  User = require('../models/user');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const User = require('../models/user');
+const nodemailer = require('nodemailer');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -30,10 +31,10 @@ exports.login = (req, res, next) => {
 };
 
 exports.register = (req, res, next) => {
-  const email = req.body.email,
-    firstName = req.body.firstName,
-    lastName = req.body.lastName,
-    password = req.body.password;
+  const email = req.body.email;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const password = req.body.password;
 
   // VALIDATION FOR REQUIRED FIELDS
   if (!email)
@@ -50,15 +51,14 @@ exports.register = (req, res, next) => {
     if (existingUser)
       return res.status(422).send({ error: 'That email is already in use' });
     // CREATE ACCOUNT
-    let user = new User({
+    const user = new User({
       email,
       password,
       profile: { firstName, lastName }
     });
-
     user.save((user, err) => {
       if (err) return next(err);
-      let userInfo = setUserInfo(user);
+      const userInfo = setUserInfo(user);
       res.status(201).json({
         token: `JWT ${generateToken(userInfo)}`,
         user: userInfo
@@ -80,4 +80,100 @@ exports.roleAuthorization = role => (req, res, next) => {
       .json({ error: "You're not authorized to view this content" });
     return next('Unauthorized');
   });
+};
+
+// = = = = = = = = = = = = = = = = =
+//- FORGOT PASSWORD ROUTE CONTROLLER
+// = = = = = = = = = = = = = = = = =
+exports.forgotPassword = (req, res, next) => {
+  const email = req.body.email;
+
+  User.findOne({ email }, (err, existingUser) => {
+    // NO USER. RENDER ERROR
+    if (err || existingUser == null) {
+      res.status(422).json({
+        error:
+          'Your request could not be processed as entered. Please try again.'
+      });
+      return next(err);
+    }
+    //  IF USER IS FOUND, GENERATE AND SAVE A TOKEN
+
+    crypto.randomBytes(48, (err, buffer) => {
+      const resetToken = buffer.toString('hex');
+      if (err) return next(err);
+
+      existingUser.resetPasswordToken = resetToken;
+      existingUser.resetPasswordExpires = Date.now() + 3600000; // 1 HOUR
+
+      existingUser.save(err => {
+        // IF THERE IS AN ERROR IN SAVING THE TOKEN, RETURN IT
+        if (err) return next(err);
+        const transporter = nodemailer.createTransport(SMTP_URL);
+        const emailData = {
+          to: existingUser.email,
+          from: FROM_EMAIL,
+          subject: 'Best Buy Manifest Tool Password Reset',
+          text:
+            `${'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+              'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+              'http://'}${req.headers.host}/reset-password/${resetToken}\n\n` +
+            `If you did not request this, please ignore this email and your password will remain unchanged.\n`
+        };
+        // SEND EMAIL
+        transporter.sendMail(emailData);
+        return res.status(200).json({
+          message:
+            'Please check your email for the link to reset your password.'
+        });
+      });
+    });
+  });
+};
+
+// = = = = = = = = = = = = = = = = =
+//- RESET PASSWORD ROUTE CONTROLLER
+// = = = = = = = = = = = = = = = = =
+
+exports.verifyToken = (req, res, next) => {
+  User.findOne(
+    {
+      resetPasswordToken: req.params.token,
+      resetPasswordExpires: { $gt: Date.now() }
+    },
+    (err, resetUser) => {
+      // IF A USER WASN'T FOUND, TOKEN IS EXPIRED OR INVALID, RETURN ERROR
+      if (!resetUser) {
+        res.status(422).json({
+          error:
+            'Your token has expired. Please try to reset your password again.'
+        });
+      }
+
+      // SAVE NEW PASSWORD AND CLEAR RESET TOKEN IN DB
+      resetUser.password = req.body.password;
+      resetUser.resetPasswordToken = undefined;
+      resetUser.resetPasswordExpires = undefined;
+
+      resetUser.save(err => {
+        if (err) return err;
+
+        // IF PASSWORD RESET IS SUCCESSFUL, ALERT VIA EMAIL
+        const transporter = nodemailer.createTransport(SMTP_URL);
+        const emailData = {
+          to: existingUser.email,
+          from: FROM_EMAIL,
+          subject:
+            'Your Best Buy Manifest Tool Password Password Has Been Reset',
+          text:
+            'You are receiving this email because you changed your password. \n\n' +
+            'If you did not request this change, please contact us immediately.'
+        };
+        transporter.sendMail(emailData);
+        return res.status(200).json({
+          message: 'Password changed successfully!'
+        });
+      });
+    }
+  );
 };
