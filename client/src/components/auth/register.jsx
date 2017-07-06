@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import { Redirect, withRouter } from 'react-router-dom';
 import { registerUser } from '../../actions';
 
 const form = reduxForm({
@@ -8,7 +9,7 @@ const form = reduxForm({
   validate
 });
 
-const referField = field =>
+const renderField = field =>
   <div>
     <input className="form-control" {...field.input} />
     {field.touched &&
@@ -54,7 +55,7 @@ export class Register extends React.Component {
   }
   render() {
     const { handleSubmit } = this.props;
-    return (
+    const form = (
       <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
         {this.renderAlert()}
         <div className="input-group">
@@ -76,12 +77,17 @@ export class Register extends React.Component {
         <button type="submit">Register</button>
       </form>
     );
+    // IF AUTHENTICATED, REDIRECT TO DASHBOARD
+    return this.props.authenticated ? <Redirect to="/dashboard" /> : form;
   }
 }
 
 const mapStateToProps = state => ({
   errorMessage: state.auth.error,
-  message: state.auth.message
+  message: state.auth.message,
+  authenticated: state.auth.authenticated
 });
 
-export default connect(mapStateToProps, { registerUser })(form(Register));
+export default withRouter(
+  connect(mapStateToProps, { registerUser })(form(Register))
+);
