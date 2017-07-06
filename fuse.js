@@ -32,10 +32,10 @@ Sparky.task('config', () => {
     ]
   });
   // VENDOR BUNDLE (FOR REACT)
-  vendor = fuse.bundle('vendor').instructions('~ index.js');
+  vendor = fuse.bundle('vendor').target('browser').instructions('~ index.js');
 
   // MAIN BUNDLE
-  app = fuse.bundle('app').instructions('> [index.js]');
+  app = fuse.bundle('app').target('browser').instructions('> [index.js]');
 });
 
 // RUN WITH YARN START
