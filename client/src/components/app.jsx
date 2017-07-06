@@ -1,22 +1,63 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import HomePage from './pages/home';
+import Register from './auth/register';
+import Login from './auth/login';
+import Logout from './auth/logout';
+import Dashboard from './dashboard';
+import NotFoundPage from './pages/not-found';
+import RequireAuth from './auth/require_auth';
 
 import styles from './app.css';
 
 export default class App extends React.Component {
   render() {
     return (
-      <div className={styles.default.card}>
-        <header>
-          <h1>Header here</h1>
-        </header>
+      <Router>
+        <div className={styles.default.card}>
+          <header>
+            <h1>Header here</h1>
+          </header>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/"> Home</Link>
+              </li>
+              <li>
+                <Link to="/register"> Register</Link>
+              </li>
+              <li>
+                <Link to="/login"> Login</Link>
+              </li>
+              <li>
+                <Link to="/dashboard"> Dashboard</Link>
+              </li>
+              <li>
+                <Link to="/logout"> Logout</Link>
+              </li>
+            </ul>
+          </nav>
 
-        <div className="root">
-          {this.props.children}
+          <main>
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+              <Route
+                exact
+                path="/dashboard"
+                component={RequireAuth(Dashboard)}
+              />
+              <Route exact path="/logout" component={Logout} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </main>
+
+          <footer>
+            <p>Footer here</p>
+          </footer>
         </div>
-        <footer>
-          <p>Footer here</p>
-        </footer>
-      </div>
+      </Router>
     );
   }
 }

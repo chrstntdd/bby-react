@@ -1,29 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import { Router, browserHistory } from 'react-router';
-import cookie from 'react-cookie';
+import { createStore, applyMiddleware, compose } from 'redux';
 import reduxThunk from 'redux-thunk';
-import routes from './routes';
+import Cookies from 'universal-cookie';
 import reducers from './reducers/index';
+import App from './components/app';
 import { AUTH_USER } from './actions/types';
 
-const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
-const store = createStoreWithMiddleware(reducers);
+const cookie = new Cookies();
 
-const token = cookie.load('token');
+// ADD IN REDUX DEBUGGER
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(
+  reducers,
+  composeEnhancers(applyMiddleware(reduxThunk))
+);
+
+const token = cookie.get('token');
 if (token) {
   store.dispatch({ type: AUTH_USER });
+  console.log('authorized as hell');
 }
 
 import './index.css';
 
-import App from './components/app';
-
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={browserHistory} routes={routes} />
+    <App />
   </Provider>,
   document.getElementById('root')
 );
