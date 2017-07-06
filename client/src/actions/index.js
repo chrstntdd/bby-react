@@ -1,48 +1,65 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
-import cookie from 'react-cookie';
-import { AUTH_USER, AUTH_ERROR, UNAUTH_USER, PROTECTED_TEST } from './types.js';
+import Cookies from 'universal-cookie';
+import {
+  AUTH_USER,
+  AUTH_ERROR,
+  UNAUTH_USER,
+  FORGOT_PASSWORD_REQUEST,
+  RESET_PASSWORD_REQUEST,
+  PROTECTED_TEST
+} from './types';
 
-const API_URL = 'http://localhost:27017/api';
+const API_URL = 'http://localhost:3000/api';
+const CLIENT_ROOT_URL = 'http://localhost:4444';
+
+// CREATE INSTANCE OF UNIVERSAL COOKIE
+const cookie = new Cookies();
+
+export const fetchUser = uid => dispatch => {
+  axios
+    .get(`${API_URL}/user/${uid}`, {
+      headers: { Authorization: cookie.get('token') }
+    })
+    .then(res => {
+      dispatch({
+        type: FETCH_USER,
+        payload: res.data.user
+      });
+    })
+    .catch(res => {
+      dispatch(errorHandler(res.data.error));
+    });
+};
 
 export const errorHandler = (dispatch, error, type) => {
-  let errorMessage = '';
+  console.error(`Error type: ${type}`);
+  console.error(error);
 
-  if (error.data.error) {
-    errorMessage = error.data.error;
-  } else if (error.data) {
-    errorMessage = error.data;
-  } else {
-    errorMessage = error;
+  let errorMessage = error.response ? error.response.data : error;
+
+  // NOT AUTHENTICATED ERROR
+  if (error.status === 401 || error.response.status === 401) {
+    errorMessage = 'You are not authorized to do this.';
+    return dispatch(logoutUser(errorMessage));
   }
 
-  if ((error.status = 401)) {
-    dispatch({
-      type: type,
-      payload: 'YOU CANT DO THIS. LOGIN.'
-    });
-    logoutUser();
-  } else {
-    dispatch({
-      type: type,
-      payload: errorMessage
-    });
-  }
+  dispatch({
+    type,
+    payload: errorMessage
+  });
 };
 
 export const loginUser = ({ email, password }) => dispatch => {
   axios
-    .post(`${API_URL}/auth/login`, {
-      email,
-      password
-    })
+    .post(`${API_URL}/auth/login`, { email, password })
     .then(res => {
-      cookie.save('token', res.data.token, { path: '/' });
+      cookie.set('token', res.data.token, { path: '/' });
+      cookie.set('user', res.data.user, { path: '/' });
       dispatch({ type: AUTH_USER });
-      window.location.href = `${CLIENT_ROOT_URL}/dashboard`;
     })
     .catch(err => {
-      errorHandler(dispatch, error.response, AUTH_ERROR);
+      errorHandler(dispatch, err.response, AUTH_ERROR);
     });
 };
 
@@ -60,25 +77,41 @@ export const registerUser = ({
       password
     })
     .then(res => {
-      cookie.save('token', res.data.token, { path: '/' });
+      cookie.set('token', res.data.token, { path: '/' });
+      cookie.set('token', res.data.user, { path: '/' });
       dispatch({ type: AUTH_USER });
-      window.location.href = `${CLIENT_ROOT_URL}/dashboard`;
     })
     .catch(err => {
-      errorHandler(dispatch, error.response, AUTH_ERROR);
+      errorHandler(dispatch, err.response, AUTH_ERROR);
     });
 };
 
-export const logoutUser = () => dispatch => {
-  dispatch({ type: UNAUTH_USER });
+export const logoutUser = error => dispatch => {
+  dispatch({ type: UNAUTH_USER, payload: error || '' });
   cookie.remove('token', { path: '/' });
-  window.location.href = `${CLIENT_ROOT_URL}/login`;
+  cookie.remove('user', { path: '/' });
+};
+
+export const getForgotPasswordToken = ({ email }) => dispatch => {
+  axios
+    .post(`${API_URL}/auth/forgot-password`, { email })
+    .then(res => {
+      dispatch({
+        type: FORGOT_PASSWORD_REQUEST,
+        payload: res.data.message
+      });
+      // REDIRECT TO LOGIN PAGE ON SUCCESSFUL PASSWORD RESET
+      // SOMEWHERE HERE
+    })
+    .catch(err => {
+      errorHandler(dispatch, errorHandler.response, AUTH_ERROR);
+    });
 };
 
 export const protectedTest = () => dispatch => {
   axios
     .get(`${API_URL}/protected`, {
-      headers: { Authorization: cookie.load('token') }
+      headers: { Authorization: cookie.get('token') }
     })
     .then(res => {
       dispatch({
@@ -87,6 +120,6 @@ export const protectedTest = () => dispatch => {
       });
     })
     .catch(err => {
-      errorHandler(dispatch, error.response, AUTH_ERROR);
+      errorHandler(dispatch, err.response, AUTH_ERROR);
     });
 };
