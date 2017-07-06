@@ -1,15 +1,16 @@
 require('dotenv').config();
 
-const express = require('express'),
-  app = express(),
-  bodyParser = require('body-parser'),
-  mongoose = require('mongoose'),
-  logger = require('morgan'),
-  router = require('./router');
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const logger = require('morgan');
+const router = require('./router');
 
 const DATABASE_URL = process.env.DATABASE_URL;
-const PORT = process.env.PORT || 27017;
+const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET;
+const env = app.get('env');
 
 // MIDDLEWARE STACK
 app.use((req, res, next) => {
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 });
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(logger('dev'));
 
 mongoose.Promise = global.Promise;
 
@@ -41,7 +43,9 @@ const runServer = (databaseUrl = DATABASE_URL, port = PORT) =>
       }
       server = app
         .listen(port, () => {
-          console.info(`Your app is listening on port ${port}. 🤔`);
+          console.info(
+            `Your server is listening on port ${port} in a ${env} environment 🤔`
+          );
           resolve();
         })
         .on('error', err => {

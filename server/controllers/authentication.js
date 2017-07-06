@@ -6,9 +6,9 @@ const jwt = require('jsonwebtoken'),
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const generateToken = user => {
-  return jwt.sign(user, JWT_SECRET), {
-    expiresIn: 10080 // MEASURED IN SECONDS
-  };
+  return jwt.sign(user, JWT_SECRET, {
+    expiresIn: '2h'
+  });
 };
 
 // SET USER INFO FROM REQUEST
@@ -22,7 +22,7 @@ const setUserInfo = req => ({
 
 // LOGIN ROUTE
 exports.login = (req, res, next) => {
-  let userInfo = setUserInfo(req.user);
+  const userInfo = setUserInfo(req.user);
   res.status(200).json({
     token: `JWT ${generateToken(userInfo)}`,
     user: userInfo
@@ -43,36 +43,28 @@ exports.register = (req, res, next) => {
   if (!password)
     return res.status(422).send({ error: 'You must enter a password' });
 
-  User.findOne(
-    {
-      email: email
-    },
-    (err, existingUser) => {
-      console.log(existingUser);
-      if (err) return next(err);
-      // IF EMAIL ALREADY EXISTS
-      if (existingUser)
-        return res.status(422).send({ error: 'That email is already in use' });
-      // CREATE ACCOUNT
-      let user = new User({
-        email: email,
-        password: password,
-        profile: {
-          firstName: firstName,
-          lastName: lastName
-        }
-      });
+  User.findOne({ email }, (err, existingUser) => {
+    console.log(existingUser);
+    if (err) return next(err);
+    // IF EMAIL ALREADY EXISTS
+    if (existingUser)
+      return res.status(422).send({ error: 'That email is already in use' });
+    // CREATE ACCOUNT
+    let user = new User({
+      email,
+      password,
+      profile: { firstName, lastName }
+    });
 
-      user.save((user, err) => {
-        if (err) return next(err);
-        let userInfo = setUserInfo(user);
-        res.status(201).json({
-          token: `JWT ${generateToken(userInfo)}`,
-          user: userInfo
-        });
+    user.save((user, err) => {
+      if (err) return next(err);
+      let userInfo = setUserInfo(user);
+      res.status(201).json({
+        token: `JWT ${generateToken(userInfo)}`,
+        user: userInfo
       });
-    }
-  );
+    });
+  });
 };
 
 exports.roleAuthorization = role => (req, res, next) => {
