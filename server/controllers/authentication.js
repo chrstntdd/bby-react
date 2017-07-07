@@ -5,6 +5,8 @@ const User = require('../models/user');
 const nodemailer = require('nodemailer');
 
 const JWT_SECRET = process.env.JWT_SECRET;
+const SMTP_URL = process.env.SMTP_URL;
+const FROM_EMAIL = process.env.FROM_EMAIL;
 
 const generateToken = user => {
   return jwt.sign(user, JWT_SECRET, {

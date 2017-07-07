@@ -1,10 +1,10 @@
 require('dotenv').config();
 
-const passport = require('passport'),
-  User = require('../models/user'),
-  JwtStrategy = require('passport-jwt').Strategy,
-  ExtractJwt = require('passport-jwt').ExtractJwt,
-  LocalStrategy = require('passport-local');
+const passport = require('passport');
+const User = require('../models/user');
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const LocalStrategy = require('passport-local');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
