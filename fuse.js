@@ -27,7 +27,8 @@ Sparky.task('config', () => {
       isProduction &&
         QuantumPlugin({
           removeExportsInterop: false,
-          uglify: true
+          uglify: true,
+          treeshake: true
         })
     ]
   });
@@ -35,7 +36,7 @@ Sparky.task('config', () => {
   vendor = fuse.bundle('vendor').target('browser').instructions('~ index.js');
 
   // MAIN BUNDLE
-  app = fuse.bundle('app').target('browser').instructions('> [index.js]');
+  app = fuse.bundle('app').target('browser').instructions('!> [index.js]');
 });
 
 // RUN WITH YARN START
