@@ -5,6 +5,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const logger = require('morgan');
+const validator = require('express-validator');
+const helmet = require('helmet');
 const router = require('./router');
 
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -23,8 +25,10 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Credentials', 'true');
   next();
 });
+app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(validator());
 app.use(logger('dev'));
 
 mongoose.Promise = global.Promise;

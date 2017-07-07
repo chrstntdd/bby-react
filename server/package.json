@@ -8,9 +8,12 @@
   },
   "dependencies": {
     "bcrypt-nodejs": "^0.0.3",
+    "bestbuy": "^1.1.0",
     "body-parser": "^1.17.2",
     "crypto": "^0.0.3",
     "express": "^4.15.3",
+    "express-validator": "^3.2.0",
+    "helmet": "^3.6.1",
     "jsonwebtoken": "^7.4.1",
     "mongoose": "^4.11.1",
     "morgan": "^1.8.2",
