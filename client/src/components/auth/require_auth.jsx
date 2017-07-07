@@ -7,8 +7,6 @@ export default ComposedComponent => {
   class Authentication extends React.Component {
     static propTypes = {
       router: PropTypes.object,
-      match: PropTypes.object.isRequired,
-      location: PropTypes.object.isRequired,
       history: PropTypes.object.isRequired
     };
     componentWillMount() {
