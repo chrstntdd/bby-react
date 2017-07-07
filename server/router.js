@@ -12,7 +12,7 @@ module.exports = app => {
   const apiRoutes = express.Router();
   const authRoutes = express.Router();
 
-  // SET AUTH ROUTES AS A SUBROUTE TO apiRoutes
+  // SET AUTH ROUTES AS A SUB-ROUTE TO apiRoutes
   apiRoutes.use('/auth', authRoutes);
   // REGISTRATION ROUTE
   authRoutes.post('/register', AuthenticationController.register);
@@ -44,7 +44,7 @@ module.exports = app => {
     req
       .checkBody(
         'upc',
-        "Looks like you didn't scan the right barcode. Please scan the UPC code."
+        "Looks like you didn't scan the right bar code. Please scan the UPC code."
       )
       .isNumeric()
       .isInt({ allow_leading_zeroes: true })
@@ -79,7 +79,8 @@ module.exports = app => {
           department: product.department,
           departmentId: product.departmentId,
           modelNumber: product.modelNumber,
-          classId: product.classId
+          classId: product.classId,
+          quantity: 1
         };
         // RETURN JSON RESPONSE
         res.json(productDetails);
