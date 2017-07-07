@@ -7,7 +7,9 @@ import {
   UNAUTH_USER,
   FORGOT_PASSWORD_REQUEST,
   RESET_PASSWORD_REQUEST,
-  PROTECTED_TEST
+  PROTECTED_TEST,
+  POST_UPC,
+  CHECK_EXISTENCE
 } from './types';
 
 const API_URL = 'http://localhost:3000/api';
@@ -16,19 +18,16 @@ const CLIENT_ROOT_URL = 'http://localhost:4444';
 // CREATE INSTANCE OF UNIVERSAL COOKIE
 const cookie = new Cookies();
 
-export const fetchUser = uid => dispatch => {
+export const getProductDetails = upc => dispatch => {
   axios
-    .get(`${API_URL}/user/${uid}`, {
+    .post(`${API_URL}/protected/bby-api`, upc, {
       headers: { Authorization: cookie.get('token') }
     })
     .then(res => {
-      dispatch({
-        type: FETCH_USER,
-        payload: res.data.user
-      });
+      dispatch({ type: POST_UPC, payload: res.data });
     })
-    .catch(res => {
-      dispatch(errorHandler(res.data.error));
+    .catch(err => {
+      errorHandler(dispatch, err.response, AUTH_ERROR);
     });
 };
 

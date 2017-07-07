@@ -4,6 +4,9 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
 import { protectedTest } from '../actions/index';
 
+// CHILD COMPONENTS
+import SearchBar from './search-bar';
+
 export class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -13,6 +16,7 @@ export class Dashboard extends React.Component {
     return (
       <div>
         <h1>DASHBOARD</h1>
+        <SearchBar />
       </div>
     );
   }

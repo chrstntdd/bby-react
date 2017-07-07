@@ -1,11 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import HomePage from './pages/home';
+
+// - AUTHENTICATION COMPONENTS
 import Register from './auth/register';
 import Login from './auth/login';
 import Logout from './auth/logout';
-import Dashboard from './dashboard';
+import ForgotPassword from './auth/forgot_password';
+import ResetPassword from './auth/reset_password';
+
+// - PAGES
 import NotFoundPage from './pages/not-found';
+import HomePage from './pages/home';
+
+// - MISC
+import Dashboard from './dashboard';
+
+// - HIGHER ORDER COMPONENTS (DECORATORS)
 import RequireAuth from './auth/require_auth';
 
 import styles from './app.css';
@@ -35,6 +45,12 @@ export default class App extends React.Component {
               <li>
                 <Link to="/logout"> Logout</Link>
               </li>
+              <li>
+                <Link to="/forgot-password"> Forgot Password?</Link>
+              </li>
+              <li>
+                <Link to="/logout"> Logout</Link>
+              </li>
             </ul>
           </nav>
 
@@ -49,6 +65,12 @@ export default class App extends React.Component {
                 component={RequireAuth(Dashboard)}
               />
               <Route exact path="/logout" component={Logout} />
+              <Route exact path="/forgot-password" component={ForgotPassword} />
+              <Route
+                exact
+                path="/reset-password/:token"
+                component={ResetPassword}
+              />
               <Route component={NotFoundPage} />
             </Switch>
           </main>
