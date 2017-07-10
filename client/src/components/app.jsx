@@ -43,9 +43,6 @@ export default class App extends React.Component {
                 <Link to="/dashboard"> Dashboard</Link>
               </li>
               <li>
-                <Link to="/logout"> Logout</Link>
-              </li>
-              <li>
                 <Link to="/forgot-password"> Forgot Password?</Link>
               </li>
               <li>
@@ -68,7 +65,7 @@ export default class App extends React.Component {
               <Route exact path="/forgot-password" component={ForgotPassword} />
               <Route
                 exact
-                path="/reset-password/:token"
+                path="/reset-password/:resetToken"
                 component={ResetPassword}
               />
               <Route component={NotFoundPage} />

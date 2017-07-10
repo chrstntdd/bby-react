@@ -28,16 +28,15 @@ export const validate = formProps => {
   return errors;
 };
 
-export const renderField = field => {
+const renderField = field =>
   <div>
-    <input {...field.input} />
+    <input className="form-control" {...field.input} />
     {field.touched &&
       field.error &&
       <div className="error">
         {field.error}
       </div>}
   </div>;
-};
 
 export class ResetPassword extends React.Component {
   static propTypes = {
@@ -53,8 +52,8 @@ export class ResetPassword extends React.Component {
       this.props.history.push('/dashboard');
     }
   }
-  handleFormSubmit({ password }) {
-    const resetToken = this.props.params.resetToken;
+  handleFormSubmit({ password }, formProps) {
+    const resetToken = this.props.match.params.resetToken;
     this.props.resetPassword(resetToken, { password });
   }
   renderAlert() {
@@ -90,11 +89,6 @@ export class ResetPassword extends React.Component {
             component={renderField}
             type="password"
           />
-          {passwordConfirm.touched &&
-            passwordConfirm.error &&
-            <div className="error">
-              {passwordConfirm.error}
-            </div>}
         </fieldset>
 
         {this.renderAlert()}

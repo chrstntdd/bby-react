@@ -163,7 +163,7 @@ exports.verifyToken = (req, res, next) => {
         // IF PASSWORD RESET IS SUCCESSFUL, ALERT VIA EMAIL
         const transporter = nodemailer.createTransport(SMTP_URL);
         const emailData = {
-          to: existingUser.email,
+          to: resetUser.email,
           from: FROM_EMAIL,
           subject:
             'Your Best Buy Manifest Tool Password Password Has Been Reset',
