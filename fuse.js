@@ -1,5 +1,6 @@
 const {
   FuseBox,
+  EnvPlugin,
   CSSPlugin,
   CSSModules,
   BabelPlugin,
@@ -8,22 +9,30 @@ const {
   UglifyJSPlugin,
   Sparky
 } = require('fuse-box');
+const path = require('path');
+const express = require('express');
 
-let fuse,
-  app,
-  vendor,
-  isProduction = false;
+let producer;
+let isProduction = false;
 
-Sparky.task('config', () => {
-  fuse = new FuseBox({
+Sparky.task('build', () => {
+  const fuse = FuseBox.init({
     homeDir: 'client/src',
-    output: 'client/dist/$name.js',
+    output: 'client/dist/static/$name.js',
     hash: isProduction,
     sourceMaps: !isProduction,
+    target: 'browser',
+    experimentalFeatures: true,
+    cache: !isProduction,
     plugins: [
+      EnvPlugin({ NODE_ENV: isProduction ? 'production' : 'development' }),
       [CSSModules(), CSSPlugin()],
       BabelPlugin(),
-      WebIndexPlugin({ template: 'client/src/index.html' }),
+      WebIndexPlugin({
+        template: 'client/src/index.html',
+        title: 'Best Buy Tools | By Christian Todd',
+        path: '/static/'
+      }),
       isProduction &&
         QuantumPlugin({
           removeExportsInterop: false,
@@ -32,28 +41,39 @@ Sparky.task('config', () => {
         })
     ]
   });
-  // VENDOR BUNDLE (FOR REACT)
-  vendor = fuse.bundle('vendor').target('browser').instructions('~ index.js');
+
+  // IF NOT IN PRODUCTION
+  // CONFIG DEV SERVER
+  fuse.dev({ root: false }, server => {
+    const dist = path.resolve('./client/dist');
+    const app = server.httpServer.app;
+    app.use('/static/', express.static(path.join(dist, 'static')));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(dist, '/static/index.html'));
+    });
+  });
+
+  // EXTRACT VENDOR DEPENDENCIES
+  const vendor = fuse.bundle('vendor').instructions('~ index.js');
+  if (!isProduction) {
+    vendor.hmr();
+  }
 
   // MAIN BUNDLE
-  app = fuse.bundle('app').target('browser').instructions('!> [index.js]');
-});
+  const app = fuse.bundle('app').instructions('!> [index.js]');
+  if (!isProduction) {
+    app.hmr().watch();
+  }
 
-// RUN WITH YARN START
-Sparky.task('default', ['clean', 'config'], () => {
-  fuse.dev();
-  // add dev instructions
-  app.watch().hmr();
   return fuse.run();
 });
 
-// RUN WITH YARN DIST
-Sparky.task('dist', ['prod-env', 'config'], () => {
-  return fuse.run();
-});
+// YARN START
+Sparky.task('default', ['clean', 'build'], () => {});
 
-// SPARKY TASKS
-Sparky.task('clean', () => Sparky.src('dist/').clean('dist/'));
-Sparky.task('prod-env', ['clean'], () => {
-  isProduction = true;
-});
+// YARN DIST
+Sparky.task('dist', ['clean', 'set-production-env', 'build'], () => {});
+
+// TASKS FOR BUILD
+Sparky.task('clean', () => Sparky.src('dist/*').clean('dist/'));
+Sparky.task('set-production-env', () => (isProduction = true));
