@@ -9,8 +9,9 @@ import {
   RESET_PASSWORD_REQUEST,
   PROTECTED_TEST,
   POST_UPC,
-  CHECK_EXISTENCE
+  INCREMENT_QUANTITY
 } from './types';
+const _find = require('lodash.find');
 
 const API_URL = 'http://localhost:3000/api';
 const CLIENT_ROOT_URL = 'http://localhost:4444';
@@ -18,17 +19,25 @@ const CLIENT_ROOT_URL = 'http://localhost:4444';
 // CREATE INSTANCE OF UNIVERSAL COOKIE
 const cookie = new Cookies();
 
-export const getProductDetails = upc => dispatch => {
-  axios
-    .post(`${API_URL}/protected/bby-api`, upc, {
-      headers: { Authorization: cookie.get('token') }
-    })
-    .then(res => {
-      dispatch({ type: POST_UPC, payload: res.data });
-    })
-    .catch(err => {
-      errorHandler(dispatch, err.response, AUTH_ERROR);
-    });
+export const getProductDetails = upc => (dispatch, getState) => {
+  const state = getState();
+  const products = state.table.products;
+  if (_find(products, upc) !== undefined) {
+    // IF THE PRODUCT EXISTS ALREADY
+    dispatch({ type: INCREMENT_QUANTITY, payload: upc });
+  } else {
+    // IF THE PRODUCT IS UNIQUE AND DOESN'T EXIST WITHIN THE ARRAY
+    axios
+      .post(`${API_URL}/protected/bby-api`, upc, {
+        headers: { Authorization: cookie.get('token') }
+      })
+      .then(res => {
+        dispatch({ type: POST_UPC, payload: res.data });
+      })
+      .catch(err => {
+        errorHandler(dispatch, err.response, AUTH_ERROR);
+      });
+  }
 };
 
 export const errorHandler = (dispatch, error, type) => {
@@ -104,6 +113,21 @@ export const getForgotPasswordToken = ({ email }) => dispatch => {
     })
     .catch(err => {
       errorHandler(dispatch, errorHandler.response, AUTH_ERROR);
+    });
+};
+
+export const resetPassword = (token, { password }) => dispatch => {
+  axios
+    .post(`${API_URL}/auth/reset-password/${token}`, { password })
+    .then(res => {
+      dispatch({
+        type: RESET_PASSWORD_REQUEST,
+        payload: res.data.message
+      });
+      // REDIRECT TO LOGIN PAGE WHEN SUCCESSFUL
+    })
+    .catch(err => {
+      errorHandler(dispatch, err.response, AUTH_ERROR);
     });
 };
 
