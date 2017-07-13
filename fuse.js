@@ -56,7 +56,7 @@ Sparky.task('build', () => {
   // EXTRACT VENDOR DEPENDENCIES
   const vendor = fuse.bundle('vendor').instructions('~ index.js');
   if (!isProduction) {
-    vendor.hmr();
+    vendor.hmr().watch();
   }
 
   // MAIN BUNDLE
