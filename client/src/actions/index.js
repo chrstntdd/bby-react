@@ -9,7 +9,8 @@ import {
   RESET_PASSWORD_REQUEST,
   PROTECTED_TEST,
   POST_UPC,
-  INCREMENT_QUANTITY
+  INCREMENT_QUANTITY,
+  GET_PRODUCTS_FROM_STORE
 } from './types';
 const _find = require('lodash.find');
 
@@ -145,4 +146,10 @@ export const protectedTest = () => dispatch => {
     .catch(err => {
       errorHandler(dispatch, err.response, AUTH_ERROR);
     });
+};
+
+export const getProductsFromStore = () => (dispatch, getState) => {
+  const state = getState();
+  const products = state.table.products;
+  dispatch({ type: GET_PRODUCTS_FROM_STORE, payload: products });
 };

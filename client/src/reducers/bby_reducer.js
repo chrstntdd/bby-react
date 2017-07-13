@@ -1,7 +1,44 @@
-import { POST_UPC, FORMAT_TABLE, INCREMENT_QUANTITY } from '../actions/types';
+import {
+  POST_UPC,
+  FORMAT_TABLE,
+  INCREMENT_QUANTITY,
+  GET_PRODUCTS_FROM_STORE
+} from '../actions/types';
 
 const INITIAL_STATE = {
-  products: [],
+  // FOR TESTING
+  products: [
+    {
+      name: 'Apple - Apple Pencil for iPad Pro - White',
+      sku: 4538802,
+      upc: '888462313674',
+      department: 'COMPUTERS',
+      departmentId: 6,
+      modelNumber: 'MK0C2AM/A',
+      classId: 492,
+      quantity: 5
+    },
+    {
+      name: 'Apple - TEST TEST TEST',
+      sku: 9234812,
+      upc: '719284372618',
+      department: 'APPLIANCES',
+      departmentId: 7,
+      modelNumber: 'T3ST071/B',
+      classId: 420,
+      quantity: 2
+    },
+    {
+      name: 'Apple - BREAST TEST NEST',
+      sku: 9175320,
+      upc: '817347123934',
+      department: 'TABLETS',
+      departmentId: 3,
+      modelNumber: 'T3ST05',
+      classId: 666,
+      quantity: 12
+    }
+  ],
   formatted: false
 };
 
@@ -25,6 +62,9 @@ export default function(state = INITIAL_STATE, action) {
               : product
         )
       };
+    case GET_PRODUCTS_FROM_STORE:
+      console.log(state.products);
+      return state.products;
     default:
       return state;
   }
