@@ -62,9 +62,6 @@ export default function(state = INITIAL_STATE, action) {
               : product
         )
       };
-    case GET_PRODUCTS_FROM_STORE:
-      console.log(state.products);
-      return state.products;
     default:
       return state;
   }

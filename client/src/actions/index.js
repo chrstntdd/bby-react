@@ -131,25 +131,3 @@ export const resetPassword = (token, { password }) => dispatch => {
       errorHandler(dispatch, err.response, AUTH_ERROR);
     });
 };
-
-export const protectedTest = () => dispatch => {
-  axios
-    .get(`${API_URL}/protected`, {
-      headers: { Authorization: cookie.get('token') }
-    })
-    .then(res => {
-      dispatch({
-        type: PROTECTED_TEST,
-        payload: res.data.content
-      });
-    })
-    .catch(err => {
-      errorHandler(dispatch, err.response, AUTH_ERROR);
-    });
-};
-
-export const getProductsFromStore = () => (dispatch, getState) => {
-  const state = getState();
-  const products = state.table.products;
-  dispatch({ type: GET_PRODUCTS_FROM_STORE, payload: products });
-};

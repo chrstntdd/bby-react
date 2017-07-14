@@ -9,10 +9,6 @@ import SearchBar from './search-bar';
 import ProductReactTable from './product-react-table';
 
 export class Dashboard extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.props.protectedTest();
-  // }
   render() {
     return (
       <div>
