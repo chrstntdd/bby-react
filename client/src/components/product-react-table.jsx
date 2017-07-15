@@ -25,6 +25,10 @@ export class ProductReactTable extends React.PureComponent {
         Header: 'Product Information',
         columns: [
           {
+            Header: 'Department Id',
+            accessor: 'departmentId'
+          },
+          {
             Header: 'Department',
             accessor: 'department'
           },
@@ -61,7 +65,6 @@ export class ProductReactTable extends React.PureComponent {
           {
             Header: 'Remove',
             filterable: false,
-            sortable: false,
             Cell: props =>
               <button onClick={() => this.removeItem(props.row.upc)}>
                 {' '}REMOVE
@@ -70,7 +73,6 @@ export class ProductReactTable extends React.PureComponent {
           {
             Header: '-1',
             filterable: false,
-            sortable: false,
             Cell: props =>
               <button onClick={() => this.decrementQuantity(props.row.upc)}>
                 -1
@@ -90,16 +92,12 @@ export class ProductReactTable extends React.PureComponent {
             defaultPageSize={10}
             filterable={true}
             resizable={true}
-            sortable={true}
+            sortable={false}
             showPagination={false}
             style={{
-              height: '400px' // This will force the table body to overflow and scroll, since there is not enough room
+              height: '500px' // This will force the table body to overflow and scroll, since there is not enough room
             }}
           />
-        </div>
-        <div style={{ textAlign: 'center' }}>
-          <br />
-          <em>Tip: Hold shift when sorting to multi-sort!</em>
         </div>
       </div>
     );

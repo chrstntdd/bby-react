@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { getProductDetails } from '../actions';
+import { getProductDetails, formatTable } from '../actions';
 
 const form = reduxForm({
   form: 'postUPC'
@@ -11,6 +11,9 @@ const form = reduxForm({
 export class SearchBar extends React.Component {
   handleFormSubmit(formProps) {
     this.props.getProductDetails(formProps);
+  }
+  handleTableFormat() {
+    this.props.formatTable();
   }
   renderAlert() {
     if (this.props.errorMessage) {
@@ -27,18 +30,22 @@ export class SearchBar extends React.Component {
   render() {
     const { handleSubmit } = this.props;
     return (
-      <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-        {this.renderAlert()}
-        <div className="input-group">
-          <Field
-            name="upc"
-            component="input"
-            type="number"
-            placeholder="Enter UPC"
-          />
-          <label htmlFor="upc">UPC</label>
-        </div>
-      </form>
+      <section>
+        <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+          {this.renderAlert()}
+          <div className="input-group">
+            <Field
+              name="upc"
+              component="input"
+              type="number"
+              placeholder="Enter UPC"
+            />
+            <label htmlFor="upc">UPC</label>
+          </div>
+        </form>
+        <button onClick={() => this.handleTableFormat()}> FORMAT TABLE</button>
+        <button> PRINT TABLE</button>
+      </section>
     );
   }
 }
@@ -48,5 +55,5 @@ const mapStateToProps = state => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, { getProductDetails })(form(SearchBar))
+  connect(mapStateToProps, { getProductDetails, formatTable })(form(SearchBar))
 );

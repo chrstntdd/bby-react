@@ -11,7 +11,8 @@ import {
   POST_UPC,
   INCREMENT_PRODUCT_QUANTITY,
   DECREMENT_PRODUCT_QUANTITY,
-  REMOVE_PRODUCT_FROM_TABLE
+  REMOVE_PRODUCT_FROM_TABLE,
+  FORMAT_TABLE
 } from './types';
 const _find = require('lodash.find');
 
@@ -48,6 +49,10 @@ export const decrementProductQuantity = upc => dispatch => {
 
 export const removeItemFromTable = upc => dispatch => {
   dispatch({ type: REMOVE_PRODUCT_FROM_TABLE, payload: upc });
+};
+
+export const formatTable = () => dispatch => {
+  dispatch({ type: FORMAT_TABLE });
 };
 
 export const errorHandler = (dispatch, error, type) => {
