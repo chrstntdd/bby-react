@@ -6,6 +6,13 @@ import 'react-table/react-table.css';
 import propTypes from 'prop-types';
 
 export class ProductReactTable extends React.PureComponent {
+  removeItem(upc) {
+    alert(`You just removed the item: ${upc}`);
+  }
+
+  decrementQuantity(upc) {
+    alert(`You just decremented the quantity of item: ${upc}`);
+  }
   render() {
     const { products } = this.props;
 
@@ -49,11 +56,19 @@ export class ProductReactTable extends React.PureComponent {
         columns: [
           {
             Header: 'Remove',
-            filterable: false
+            filterable: false,
+            Cell: props =>
+              <button onClick={() => this.removeItem(props.row.upc)}>
+                {' '}REMOVE
+              </button>
           },
           {
             Header: '-1',
-            filterable: false
+            filterable: false,
+            Cell: props =>
+              <button onClick={() => this.decrementQuantity(props.row.upc)}>
+                -1
+              </button>
           }
         ]
       }
@@ -70,6 +85,9 @@ export class ProductReactTable extends React.PureComponent {
             filterable={true}
             resizable={true}
             sortable={true}
+            style={{
+              height: '400px' // This will force the table body to overflow and scroll, since there is not enough room
+            }}
           />
         </div>
         <div style={{ textAlign: 'center' }}>
