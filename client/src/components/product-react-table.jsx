@@ -61,6 +61,7 @@ export class ProductReactTable extends React.PureComponent {
           {
             Header: 'Remove',
             filterable: false,
+            sortable: false,
             Cell: props =>
               <button onClick={() => this.removeItem(props.row.upc)}>
                 {' '}REMOVE
@@ -69,6 +70,7 @@ export class ProductReactTable extends React.PureComponent {
           {
             Header: '-1',
             filterable: false,
+            sortable: false,
             Cell: props =>
               <button onClick={() => this.decrementQuantity(props.row.upc)}>
                 -1
@@ -89,6 +91,7 @@ export class ProductReactTable extends React.PureComponent {
             filterable={true}
             resizable={true}
             sortable={true}
+            showPagination={false}
             style={{
               height: '400px' // This will force the table body to overflow and scroll, since there is not enough room
             }}

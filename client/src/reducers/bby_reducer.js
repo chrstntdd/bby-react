@@ -47,10 +47,10 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case POST_UPC:
-      // CONCAT IN NEW PRODUCT
+      // ADD IN NEW PRODUCT AT THE TOP OF THE ARRAY
       return Object.assign({}, state, {
         ...state,
-        products: state.products.concat(action.payload)
+        products: [action.payload, ...state.products]
       });
     case FORMAT_TABLE:
       return { ...state, formatted: true };
