@@ -4,14 +4,18 @@ import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import propTypes from 'prop-types';
+import {
+  decrementProductQuantity,
+  removeItemFromTable
+} from '../actions/index';
 
 export class ProductReactTable extends React.PureComponent {
   removeItem(upc) {
-    alert(`You just removed the item: ${upc}`);
+    this.props.removeItemFromTable(upc);
   }
 
   decrementQuantity(upc) {
-    alert(`You just decremented the quantity of item: ${upc}`);
+    this.props.decrementProductQuantity(upc);
   }
   render() {
     const { products } = this.props;
@@ -103,4 +107,8 @@ const mapStateToProps = state => ({
   products: state.table.products
 });
 
-export default withRouter(connect(mapStateToProps)(ProductReactTable));
+export default withRouter(
+  connect(mapStateToProps, { decrementProductQuantity, removeItemFromTable })(
+    ProductReactTable
+  )
+);

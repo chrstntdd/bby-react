@@ -1,8 +1,10 @@
 import {
   POST_UPC,
   FORMAT_TABLE,
-  INCREMENT_QUANTITY,
-  GET_PRODUCTS_FROM_STORE
+  INCREMENT_PRODUCT_QUANTITY,
+  GET_PRODUCTS_FROM_STORE,
+  REMOVE_PRODUCT_FROM_TABLE,
+  DECREMENT_PRODUCT_QUANTITY
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -52,14 +54,31 @@ export default function(state = INITIAL_STATE, action) {
       });
     case FORMAT_TABLE:
       return { ...state, formatted: true };
-    case INCREMENT_QUANTITY:
+    case INCREMENT_PRODUCT_QUANTITY:
       return {
         ...state,
         products: state.products.map(
           product =>
-            action.payload.upc === product.upc
+            action.payload === product.upc
               ? { ...product, quantity: product.quantity + 1 }
               : product
+        )
+      };
+    case DECREMENT_PRODUCT_QUANTITY:
+      return {
+        ...state,
+        products: state.products.map(
+          product =>
+            action.payload === product.upc
+              ? { ...product, quantity: product.quantity - 1 }
+              : product
+        )
+      };
+    case REMOVE_PRODUCT_FROM_TABLE:
+      return {
+        ...state,
+        products: state.products.filter(
+          product => product.upc !== action.payload
         )
       };
     default:

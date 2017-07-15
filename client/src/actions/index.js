@@ -9,8 +9,9 @@ import {
   RESET_PASSWORD_REQUEST,
   PROTECTED_TEST,
   POST_UPC,
-  INCREMENT_QUANTITY,
-  GET_PRODUCTS_FROM_STORE
+  INCREMENT_PRODUCT_QUANTITY,
+  DECREMENT_PRODUCT_QUANTITY,
+  REMOVE_PRODUCT_FROM_TABLE
 } from './types';
 const _find = require('lodash.find');
 
@@ -25,7 +26,7 @@ export const getProductDetails = upc => (dispatch, getState) => {
   const products = state.table.products;
   if (_find(products, upc) !== undefined) {
     // IF THE PRODUCT EXISTS ALREADY
-    dispatch({ type: INCREMENT_QUANTITY, payload: upc });
+    dispatch({ type: INCREMENT_PRODUCT_QUANTITY, payload: upc.upc });
   } else {
     // IF THE PRODUCT IS UNIQUE AND DOESN'T EXIST WITHIN THE ARRAY
     axios
@@ -39,6 +40,14 @@ export const getProductDetails = upc => (dispatch, getState) => {
         errorHandler(dispatch, err.response, AUTH_ERROR);
       });
   }
+};
+
+export const decrementProductQuantity = upc => dispatch => {
+  dispatch({ type: DECREMENT_PRODUCT_QUANTITY, payload: upc });
+};
+
+export const removeItemFromTable = upc => dispatch => {
+  dispatch({ type: REMOVE_PRODUCT_FROM_TABLE, payload: upc });
 };
 
 export const errorHandler = (dispatch, error, type) => {
