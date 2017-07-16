@@ -1,0 +1,12 @@
+.fusebox
+client/dist*
+.vscode
+bby-wireframe.xd
+
+# Node Modules
+client/node_modules  
+server/node_modules  
+node_modules/
+
+# dotenv environment variables file
+.env
