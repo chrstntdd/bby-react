@@ -2,14 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
-import 'react-table/react-table.css';
-import propTypes from 'prop-types';
 import {
   decrementProductQuantity,
   removeItemFromTable
 } from '../actions/index';
 
-export class ProductReactTable extends React.PureComponent {
+import styles from './table.scss';
+
+export class ProductTable extends React.PureComponent {
   removeItem(upc) {
     this.props.removeItemFromTable(upc);
   }
@@ -25,20 +25,25 @@ export class ProductReactTable extends React.PureComponent {
         Header: 'Product Information',
         columns: [
           {
-            Header: 'Department Id',
-            accessor: 'departmentId'
+            Header: 'Department',
+            accessor: 'departmentId',
+            minWidth: 100,
+            Cell: props => `${props.row.departmentId} - ${props.row.department}`
           },
           {
             Header: 'Department',
-            accessor: 'department'
+            accessor: 'department',
+            show: false
           },
           {
             Header: 'Class',
-            accessor: 'classId'
+            accessor: 'classId',
+            minWidth: 50
           },
           {
             Header: 'SKU',
-            accessor: 'sku'
+            accessor: 'sku',
+            minWidth: 75
           },
           {
             Header: 'Model Number',
@@ -50,31 +55,42 @@ export class ProductReactTable extends React.PureComponent {
           },
           {
             Header: 'UPC',
-            accessor: 'upc'
+            accessor: 'upc',
+            minWidth: 120
           },
           {
             Header: 'Quantity',
             accessor: 'quantity',
-            filterable: false
+            filterable: false,
+            minWidth: 75
           }
         ]
       },
       {
         Header: 'Actions',
+        headerClassName: 'hide-on-print',
         columns: [
           {
             Header: 'Remove',
+            headerClassName: 'hide-on-print',
             filterable: false,
             Cell: props =>
-              <button onClick={() => this.removeItem(props.row.upc)}>
+              <button
+                className="remove-btn"
+                onClick={() => this.removeItem(props.row.upc)}
+              >
                 {' '}REMOVE
               </button>
           },
           {
             Header: '-1',
+            headerClassName: 'hide-on-print',
             filterable: false,
             Cell: props =>
-              <button onClick={() => this.decrementQuantity(props.row.upc)}>
+              <button
+                className="decrement-btn"
+                onClick={() => this.decrementQuantity(props.row.upc)}
+              >
                 -1
               </button>
           }
@@ -83,23 +99,16 @@ export class ProductReactTable extends React.PureComponent {
     ];
 
     return (
-      <div>
-        <div className="table-wrap">
-          <ReactTable
-            className="-striped -highlight"
-            data={products}
-            columns={columns}
-            defaultPageSize={10}
-            filterable={true}
-            resizable={true}
-            sortable={false}
-            showPagination={false}
-            style={{
-              height: '500px' // This will force the table body to overflow and scroll, since there is not enough room
-            }}
-          />
-        </div>
-      </div>
+      <ReactTable
+        className="-striped -highlight"
+        data={products}
+        columns={columns}
+        defaultPageSize={10}
+        filterable={true}
+        resizable={true}
+        sortable={false}
+        showPagination={false}
+      />
     );
   }
 }
@@ -110,6 +119,6 @@ const mapStateToProps = state => ({
 
 export default withRouter(
   connect(mapStateToProps, { decrementProductQuantity, removeItemFromTable })(
-    ProductReactTable
+    ProductTable
   )
 );
