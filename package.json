@@ -1,5 +1,5 @@
 {
-  "name": "bby-preact",
+  "name": "bby-react",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Christian Todd <christiantodd27@icloud.com>",
@@ -33,6 +33,7 @@
     "jest": "^20.0.4",
     "node-sass": "^4.5.3",
     "nodemon": "^1.11.0",
+    "postcss-flexibility": "^2.0.0",
     "postcss-modules": "^0.8.0",
     "uglify-js": "^3.0.22"
   },

@@ -2,7 +2,8 @@ const {
   FuseBox,
   EnvPlugin,
   CSSPlugin,
-  CSSModules,
+  SassPlugin,
+  PostCSSPlugin,
   BabelPlugin,
   QuantumPlugin,
   WebIndexPlugin,
@@ -11,6 +12,7 @@ const {
 } = require('fuse-box');
 const path = require('path');
 const express = require('express');
+const POSTCSS_PLUGINS = [require('postcss-flexibility')];
 
 let producer;
 let isProduction = false;
@@ -26,7 +28,13 @@ Sparky.task('build', () => {
     cache: !isProduction,
     plugins: [
       EnvPlugin({ NODE_ENV: isProduction ? 'production' : 'development' }),
-      [CSSModules(), CSSPlugin()],
+      [
+        SassPlugin({
+          outputStyle: 'compressed'
+        }),
+        PostCSSPlugin(POSTCSS_PLUGINS),
+        CSSPlugin()
+      ],
       BabelPlugin(),
       WebIndexPlugin({
         template: 'client/src/index.html',
