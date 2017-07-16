@@ -15,6 +15,9 @@ export class SearchBar extends React.Component {
   handleTableFormat() {
     this.props.formatTable();
   }
+  handlePrintTable() {
+    window.print();
+  }
   renderAlert() {
     if (this.props.errorMessage) {
       return (
@@ -44,7 +47,7 @@ export class SearchBar extends React.Component {
           </div>
         </form>
         <button onClick={() => this.handleTableFormat()}> FORMAT TABLE</button>
-        <button> PRINT TABLE</button>
+        <button onClick={() => this.handlePrintTable()}> PRINT TABLE</button>
       </section>
     );
   }
