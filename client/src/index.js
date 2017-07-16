@@ -23,7 +23,7 @@ if (token) {
   console.log('authorized as hell');
 }
 
-import './index.css';
+import './index.scss';
 
 ReactDOM.render(
   <Provider store={store}>

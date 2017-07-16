@@ -18,13 +18,13 @@ import Dashboard from './dashboard';
 // - HIGHER ORDER COMPONENTS (DECORATORS)
 import RequireAuth from './auth/require_auth';
 
-import styles from './app.css';
+import './app.scss';
 
 export default class App extends React.Component {
   render() {
     return (
       <Router>
-        <div className={styles.default.card}>
+        <div className="card">
           <header>
             <h1>Header here</h1>
           </header>
