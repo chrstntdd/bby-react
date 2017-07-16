@@ -125,12 +125,17 @@ export default function(state = INITIAL_STATE, action) {
         products: [action.payload, ...state.products]
       });
     case INCREMENT_PRODUCT_QUANTITY:
+      // INCREMENT QUANTITY AND CALCULATE NEW VALUE BASED ON UPDATED QTY
       return {
         ...state,
         products: state.products.map(
           product =>
             action.payload === product.upc
-              ? { ...product, quantity: product.quantity + 1 }
+              ? {
+                  ...product,
+                  quantity: product.quantity + 1,
+                  totalValue: Math.round((product.quantity + 1) * product.value)
+                }
               : product
         )
       };
@@ -140,7 +145,11 @@ export default function(state = INITIAL_STATE, action) {
         products: state.products.map(
           product =>
             action.payload === product.upc
-              ? { ...product, quantity: product.quantity - 1 }
+              ? {
+                  ...product,
+                  quantity: product.quantity - 1,
+                  totalValue: Math.round((product.quantity - 1) * product.value)
+                }
               : product
         )
       };
