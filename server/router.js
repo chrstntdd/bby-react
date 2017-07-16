@@ -80,6 +80,8 @@ module.exports = app => {
           departmentId: product.departmentId,
           modelNumber: product.modelNumber,
           classId: product.classId,
+          value: product.salePrice,
+          totalValue: product.salePrice,
           quantity: 1
         };
         // RETURN JSON RESPONSE
