@@ -12,85 +12,28 @@ const INITIAL_STATE = {
   // FOR TESTING
   products: [
     {
-      name:
-        'WD - My Passport Ultra Metal Edition 1TB External USB 3.0 Portable Hard Drive - Silver',
-      sku: 8173008,
-      upc: '718037826806',
+      name: 'Apple - 9.7-Inch iPad Pro with WiFi - 32GB - Silver',
+      sku: 4901909,
+      upc: '888462761222',
       department: 'COMPUTERS',
       departmentId: 6,
-      modelNumber: 'WDBTYH0010BSL-NESN',
-      classId: 166,
+      modelNumber: 'MLMP2LL/A',
+      classId: 403,
+      value: 474.99,
+      totalValue: 474.99,
       quantity: 1
     },
     {
-      name: 'SCOSCHE - BTFreq™ Bluetooth FM Transmitter - Black',
-      sku: 5577305,
-      upc: '033991057494',
-      department: 'DIGITAL COMMUNICATIO',
-      departmentId: 3,
-      modelNumber: 'BTFM2A',
-      classId: 544,
+      name: 'Apple - Smart Keyboard for 9.7-inch iPad Pro - Gray',
+      sku: 5041505,
+      upc: '888462815611',
+      department: 'COMPUTERS',
+      departmentId: 6,
+      modelNumber: 'MM2L2AM/A',
+      classId: 492,
+      value: 149.99,
+      totalValue: 149.99,
       quantity: 1
-    },
-    {
-      name: 'Apple - USB Power Adapter - White',
-      sku: 6653042,
-      upc: '885909627301',
-      department: 'DIGITAL COMMUNICATIO',
-      departmentId: 3,
-      modelNumber: 'MD810LL/A',
-      classId: 544,
-      quantity: 1
-    },
-    {
-      name: 'GoPro - Charger - Black',
-      sku: 5580649,
-      upc: '818279015058',
-      department: 'PHOTO/COMMODITIES',
-      departmentId: 5,
-      modelNumber: 'AADBD-001',
-      classId: 56,
-      quantity: 1
-    },
-    {
-      name: "Insignia™ - 6' DisplayPort-to-HDMI Cable - Black",
-      sku: 6213011,
-      upc: '600603166860',
-      department: 'ACCESSORIES',
-      departmentId: 12,
-      modelNumber: 'NS-PD06502',
-      classId: 86,
-      quantity: 1
-    },
-    {
-      name: 'PowerA - Spectra Controller for Xbox One - Black',
-      sku: 8685189,
-      upc: '617885008184',
-      department: 'INTERACTIVE SOFTWARE',
-      departmentId: 9,
-      modelNumber: 'CPFA115536-03',
-      classId: 99,
-      quantity: 1
-    },
-    {
-      name: 'Metra - Installation Kit for Select Honda Vehicles - Black',
-      sku: 9797981,
-      upc: '086429215126',
-      department: 'MOBILE AUDIO',
-      departmentId: 11,
-      modelNumber: 'IBR-807HD',
-      classId: 18,
-      quantity: 1
-    },
-    {
-      name: 'Apple - BREAST TEST NEST',
-      sku: 9175320,
-      upc: '817347123934',
-      department: 'TABLETS',
-      departmentId: 3,
-      modelNumber: 'T3ST05',
-      classId: 666,
-      quantity: 12
     },
     {
       name: 'Apple - Apple Pencil for iPad Pro - White',
@@ -100,16 +43,93 @@ const INITIAL_STATE = {
       departmentId: 6,
       modelNumber: 'MK0C2AM/A',
       classId: 492,
-      quantity: 5
+      value: 99.99,
+      totalValue: 200,
+      quantity: 2
     },
     {
-      name: 'Apple - TEST TEST TEST',
-      sku: 9234812,
-      upc: '719284372618',
-      department: 'APPLIANCES',
-      departmentId: 7,
-      modelNumber: 'T3ST071/B',
-      classId: 420,
+      name: 'Metra - Installation Kit for Select Honda Vehicles - Black',
+      sku: 9797981,
+      upc: '086429215126',
+      department: 'MOBILE AUDIO',
+      departmentId: 11,
+      modelNumber: 'IBR-807HD',
+      classId: 18,
+      value: 16.99,
+      totalValue: 34,
+      quantity: 2
+    },
+    {
+      name: 'PowerA - Spectra Controller for Xbox One - Black',
+      sku: 8685189,
+      upc: '617885008184',
+      department: 'INTERACTIVE SOFTWARE',
+      departmentId: 9,
+      modelNumber: 'CPFA115536-03',
+      classId: 99,
+      value: 37.99,
+      totalValue: 76,
+      quantity: 2
+    },
+    {
+      name: "Insignia™ - 6' DisplayPort-to-HDMI Cable - Black",
+      sku: 6213011,
+      upc: '600603166860',
+      department: 'ACCESSORIES',
+      departmentId: 12,
+      modelNumber: 'NS-PD06502',
+      classId: 86,
+      value: 39.99,
+      totalValue: 80,
+      quantity: 2
+    },
+    {
+      name: 'GoPro - Charger - Black',
+      sku: 5580649,
+      upc: '818279015058',
+      department: 'PHOTO/COMMODITIES',
+      departmentId: 5,
+      modelNumber: 'AADBD-001',
+      classId: 56,
+      value: 49.99,
+      totalValue: 100,
+      quantity: 2
+    },
+    {
+      name: 'Apple - USB Power Adapter - White',
+      sku: 6653042,
+      upc: '885909627301',
+      department: 'DIGITAL COMMUNICATIO',
+      departmentId: 3,
+      modelNumber: 'MD810LL/A',
+      classId: 544,
+      value: 16.99,
+      totalValue: 34,
+      quantity: 2
+    },
+    {
+      name: 'SCOSCHE - BTFreq™ Bluetooth FM Transmitter - Black',
+      sku: 5577305,
+      upc: '033991057494',
+      department: 'DIGITAL COMMUNICATIO',
+      departmentId: 3,
+      modelNumber: 'BTFM2A',
+      classId: 544,
+      value: 39.99,
+      totalValue: 80,
+      quantity: 2
+    },
+    {
+      name:
+        'WD - My Passport Ultra Metal Edition 1TB External USB 3.0 Portable Hard Drive - Silver',
+      sku: 8173008,
+      upc: '718037826806',
+      department: 'COMPUTERS',
+      departmentId: 6,
+      modelNumber: 'WDBTYH0010BSL-NESN',
+      classId: 166,
+      value: 44.99,
+      totalValue: 90,
       quantity: 2
     }
   ],
