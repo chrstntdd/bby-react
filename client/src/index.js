@@ -7,6 +7,7 @@ import Cookies from 'universal-cookie';
 import reducers from './reducers/index';
 import App from './components/app';
 import { AUTH_USER } from './actions/types';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const cookie = new Cookies();
 
@@ -27,7 +28,9 @@ import './index.scss';
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </Provider>,
   document.getElementById('root')
 );
