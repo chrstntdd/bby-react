@@ -8,11 +8,25 @@ const {
   QuantumPlugin,
   WebIndexPlugin,
   UglifyJSPlugin,
+  CSSResourcePlugin,
   Sparky
 } = require('fuse-box');
 const path = require('path');
 const express = require('express');
-const POSTCSS_PLUGINS = [require('postcss-flexibility')];
+const autoprefixer = require('autoprefixer');
+
+const POSTCSS_PLUGINS = [
+  require('postcss-flexibility'),
+  autoprefixer({
+    browsers: [
+      'Chrome >= 52',
+      'FireFox >= 44',
+      'Safari >= 7',
+      'Explorer 11',
+      'last 4 Edge versions'
+    ]
+  })
+];
 
 let producer;
 let isProduction = false;
@@ -21,6 +35,7 @@ Sparky.task('build', () => {
   const fuse = FuseBox.init({
     homeDir: 'client/src',
     output: 'client/dist/static/$name.js',
+    log: !isProduction,
     hash: isProduction,
     sourceMaps: !isProduction,
     target: 'browser',
@@ -33,6 +48,10 @@ Sparky.task('build', () => {
           outputStyle: 'compressed'
         }),
         PostCSSPlugin(POSTCSS_PLUGINS),
+        CSSResourcePlugin({
+          dist: 'client/dist/static',
+          resolve: f => `static/${f}`
+        }),
         CSSPlugin()
       ],
       BabelPlugin(),
@@ -44,6 +63,7 @@ Sparky.task('build', () => {
       isProduction &&
         QuantumPlugin({
           removeExportsInterop: false,
+          bakeApiIntoBundle: 'app',
           uglify: true,
           treeshake: true
         })
@@ -53,11 +73,11 @@ Sparky.task('build', () => {
   // IF NOT IN PRODUCTION
   // CONFIG DEV SERVER
   fuse.dev({ root: false }, server => {
-    const dist = path.resolve('./client/dist');
+    const dist = path.join(__dirname, 'client/dist');
     const app = server.httpServer.app;
     app.use('/static/', express.static(path.join(dist, 'static')));
     app.get('*', (req, res) => {
-      res.sendFile(path.join(dist, '/static/index.html'));
+      res.sendFile(path.join(dist, 'static/index.html'));
     });
   });
 
@@ -83,5 +103,5 @@ Sparky.task('default', ['clean', 'build'], () => {});
 Sparky.task('dist', ['clean', 'set-production-env', 'build'], () => {});
 
 // TASKS FOR BUILD
-Sparky.task('clean', () => Sparky.src('dist/*').clean('dist/'));
+Sparky.task('clean', () => Sparky.src('client/dist/*').clean('client/dist/'));
 Sparky.task('set-production-env', () => (isProduction = true));
