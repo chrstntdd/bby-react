@@ -1,0 +1,16 @@
+.input-group {
+  width: 33%;
+  margin: 0 auto;
+}
+
+#upcInput {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 7px 14px;
+  transition: 0.4s;
+  background: transparent;
+  &:focus {
+    outline-color: transparent;
+    border: 1px solid red;
+  }
+}
