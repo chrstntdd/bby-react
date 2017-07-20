@@ -2,9 +2,10 @@ const {
   FuseBox,
   EnvPlugin,
   CSSPlugin,
+  SVGPlugin,
   SassPlugin,
-  PostCSSPlugin,
   BabelPlugin,
+  PostCSSPlugin,
   QuantumPlugin,
   WebIndexPlugin,
   UglifyJSPlugin,
@@ -54,6 +55,7 @@ Sparky.task('build', () => {
         }),
         CSSPlugin()
       ],
+      SVGPlugin(),
       BabelPlugin(),
       WebIndexPlugin({
         template: 'client/src/index.html',
