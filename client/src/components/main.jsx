@@ -10,7 +10,7 @@ import ResetPassword from './auth/reset_password';
 
 // - PAGES
 import NotFoundPage from './pages/not-found';
-import HomePage from './pages/home';
+import LandingPage from '../components/pages/landing-page/landing-page';
 
 // - MISC
 import Dashboard from './dashboard';
@@ -21,7 +21,7 @@ import RequireAuth from './auth/require_auth';
 const Main = () =>
   <main>
     <Switch>
-      <Route exact path="/" component={HomePage} />
+      <Route exact path="/" component={LandingPage} />
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/dashboard" component={RequireAuth(Dashboard)} />
