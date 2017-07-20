@@ -42,6 +42,9 @@ export class Login extends React.Component {
           <label htmlFor="">Password</label>
         </div>
         <button type="submit">Login</button>
+        <Link to="/forgot-password">
+          <button>Forgot password?</button>
+        </Link>
       </form>
     );
     // IF AUTHENTICATED, REDIRECT TO DASHBOARD

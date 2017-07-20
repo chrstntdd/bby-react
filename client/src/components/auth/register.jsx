@@ -3,6 +3,10 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Redirect, withRouter } from 'react-router-dom';
 import { registerUser } from '../../actions';
+import './register.scss';
+
+const Scroll = require('react-scroll');
+const Element = Scroll.Element;
 
 const form = reduxForm({
   form: 'register',
@@ -56,29 +60,33 @@ export class Register extends React.Component {
   render() {
     const { handleSubmit } = this.props;
     const form = (
-      <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-        {this.renderAlert()}
-        <div className="input-group">
-          <Field name="firstName" component={renderField} type="text" />
-          <label htmlFor="">First Name</label>
-        </div>
-        <div className="input-group">
-          <Field name="lastName" component={renderField} type="text" />
-          <label htmlFor="">Last Name</label>
-        </div>
-        <div className="input-group">
-          <Field name="email" component={renderField} type="text" />
-          <label htmlFor="">Email</label>
-        </div>
-        <div className="input-group">
-          <Field name="password" component={renderField} type="password" />
-          <label htmlFor="">Password</label>
-        </div>
-        <button type="submit">Register</button>
-      </form>
+      <Element id="register-section" name="register">
+        <section id="register-card">
+          <h1>Register</h1>
+          <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+            {this.renderAlert()}
+            <div className="input-group">
+              <Field name="firstName" component={renderField} type="text" />
+              <label htmlFor="">First Name</label>
+            </div>
+            <div className="input-group">
+              <Field name="lastName" component={renderField} type="text" />
+              <label htmlFor="">Last Name</label>
+            </div>
+            <div className="input-group">
+              <Field name="email" component={renderField} type="text" />
+              <label htmlFor="">Email</label>
+            </div>
+            <div className="input-group">
+              <Field name="password" component={renderField} type="password" />
+              <label htmlFor="">Password</label>
+            </div>
+            <button type="submit">Register</button>
+          </form>
+        </section>
+      </Element>
     );
-    // IF AUTHENTICATED, REDIRECT TO DASHBOARD
-    return this.props.authenticated ? <Redirect to="/dashboard" /> : form;
+    return form;
   }
 }
 
