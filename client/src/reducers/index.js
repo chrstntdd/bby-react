@@ -14,6 +14,8 @@ const rootReducer = combineReducers({
           return undefined;
         case INCREMENT_PRODUCT_QUANTITY:
           return undefined;
+        case 'persist/REHYDRATE':
+          return { ...state, persistedState: action.payload };
         default:
           return state;
       }

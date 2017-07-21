@@ -8,15 +8,22 @@ import reducers from './reducers/index';
 import App from './components/app';
 import { AUTH_USER } from './actions/types';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { autoRehydrate, persistStore } from 'redux-persist';
 
 const cookie = new Cookies();
 
 // ADD IN REDUX DEBUGGER
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+// CONFIGURE STORE TO PERSIST STATE AND USE REDUX DEV TOOLS
 const store = createStore(
   reducers,
-  composeEnhancers(applyMiddleware(reduxThunk))
+  undefined,
+  composeEnhancers(applyMiddleware(reduxThunk), autoRehydrate())
 );
+
+// BEGIN PERSISTING STATE
+persistStore(store);
 
 const token = cookie.get('token');
 if (token) {

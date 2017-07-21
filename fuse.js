@@ -36,7 +36,7 @@ Sparky.task('build', () => {
   const fuse = FuseBox.init({
     homeDir: 'client/src',
     output: 'client/dist/static/$name.js',
-    log: !isProduction,
+    log: true,
     hash: isProduction,
     sourceMaps: !isProduction,
     target: 'browser',
@@ -65,7 +65,7 @@ Sparky.task('build', () => {
       isProduction &&
         QuantumPlugin({
           removeExportsInterop: false,
-          bakeApiIntoBundle: 'app',
+          bakeApiIntoBundle: 'vendor',
           uglify: true,
           treeshake: true
         })
