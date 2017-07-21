@@ -1,14 +1,15 @@
-$BESTBUY_BLUE: #003b64;
-$BESTBUY_YELLOW: #fff200;
+@import '../colors.scss';
 
 @media print {
   .hide-on-print,
   .ReactTable .rt-thead input,
   .ReactTable .rt-td button,
   .-filters,
-  header,
-  nav,
-  section {
+  #side-bar *,
+  input,
+  img,
+  header *,
+  nav {
     display: none;
   }
   html,
@@ -20,6 +21,7 @@ $BESTBUY_YELLOW: #fff200;
     border-left: 1px solid black;
   }
   .ReactTable {
+    width: 100%;
     height: auto;
   }
 }

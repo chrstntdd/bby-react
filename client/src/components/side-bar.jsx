@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatTable, printTable } from '../actions';
+import { formatTable, printTable, clearTable } from '../actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
@@ -17,8 +17,13 @@ export class SideBar extends React.Component {
   }
 
   handlePrintTable() {
-    window.print();
+    this.props.printTable();
   }
+
+  handelClearTable() {
+    this.props.clearTable();
+  }
+
   render() {
     return (
       <aside id="side-bar">
@@ -47,7 +52,7 @@ export class SideBar extends React.Component {
           </button>
         </div>
         <div className="btn-container">
-          {' '}<button>
+          <button onClick={() => this.handelClearTable()}>
             <img id="clear-icon" src={clearIcon} alt="" />
             <p>Clear</p>
           </button>
@@ -58,7 +63,10 @@ export class SideBar extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  products: state.table.products
+  products: state.table.products,
+  printing: state.table.printing
 });
 
-export default withRouter(connect(mapStateToProps, { formatTable })(SideBar));
+export default withRouter(
+  connect(mapStateToProps, { formatTable, printTable, clearTable })(SideBar)
+);

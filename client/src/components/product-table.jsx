@@ -4,10 +4,11 @@ import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
 import {
   decrementProductQuantity,
-  removeItemFromTable
+  removeItemFromTable,
+  printTable
 } from '../actions/index';
 
-import styles from './table.scss';
+import styles from './product-table.scss';
 
 export class ProductTable extends React.PureComponent {
   removeItem(upc) {
@@ -18,7 +19,7 @@ export class ProductTable extends React.PureComponent {
     this.props.decrementProductQuantity(upc);
   }
   render() {
-    const { products } = this.props;
+    const { products, printing } = this.props;
 
     const columns = [
       {
@@ -61,19 +62,17 @@ export class ProductTable extends React.PureComponent {
           {
             Header: 'Quantity',
             accessor: 'quantity',
-            filterable: false,
             minWidth: 75
           }
         ]
       },
       {
         Header: 'Actions',
-        headerClassName: 'hide-on-print',
         columns: [
           {
             Header: 'Remove',
-            headerClassName: 'hide-on-print',
             filterable: false,
+            show: !printing, // <-- NEEDED TO HIDE COLUMNS WHEN PRINTING
             Cell: props =>
               <button
                 className="remove-btn"
@@ -84,8 +83,8 @@ export class ProductTable extends React.PureComponent {
           },
           {
             Header: '-1',
-            headerClassName: 'hide-on-print',
             filterable: false,
+            show: !printing, // <-- NEEDED TO HIDE COLUMNS WHEN PRINTING
             Cell: props =>
               <button
                 className="decrement-btn"
@@ -103,22 +102,27 @@ export class ProductTable extends React.PureComponent {
         className="-striped -highlight"
         data={products}
         columns={columns}
-        defaultPageSize={10}
         filterable={true}
         resizable={true}
         sortable={false}
         showPagination={false}
+        style={{
+          height: '100%' // This will force the table body to overflow and scroll, since there is not enough room
+        }}
       />
     );
   }
 }
 
 const mapStateToProps = state => ({
-  products: state.table.products
+  products: state.table.products,
+  printing: state.table.printing
 });
 
 export default withRouter(
-  connect(mapStateToProps, { decrementProductQuantity, removeItemFromTable })(
-    ProductTable
-  )
+  connect(mapStateToProps, {
+    decrementProductQuantity,
+    removeItemFromTable,
+    printTable
+  })(ProductTable)
 );

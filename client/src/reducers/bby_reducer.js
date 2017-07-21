@@ -4,7 +4,9 @@ import {
   INCREMENT_PRODUCT_QUANTITY,
   GET_PRODUCTS_FROM_STORE,
   REMOVE_PRODUCT_FROM_TABLE,
-  DECREMENT_PRODUCT_QUANTITY
+  DECREMENT_PRODUCT_QUANTITY,
+  PRINT_TABLE,
+  CLEAR_TABLE
 } from '../actions/types';
 const orderBy = require('lodash.orderby');
 
@@ -133,7 +135,8 @@ const INITIAL_STATE = {
       quantity: 2
     }
   ],
-  formatted: false
+  formatted: false,
+  printing: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -189,6 +192,17 @@ export default function(state = INITIAL_STATE, action) {
           ['asc', 'asc', 'asc']
         ),
         formatted: true
+      };
+
+    case PRINT_TABLE:
+      return {
+        ...state,
+        printing: !state.printing
+      };
+    case CLEAR_TABLE:
+      return {
+        ...state,
+        products: []
       };
     default:
       return state;

@@ -12,7 +12,9 @@ import {
   INCREMENT_PRODUCT_QUANTITY,
   DECREMENT_PRODUCT_QUANTITY,
   REMOVE_PRODUCT_FROM_TABLE,
-  FORMAT_TABLE
+  FORMAT_TABLE,
+  PRINT_TABLE,
+  CLEAR_TABLE
 } from './types';
 const _find = require('lodash.find');
 
@@ -53,6 +55,18 @@ export const removeItemFromTable = upc => dispatch => {
 
 export const formatTable = () => dispatch => {
   dispatch({ type: FORMAT_TABLE });
+};
+
+export const printTable = () => dispatch => {
+  dispatch({ type: PRINT_TABLE });
+  setTimeout(() => {
+    window.print();
+    dispatch({ type: PRINT_TABLE });
+  }, 100);
+};
+
+export const clearTable = () => dispatch => {
+  dispatch({ type: CLEAR_TABLE });
 };
 
 export const errorHandler = (dispatch, error, type) => {
