@@ -1,16 +1,19 @@
-.input-group {
-  width: 33%;
-  margin: 0 auto;
-}
+@import '../colors.scss';
 
-#upcInput {
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  padding: 7px 14px;
-  transition: 0.4s;
-  background: transparent;
-  &:focus {
-    outline-color: transparent;
-    border: 1px solid red;
+#search-section {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  #upcInput {
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 2px;
+    padding: 14px 28px;
+    transition: 0.4s;
+    background: transparent;
+    &:focus {
+      outline-color: transparent;
+      border: 2px solid $BESTBUY_BLUE;
+    }
   }
 }

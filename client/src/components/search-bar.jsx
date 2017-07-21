@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { getProductDetails, formatTable } from '../actions';
+import { getProductDetails } from '../actions';
 
 import './search-bar.scss';
 
@@ -30,14 +30,6 @@ export class SearchBar extends React.Component {
     this.props.getProductDetails({ upc: inputValue.toString() });
   }
 
-  handleTableFormat() {
-    this.props.formatTable();
-  }
-
-  handlePrintTable() {
-    window.print();
-  }
-
   renderAlert() {
     if (this.props.errorMessage) {
       return (
@@ -53,7 +45,7 @@ export class SearchBar extends React.Component {
   render() {
     const { onChange } = this.props;
     return (
-      <section>
+      <section id="search-section">
         <form>
           {this.renderAlert()}
           <div className="input-group">
@@ -67,9 +59,6 @@ export class SearchBar extends React.Component {
             />
           </div>
         </form>
-
-        <button onClick={() => this.handleTableFormat()}> FORMAT TABLE</button>
-        <button onClick={() => this.handlePrintTable()}> PRINT TABLE</button>
       </section>
     );
   }
@@ -81,7 +70,6 @@ const mapStateToProps = state => ({
 
 export default withRouter(
   connect(mapStateToProps, {
-    getProductDetails,
-    formatTable
+    getProductDetails
   })(form(SearchBar))
 );
