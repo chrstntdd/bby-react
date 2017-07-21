@@ -59,7 +59,7 @@ Sparky.task('build', () => {
       BabelPlugin(),
       WebIndexPlugin({
         template: 'client/src/index.html',
-        title: 'Best Buy Tools | By Christian Todd',
+        title: 'Quantified | By Christian Todd',
         path: '/static/'
       }),
       isProduction &&
