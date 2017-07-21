@@ -6,22 +6,34 @@
   .ReactTable .rt-td button,
   .-filters,
   #side-bar *,
+  #search-section,
   input,
   img,
   header *,
   nav {
     display: none;
   }
+
+  #dashboard-wrapper {
+    height: auto !important;
+  }
+
   html,
+  #main-table-area,
+  #main-content-area,
+  .card,
   body {
     margin: 0;
     padding: 0;
+    height: auto;
+    overflow: visible;
   }
   .rt-resizable-header {
     border-left: 1px solid black;
   }
   .ReactTable {
-    width: 100%;
+    margin: 0;
+    width: auto;
     height: auto;
   }
 }

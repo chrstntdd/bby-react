@@ -11,6 +11,10 @@ import {
 import styles from './product-table.scss';
 
 export class ProductTable extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    console.log(this.props.products.length);
+  }
   removeItem(upc) {
     this.props.removeItemFromTable(upc);
   }
@@ -105,9 +109,10 @@ export class ProductTable extends React.PureComponent {
         filterable={true}
         resizable={true}
         sortable={false}
+        pageSize={`${products.length < 10 ? 10 : products.length}`}
         showPagination={false}
         style={{
-          height: '100%' // This will force the table body to overflow and scroll, since there is not enough room
+          height: `${printing ? 'auto' : '600px'}`
         }}
       />
     );

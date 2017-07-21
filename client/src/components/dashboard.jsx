@@ -13,7 +13,7 @@ import './dashboard.scss';
 export class Dashboard extends React.Component {
   render() {
     return (
-      <div id="dashboard-body">
+      <div id="dashboard-wrapper">
         <DashboardHeader />
         <div id="main-content-area">
           <SideBar />
