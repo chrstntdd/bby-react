@@ -13,16 +13,6 @@ export class ForgotPassword extends React.Component {
   static propTypes = {
     router: PropTypes.object
   };
-  // componentWillMount() {
-  //   if (this.props.authenticated) {
-  //     this.props.history.push('/dashboard');
-  //   }
-  // }
-  // componentWillUpdate(nextProps) {
-  //   if (nextProps.authenticated) {
-  //     this.props.history.push('/dashboard');
-  //   }
-  // }
   handleFormSubmit(formProps) {
     this.props.getForgotPasswordToken(formProps);
   }
