@@ -45,5 +45,21 @@
     "dist": "node fuse dist",
     "watch": "nodemon server/index.js || node server/index.js",
     "test": "jest"
+  },
+  "jest": {
+    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.scss$": "<rootDir>\\config\\jest\\scssTransform.js"
+    },
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web"
+    }
   }
 }
