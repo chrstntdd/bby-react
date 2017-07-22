@@ -25,10 +25,14 @@ const setUserInfo = req => ({
 
 // LOGIN ROUTE
 exports.login = (req, res, next) => {
-  const userInfo = setUserInfo(req.user);
-  res.status(200).json({
-    token: `JWT ${generateToken(userInfo)}`,
-    user: userInfo
+  const email = req.body.email;
+  User.findOne({ email }, (err, user) => {
+    console.log(user);
+    const userInfo = setUserInfo(req.user);
+    res.status(200).json({
+      token: `JWT ${generateToken(userInfo)}`,
+      user: userInfo
+    });
   });
 };
 
@@ -47,40 +51,63 @@ exports.register = (req, res, next) => {
     return res.status(422).send({ error: 'You must enter a password' });
 
   User.findOne({ email }, (err, existingUser) => {
-    console.log(existingUser);
     if (err) return next(err);
     // IF EMAIL ALREADY EXISTS
     if (existingUser)
       return res.status(422).send({ error: 'That email is already in use' });
-    // CREATE ACCOUNT
-    const user = new User({
-      email,
-      password,
-      profile: { firstName, lastName }
-    });
-    user.save((user, err) => {
+
+    // GENERATE VERIFY TOKEN
+    crypto.randomBytes(48, (err, buffer) => {
       if (err) return next(err);
-      const userInfo = setUserInfo(user);
-      res.status(201).json({
-        token: `JWT ${generateToken(userInfo)}`,
-        user: userInfo
+      const verifyToken = buffer.toString('hex');
+      // CREATE ACCOUNT
+      let user = new User({
+        email,
+        password,
+        isVerified: false,
+        confirmationEmailToken: verifyToken,
+        profile: { firstName, lastName }
+      });
+      user.save((err, user) => {
+        if (err) return next(err);
+        const transporter = nodemailer.createTransport(SMTP_URL);
+        const emailData = {
+          to: user.email,
+          from: FROM_EMAIL,
+          subject: 'Quantified Account Confirmation',
+          text:
+            `${'You are receiving this because you (or someone else) have requested an account with Quantified.\n\n' +
+              'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+              'http://'}${req.headers.host}/confirm-email/${verifyToken}\n\n` +
+            `If you did not request this, please ignore this email.\n`
+        };
+
+        transporter.sendMail(emailData);
+        return res.status(200).json({
+          message: 'Please check your work email to confirm your account.'
+        });
       });
     });
   });
 };
 
-exports.roleAuthorization = role => (req, res, next) => {
-  const user = req.user;
-  User.findById(user._id, (err, foundUser) => {
-    if (err) {
-      res.status(422).json({ error: 'No user found' });
-      return next(err);
+exports.verifyEmail = (req, res, next) => {
+  User.findOne({ confirmationEmailToken: req.params.token }, (err, user) => {
+    // IF THE USER ISN'T FOUND
+    if (!user) {
+      res.status(422).json({ error: 'Account not found' });
     }
-    if (foundUser.role == role) return next();
-    res
-      .status(401)
-      .json({ error: "You're not authorized to view this content" });
-    return next('Unauthorized');
+    // IF A USER iS FOUND, FLIP VERIFIED FLAG AND SET AUTH HEADERS
+    user.isVerified = true;
+    user.save(err => {
+      if (err) return next(err);
+      const userInfo = setUserInfo(user);
+      res.status(200).json({
+        token: `JWT ${generateToken(userInfo)}`,
+        user: userInfo
+      });
+      next();
+    });
   });
 };
 

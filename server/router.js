@@ -25,12 +25,12 @@ module.exports = app => {
     '/reset-password/:token',
     AuthenticationController.verifyToken
   );
-  // TEST PROTECTED ROUTE
-  apiRoutes.get('/protected', requireAuth, (req, res) => {
-    res.send({
-      content: 'THE PROTECTED ROUTE IS WORKING MY GUY'
-    });
-  });
+  // EMAIL CONFIRMATION ROUTE
+  authRoutes.post(
+    '/confirm-email/:token',
+    AuthenticationController.verifyEmail
+  );
+
   // = = = = = = = = = = = = = =
   // BEST BUY API UPC CALL
   // = = = = = = = = = = = = = =

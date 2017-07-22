@@ -114,9 +114,8 @@ export const registerUser = ({
       password
     })
     .then(res => {
-      cookie.set('token', res.data.token, { path: '/' });
-      cookie.set('token', res.data.user, { path: '/' });
-      dispatch({ type: AUTH_USER });
+      // TELL USER TO CHECK THEIR EMAIL
+      console.log('CHECK YOUR EMAIL FAM');
     })
     .catch(err => {
       errorHandler(dispatch, err.response, AUTH_ERROR);
@@ -158,4 +157,16 @@ export const resetPassword = (token, { password }) => dispatch => {
     .catch(err => {
       errorHandler(dispatch, err.response, AUTH_ERROR);
     });
+};
+
+export const confirmEmail = token => dispatch => {
+  axios.post(`${API_URL}/auth/confirm-email/${token}`).then(res => {
+    if (res.status === 200) {
+      cookie.set('token', res.data.token, { path: '/' });
+      cookie.set('user', res.data.user, { path: '/' });
+      dispatch({ type: AUTH_USER });
+    } else {
+      dispatch({ type: UNAUTH_USER });
+    }
+  });
 };

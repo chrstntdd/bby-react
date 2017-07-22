@@ -23,7 +23,9 @@ const store = createStore(
 );
 
 // BEGIN PERSISTING STATE
-persistStore(store);
+persistStore(store, { blacklist: ['auth'] }, () => {
+  console.log('rehydration complete!');
+});
 
 const token = cookie.get('token');
 if (token) {

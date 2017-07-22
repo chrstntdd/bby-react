@@ -7,6 +7,7 @@ import Login from './auth/login';
 import Logout from './auth/logout';
 import ForgotPassword from './auth/forgot_password';
 import ResetPassword from './auth/reset_password';
+import VerifyEmail from './auth/verify_email';
 
 // - PAGES
 import NotFoundPage from './pages/not-found';
@@ -32,6 +33,7 @@ const Main = () =>
         path="/reset-password/:resetToken"
         component={ResetPassword}
       />
+      <Route path="/confirm-email/:verifyToken" component={VerifyEmail} />
       <Route component={NotFoundPage} />
     </Switch>
   </main>;
