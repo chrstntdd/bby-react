@@ -2,6 +2,7 @@
 client/dist*
 .vscode
 bby-wireframe.xd
+.netlify
 
 # Node Modules
 client/node_modules  
