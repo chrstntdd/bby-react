@@ -1,6 +1,10 @@
 @import '../../colors.scss';
+@import '../../rwd-helpers.scss';
 
 #register-section {
+  &:focus {
+    outline: none;
+  }
   width: 100vw;
   height: 100vh;
   background-color: lightblue;
@@ -8,21 +12,30 @@
   flex-direction: column;
   justify-content: center;
   #register-card {
+    @media (min-width: $bp-xxsmall) {
+      height: 100vh;
+      width: between(320px, 1536px, $bp-xxsmall, $bp-xlarge);
+    }
+    display: flex;
+    flex-direction: column;
     margin: 0 auto;
+    z-index: 1;
     background-color: lemonchiffon;
     width: 80vw;
     h1 {
+      display: block;
+      order: 0;
       text-align: center;
       color: white;
     }
     form {
       display: flex;
-      flex-direction: column;
-      input {
-        width: 100%;
-        padding: 20px;
-      }
+      flex-wrap: wrap;
+      justify-content: center;
+      height: 100%;
       button {
+        align-self: flex-end;
+        order: 10;
         display: block;
         margin: 10px auto;
         border: 2px solid lightgrey;

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Redirect, withRouter } from 'react-router-dom';
 import { registerUser } from '../../actions';
+import Input from './form-input';
 import './register.scss';
 
 const Scroll = require('react-scroll');
@@ -13,15 +14,15 @@ const form = reduxForm({
   validate
 });
 
-const renderField = field =>
-  <div>
-    <input className="form-control" {...field.input} />
-    {field.touched &&
-      field.error &&
-      <div className="error">
-        {field.error}
-      </div>}
-  </div>;
+// const renderField = field =>
+//   <div>
+//     <input className="form-control" {...field.input} />
+//     {field.touched &&
+//       field.error &&
+//       <div className="error">
+//         {field.error}
+//       </div>}
+//   </div>;
 
 const validate = formProps => {
   const errors = {};
@@ -42,6 +43,43 @@ const validate = formProps => {
 };
 
 export class Register extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      registerInputs: [
+        {
+          name: 'firstName',
+          type: 'text',
+          label: 'First Name'
+        },
+        {
+          name: 'lastName',
+          type: 'text',
+          label: 'Last Name'
+        },
+        {
+          name: 'storeNumber',
+          type: 'number',
+          label: 'Store Number'
+        },
+        {
+          name: 'employeeNumber',
+          type: 'text',
+          label: 'Employee Number'
+        },
+        {
+          name: 'password',
+          type: 'password',
+          label: 'Password'
+        },
+        {
+          name: 'confirmPassword',
+          type: 'password',
+          label: 'Confirm Password'
+        }
+      ]
+    };
+  }
   handleFormSubmit(formProps) {
     this.props.registerUser(formProps);
   }
@@ -59,34 +97,22 @@ export class Register extends React.Component {
   }
   render() {
     const { handleSubmit } = this.props;
-    const form = (
+
+    const formInputs = this.state.registerInputs.map((input, index) =>
+      <Input key={index} {...input} />
+    );
+    return (
       <Element id="register-section" name="register">
         <section id="register-card">
           <h1>Register</h1>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
             {this.renderAlert()}
-            <div className="input-group">
-              <Field name="firstName" component={renderField} type="text" />
-              <label htmlFor="">First Name</label>
-            </div>
-            <div className="input-group">
-              <Field name="lastName" component={renderField} type="text" />
-              <label htmlFor="">Last Name</label>
-            </div>
-            <div className="input-group">
-              <Field name="email" component={renderField} type="text" />
-              <label htmlFor="">Email</label>
-            </div>
-            <div className="input-group">
-              <Field name="password" component={renderField} type="password" />
-              <label htmlFor="">Password</label>
-            </div>
+            {formInputs}
             <button type="submit">Register</button>
           </form>
         </section>
       </Element>
     );
-    return form;
   }
 }
 

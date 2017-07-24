@@ -5,14 +5,15 @@ import { Link, Redirect, withRouter } from 'react-router-dom';
 import { loginUser } from '../../actions';
 import Cookies from 'universal-cookie';
 
-const cookie = new Cookies();
-const token = cookie.get('token');
-
 const form = reduxForm({
   form: 'login'
 });
 
 export class Login extends React.Component {
+  componentDidMount() {
+    const cookie = new Cookies();
+    const token = cookie.get('token');
+  }
   handleFormSubmit(formProps) {
     this.props.loginUser(formProps);
   }

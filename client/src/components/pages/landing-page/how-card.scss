@@ -1,13 +1,13 @@
 .how-card {
   width: 25vh;
-  height: 80%;
+  height: 40vh;
   margin: auto 0;
   background-color: white;
   display: block;
   img {
     display: block;
     margin: 0 auto;
-    height: 25vh;
+    max-height: 25vw;
   }
   h3 {
     text-transform: uppercase;

@@ -1,0 +1,63 @@
+@import '../../rwd-helpers.scss';
+@import '../../colors.scss';
+
+.input-wrapper {
+  position: relative;
+  margin-right: 10px;
+  @media (min-width: $bp-xxsmall) {
+    width: between(300px, 450px, $bp-xxsmall, $bp-xlarge);
+  }
+  height: 30px;
+  :focus {
+    outline: none;
+  }
+  .input-control {
+    background-color: transparent;
+    color: transparent;
+    z-index: -2;
+  }
+  input {
+    letter-spacing: 1px;
+    height: 100%;
+    width: 100%;
+    color: #333;
+    border: 0;
+    padding: 4px 0;
+    border-bottom: 1px solid black;
+    background-color: transparent;
+  }
+
+  .focus-border {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #3399ff;
+    transition: 0.4s;
+  }
+  .register-label {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    color: #aaa;
+    transition: 0.3s;
+    z-index: -1;
+    letter-spacing: 0.5px;
+    @media (min-width: $bp-xxsmall) {
+      font-size: between(16px, 14px, $bp-xxsmall, $bp-xlarge);
+    }
+  }
+  input:focus ~ .focus-border,
+  input.has-content ~ .focus-border {
+    width: 100%;
+    transition: 0.4s;
+  }
+  input:focus ~ .register-label,
+  input.has-content ~ .register-label {
+    top: -16px; //HOW HIGH THE .register-label RAISES UP
+    font-size: 14px;
+    color: #3399ff;
+    transition: 0.3s;
+  }
+}
