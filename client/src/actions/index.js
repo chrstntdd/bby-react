@@ -22,7 +22,8 @@ const API_URL = 'http://localhost:3000/api';
 const CLIENT_ROOT_URL = 'http://localhost:4444';
 
 // CREATE INSTANCE OF UNIVERSAL COOKIE
-const cookie = new Cookies();
+// COMMENT OUT TO RUN TESTS!
+// const cookie = new Cookies();
 
 export const getProductDetails = upc => (dispatch, getState) => {
   const state = getState();
