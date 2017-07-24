@@ -50,10 +50,15 @@ Sparky.task('build', () => {
         }),
         PostCSSPlugin(POSTCSS_PLUGINS),
         CSSResourcePlugin({
-          dist: 'client/dist/static',
-          resolve: f => `static/${f}`
+          inline: true
         }),
-        CSSPlugin()
+        CSSPlugin(
+          {
+            // group: 'bundle.css',
+            // outFile: 'client/dist/static/bundle.css',
+            // inject: file => `client/dist/static/${file}`
+          }
+        )
       ],
       SVGPlugin(),
       BabelPlugin(),
@@ -96,6 +101,11 @@ Sparky.task('build', () => {
   }
 
   return fuse.run();
+});
+
+// COPY FILES TO BUILD FOLDER
+Sparky.task('copy', () => {
+  Sparky.src('./config/netlify/**/**.*').dest('/client/dist/static');
 });
 
 // YARN START
