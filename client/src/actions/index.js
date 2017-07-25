@@ -23,7 +23,7 @@ const CLIENT_ROOT_URL = 'http://localhost:4444';
 
 // CREATE INSTANCE OF UNIVERSAL COOKIE
 // COMMENT OUT TO RUN TESTS!
-// const cookie = new Cookies();
+const cookie = new Cookies();
 
 export const getProductDetails = upc => (dispatch, getState) => {
   const state = getState();
@@ -88,9 +88,13 @@ export const errorHandler = (dispatch, error, type) => {
   });
 };
 
-export const loginUser = ({ email, password }) => dispatch => {
+/* takes in props from login form */
+export const loginUser = ({ employeeNumber, password }) => dispatch => {
   axios
-    .post(`${API_URL}/auth/login`, { email, password })
+    .post(`${API_URL}/auth/login`, {
+      email: `${employeeNumber}@bestbuy.com`,
+      password
+    })
     .then(res => {
       cookie.set('token', res.data.token, { path: '/' });
       cookie.set('user', res.data.user, { path: '/' });
@@ -102,17 +106,19 @@ export const loginUser = ({ email, password }) => dispatch => {
 };
 
 export const registerUser = ({
-  email,
   firstName,
   lastName,
-  password
+  password,
+  employeeNumber,
+  storeNumber
 }) => dispatch => {
   axios
     .post(`${API_URL}/auth/register`, {
-      email,
       firstName,
       lastName,
-      password
+      password,
+      employeeNumber,
+      storeNumber
     })
     .then(res => {
       // TELL USER TO CHECK THEIR EMAIL

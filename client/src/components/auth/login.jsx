@@ -35,8 +35,8 @@ export class Login extends React.Component {
       <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
         {this.renderAlert()}
         <div className="input-group">
-          <Field name="email" component="input" type="text" />
-          <label htmlFor="">Email</label>
+          <Field name="employeeNumber" component="input" type="text" />
+          <label htmlFor="">Employee Number</label>
         </div>
         <div className="input-group">
           <Field name="password" component="input" type="password" />
