@@ -3,7 +3,6 @@
 
 .input-wrapper {
   position: relative;
-  margin-right: 10px;
   @media (min-width: $bp-xxsmall) {
     width: between(300px, 450px, $bp-xxsmall, $bp-xlarge);
   }
@@ -17,10 +16,11 @@
     z-index: -2;
   }
   input {
+    font-size: 2rem;
     letter-spacing: 1px;
     height: 100%;
     width: 100%;
-    color: #333;
+    color: white;
     border: 0;
     padding: 4px 0;
     border-bottom: 1px solid black;
@@ -45,7 +45,7 @@
     z-index: -1;
     letter-spacing: 0.5px;
     @media (min-width: $bp-xxsmall) {
-      font-size: between(16px, 14px, $bp-xxsmall, $bp-xlarge);
+      font-size: between(18px, 16px, $bp-xxsmall, $bp-xlarge);
     }
   }
   input:focus ~ .focus-border,
@@ -55,7 +55,7 @@
   }
   input:focus ~ .register-label,
   input.has-content ~ .register-label {
-    top: -16px; //HOW HIGH THE .register-label RAISES UP
+    top: -20px; //HOW HIGH THE .register-label RAISES UP
     font-size: 14px;
     color: #3399ff;
     transition: 0.3s;

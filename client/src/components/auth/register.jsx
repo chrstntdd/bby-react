@@ -14,16 +14,6 @@ const form = reduxForm({
   validate
 });
 
-// const renderField = field =>
-//   <div>
-//     <input className="form-control" {...field.input} />
-//     {field.touched &&
-//       field.error &&
-//       <div className="error">
-//         {field.error}
-//       </div>}
-//   </div>;
-
 const validate = formProps => {
   const errors = {};
 
@@ -104,11 +94,11 @@ export class Register extends React.Component {
     return (
       <Element id="register-section" name="register">
         <section id="register-card">
-          <h1>Register</h1>
+          <h1>Register here</h1>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
             {this.renderAlert()}
             {formInputs}
-            <button type="submit">Register</button>
+            <button type="submit">Sign Up</button>
           </form>
         </section>
       </Element>
