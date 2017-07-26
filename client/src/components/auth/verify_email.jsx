@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { confirmEmail } from '../../actions/index';
 
+import './verify_email.scss';
+
 export class VerifyEmail extends React.Component {
   componentDidMount() {
     const verifyEmailToken = this.props.match.params.verifyToken;
@@ -14,10 +16,12 @@ export class VerifyEmail extends React.Component {
   }
   render() {
     return (
-      <div>
-        <h1>Thanks for registering!</h1>
-        <button onClick={() => this.redirectToDash()}>Get started</button>
-      </div>
+      <section id="confirm-email-wrapper">
+        <div id="confirm-email-card">
+          <h1>Thank you for registering you account!</h1>
+          <button onClick={() => this.redirectToDash()}>Get started</button>
+        </div>
+      </section>
     );
   }
 }

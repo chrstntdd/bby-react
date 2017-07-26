@@ -4,12 +4,32 @@ import { Field, reduxForm } from 'redux-form';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import { loginUser } from '../../actions';
 import Cookies from 'universal-cookie';
+import Input from './form-input';
+import './form-input.scss';
+import './login.scss';
 
 const form = reduxForm({
   form: 'login'
 });
 
 export class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loginInputs: [
+        {
+          name: 'employeeNumber',
+          type: 'text',
+          label: 'Employee Number'
+        },
+        {
+          name: 'password',
+          type: 'password',
+          label: 'Password'
+        }
+      ]
+    };
+  }
   componentDidMount() {
     const cookie = new Cookies();
     const token = cookie.get('token');
@@ -31,22 +51,23 @@ export class Login extends React.Component {
   }
   render() {
     const { handleSubmit } = this.props;
+
+    const formInputs = this.state.loginInputs.map((input, index) =>
+      <Input key={index} {...input} />
+    );
+
     const form = (
-      <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-        {this.renderAlert()}
-        <div className="input-group">
-          <Field name="employeeNumber" component="input" type="text" />
-          <label htmlFor="">Employee Number</label>
+      <section id="login-wrapper">
+        <div id="login-card">
+          <h1>Sign In</h1>
+          <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+            {this.renderAlert()}
+            {formInputs}
+            <button type="submit">Login</button>
+            <Link to="/forgot-password">Forgot password?</Link>
+          </form>
         </div>
-        <div className="input-group">
-          <Field name="password" component="input" type="password" />
-          <label htmlFor="">Password</label>
-        </div>
-        <button type="submit">Login</button>
-        <Link to="/forgot-password">
-          <button>Forgot password?</button>
-        </Link>
-      </form>
+      </section>
     );
     // IF AUTHENTICATED, REDIRECT TO DASHBOARD
     return this.props.authenticated ? <Redirect to="/dashboard" /> : form;
