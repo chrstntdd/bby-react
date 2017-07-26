@@ -5,6 +5,11 @@ import { withRouter } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import { resetPassword } from '../../actions/index';
 
+import Input from './form-input';
+import './form-input.scss';
+
+import './reset_password.scss';
+
 const form = reduxForm({
   form: 'resetPassword',
   validate
@@ -28,20 +33,24 @@ export const validate = formProps => {
   return errors;
 };
 
-const renderField = field =>
-  <div>
-    <input className="form-control" {...field.input} />
-    {field.touched &&
-      field.error &&
-      <div className="error">
-        {field.error}
-      </div>}
-  </div>;
-
 export class ResetPassword extends React.Component {
-  static propTypes = {
-    router: PropTypes.object
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputs: [
+        {
+          name: 'password',
+          type: 'password',
+          label: 'Password'
+        },
+        {
+          name: 'passwordConfirm',
+          type: 'password',
+          label: 'Confirm Password'
+        }
+      ]
+    };
+  }
   componentWillMount() {
     if (this.props.authenticated) {
       this.props.history.push('/dashboard');
@@ -75,25 +84,22 @@ export class ResetPassword extends React.Component {
   }
   render() {
     const { handleSubmit } = this.props;
+
+    const formInputs = this.state.inputs.map((input, index) =>
+      <Input key={index} {...input} />
+    );
+
     return (
-      <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-        <fieldset>
-          <label>New Password:</label>
-          <Field name="password" component={renderField} type="password" />
-        </fieldset>
-
-        <fieldset>
-          <label>Confirm New Password:</label>
-          <Field
-            name="passwordConfirm"
-            component={renderField}
-            type="password"
-          />
-        </fieldset>
-
-        {this.renderAlert()}
-        <button action="submit">Change Password</button>
-      </form>
+      <section id="reset-password-wrapper">
+        <div id="reset-password-card">
+          <h1>Reset Password</h1>
+          <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+            {this.renderAlert()}
+            {formInputs}
+            <button action="submit">Change Password</button>
+          </form>
+        </div>
+      </section>
     );
   }
 }

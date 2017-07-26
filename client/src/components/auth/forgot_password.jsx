@@ -5,14 +5,28 @@ import { withRouter } from 'react-router-dom';
 import { getForgotPasswordToken } from '../../actions/index';
 import PropTypes from 'prop-types';
 
+import './forgot_password.scss';
+
+import './form-input.scss';
+import Input from './form-input';
+
 const form = reduxForm({
   form: 'forgotPassword'
 });
 
 export class ForgotPassword extends React.Component {
-  static propTypes = {
-    router: PropTypes.object
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputs: [
+        {
+          name: 'employeeNumber',
+          type: 'text',
+          label: 'Employee Number'
+        }
+      ]
+    };
+  }
   handleFormSubmit(formProps) {
     this.props.getForgotPasswordToken(formProps);
   }
@@ -30,15 +44,21 @@ export class ForgotPassword extends React.Component {
   render() {
     const { handleSubmit } = this.props;
 
+    const formInputs = this.state.inputs.map((input, index) =>
+      <Input key={index} {...input} />
+    );
+
     return (
-      <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-        <div>
-          {this.renderAlert()}
-          <label htmlFor="email">Email</label>
-          <Field name="email" component="input" type="email" />
-          <button type="submit">Reset Password</button>
+      <section id="forgot-password-wrapper">
+        <div id="forgot-password-card">
+          <h1>Forgot password</h1>
+          <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+            {this.renderAlert()}
+            {formInputs}
+            <button type="submit">Reset Password</button>
+          </form>
         </div>
-      </form>
+      </section>
     );
   }
 }
