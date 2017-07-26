@@ -91,13 +91,13 @@ Sparky.task('build', () => {
   // EXTRACT VENDOR DEPENDENCIES
   const vendor = fuse.bundle('vendor').instructions('~ index.js');
   if (!isProduction) {
-    vendor.hmr().watch();
+    vendor.watch();
   }
 
   // MAIN BUNDLE
   const app = fuse.bundle('app').instructions('!> [index.js]');
   if (!isProduction) {
-    app.hmr().watch();
+    app.watch();
   }
 
   return fuse.run();
