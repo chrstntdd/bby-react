@@ -18,7 +18,7 @@ import {
 } from './types';
 const _find = require('lodash.find');
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'http://localhost:3000/api/v1';
 const CLIENT_ROOT_URL = 'http://localhost:4444';
 
 // CREATE INSTANCE OF UNIVERSAL COOKIE
@@ -34,7 +34,7 @@ export const getProductDetails = upc => (dispatch, getState) => {
   } else {
     // IF THE PRODUCT IS UNIQUE AND DOESN'T EXIST WITHIN THE ARRAY
     axios
-      .post(`${API_URL}/protected/bby-api`, upc, {
+      .post(`${API_URL}/best-buy/upc`, upc, {
         headers: { Authorization: cookie.get('token') }
       })
       .then(res => {
@@ -91,11 +91,12 @@ export const errorHandler = (dispatch, error, type) => {
 /* takes in props from login form */
 export const loginUser = ({ employeeNumber, password }) => dispatch => {
   axios
-    .post(`${API_URL}/auth/login`, {
+    .post(`${API_URL}/users/sign-in`, {
       email: `${employeeNumber}@bestbuy.com`,
       password
     })
     .then(res => {
+      console.log(res);
       cookie.set('token', res.data.token, { path: '/' });
       cookie.set('user', res.data.user, { path: '/' });
       dispatch({ type: AUTH_USER });
@@ -113,7 +114,7 @@ export const registerUser = ({
   storeNumber
 }) => dispatch => {
   axios
-    .post(`${API_URL}/auth/register`, {
+    .post(`${API_URL}/users`, {
       firstName,
       lastName,
       password,
@@ -137,7 +138,7 @@ export const logoutUser = error => dispatch => {
 
 export const getForgotPasswordToken = ({ email }) => dispatch => {
   axios
-    .post(`${API_URL}/auth/forgot-password`, { email })
+    .post(`${API_URL}/users/forgot-password`, { email })
     .then(res => {
       dispatch({
         type: FORGOT_PASSWORD_REQUEST,
@@ -153,7 +154,7 @@ export const getForgotPasswordToken = ({ email }) => dispatch => {
 
 export const resetPassword = (token, { password }) => dispatch => {
   axios
-    .post(`${API_URL}/auth/reset-password/${token}`, { password })
+    .post(`${API_URL}/users/reset-password/${token}`, { password })
     .then(res => {
       dispatch({
         type: RESET_PASSWORD_REQUEST,
@@ -167,7 +168,7 @@ export const resetPassword = (token, { password }) => dispatch => {
 };
 
 export const confirmEmail = token => dispatch => {
-  axios.post(`${API_URL}/auth/confirm-email/${token}`).then(res => {
+  axios.post(`${API_URL}/users/verify-email/${token}`).then(res => {
     if (res.status === 200) {
       cookie.set('token', res.data.token, { path: '/' });
       cookie.set('user', res.data.user, { path: '/' });

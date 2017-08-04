@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.16.2",
+    "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.6.0",
     "dotenv": "^4.0.0",
     "lodash.find": "^4.6.0",
@@ -34,7 +35,6 @@
     "fuse-box": "latest",
     "jest": "^20.0.4",
     "node-sass": "^4.5.3",
-    "nodemon": "^1.11.0",
     "postcss-flexibility": "^2.0.0",
     "postcss-modules": "^0.8.0",
     "react-test-renderer": "^15.6.1",
@@ -43,11 +43,12 @@
   "scripts": {
     "start": "node fuse",
     "dist": "node fuse dist",
-    "watch": "nodemon server/index.js || node server/index.js",
     "test": "jest"
   },
   "jest": {
-    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]"
     ],
@@ -57,7 +58,9 @@
       "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.scss$": "<rootDir>\\config\\jest\\scssTransform.js"
     },
-    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/config/jest/fileMock.js"
     }
