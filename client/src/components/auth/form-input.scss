@@ -16,7 +16,8 @@
     z-index: -2;
   }
   input {
-    font-size: 2rem;
+    line-height: 2px;
+    font-size: 1.5rem;
     letter-spacing: 1px;
     height: 100%;
     width: 100%;
@@ -55,7 +56,7 @@
   }
   input:focus ~ .register-label,
   input.has-content ~ .register-label {
-    top: -20px; //HOW HIGH THE .register-label RAISES UP
+    top: -25px; //HOW HIGH THE .register-label RAISES UP
     font-size: 14px;
     color: #3399ff;
     transition: 0.3s;
