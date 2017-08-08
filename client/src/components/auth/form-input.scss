@@ -2,9 +2,11 @@
 @import '../../colors.scss';
 
 .input-wrapper {
+  flex: auto;
+  margin: auto 10px auto 10px;
   position: relative;
   @media (min-width: $bp-xxsmall) {
-    width: between(300px, 450px, $bp-xxsmall, $bp-xlarge);
+    width: between(200px, 350px, $bp-xxsmall, $bp-xlarge);
   }
   height: 30px;
   :focus {
@@ -24,7 +26,7 @@
     color: white;
     border: 0;
     padding: 4px 0;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #aaa;
     background-color: transparent;
   }
 

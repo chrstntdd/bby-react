@@ -9,8 +9,11 @@
   justify-content: center;
   align-items: center;
   #login-card {
+    @media (min-width: $bp-xxsmall) {
+      width: between(300px, 600px, $bp-xxsmall, $bp-xlarge);
+      height: between(400px, 500px, $bp-xxsmall, $bp-xlarge);
+    }
     z-index: 1;
-    height: 500px;
     background-color: lighten($DARK_GREY, 10%);
     padding: 20px;
     border-radius: 3px;
@@ -30,7 +33,7 @@
       align-content: center;
       align-items: center;
       .input-wrapper {
-        margin: 40px auto;
+        margin: 30px auto;
         input {
           position: relative;
           z-index: 9000;
@@ -61,7 +64,7 @@
         @media (min-width: $bp-xxsmall) {
           font-size: between(14px, 16px, $bp-xxsmall, $bp-xlarge);
         }
-        margin-top: 4%;
+        margin-top: 6%;
         text-decoration: none;
         color: lighten($BESTBUY_YELLOW, 20%);
         &:hover {

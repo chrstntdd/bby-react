@@ -3,28 +3,17 @@ import { Link } from 'react-router-dom';
 
 import './footer.scss';
 
-const Footer = () => {
+const Footer = props => {
   return (
     <footer>
       <ul>
-        <li>
-          <Link to="">Something</Link>
-        </li>
-        <li>
-          <Link to="">Something</Link>
-        </li>
-        <li>
-          <Link to="">Something</Link>
-        </li>
-        <li>
-          <Link to="">Something</Link>
-        </li>
-        <li>
-          <Link to="">Something</Link>
-        </li>
-        <li>
-          <Link to="">Something</Link>
-        </li>
+        {props.footerData.map((data, index) =>
+          <li key={index}>
+            <Link to={data.link}>
+              {data.name}
+            </Link>
+          </li>
+        )}
       </ul>
     </footer>
   );

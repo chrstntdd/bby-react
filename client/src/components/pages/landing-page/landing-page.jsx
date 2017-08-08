@@ -7,6 +7,33 @@ import Register from '../../auth/register';
 import Footer from './footer';
 
 export default class LandingPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      formData: [
+        {
+          name: 'Home',
+          link: ''
+        },
+        {
+          name: 'Official Best Buy API Status',
+          link: 'https://developer.bestbuy.com/api-status'
+        },
+        {
+          name: 'Sign up',
+          link: `/#register-section`
+        },
+        {
+          name: 'Sign in',
+          link: '/login'
+        },
+        {
+          name: 'Contact',
+          link: ''
+        }
+      ]
+    };
+  }
   render() {
     return (
       <div className="landing-page">
@@ -14,7 +41,7 @@ export default class LandingPage extends React.Component {
         <HowSection />
         <AboutSection />
         <Register />
-        <Footer />
+        <Footer footerData={this.state.formData} />
       </div>
     );
   }
