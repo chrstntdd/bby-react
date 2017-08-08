@@ -8,6 +8,8 @@ import ProductTable from './product-table';
 import SideBar from './side-bar';
 import DashboardHeader from './dashboard-header';
 
+import { syncDatabaseWithClient } from '../actions/index.js';
+
 import './dashboard.scss';
 
 export class Dashboard extends React.Component {
@@ -31,4 +33,6 @@ const mapStateToProps = state => ({
   content: state.auth.content
 });
 
-export default withRouter(connect(mapStateToProps)(Dashboard));
+export default withRouter(
+  connect(mapStateToProps, { syncDatabaseWithClient })(Dashboard)
+);

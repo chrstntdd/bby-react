@@ -6,7 +6,10 @@ import {
   REMOVE_PRODUCT_FROM_TABLE,
   DECREMENT_PRODUCT_QUANTITY,
   PRINT_TABLE,
-  CLEAR_TABLE
+  SHOW_ACTIONS,
+  HIDE_ACTIONS,
+  CLEAR_TABLE,
+  SYNCED_TABLE_TO_DB
 } from '../actions/types';
 const orderBy = require('lodash.orderby');
 
@@ -136,7 +139,8 @@ const INITIAL_STATE = {
     }
   ],
   formatted: false,
-  printing: false
+  printing: false,
+  timer: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -193,17 +197,23 @@ export default function(state = INITIAL_STATE, action) {
         ),
         formatted: true
       };
-
-    case PRINT_TABLE:
+    case SHOW_ACTIONS:
       return {
         ...state,
-        printing: !state.printing
+        printing: false
+      };
+    case HIDE_ACTIONS:
+      return {
+        ...state,
+        printing: true
       };
     case CLEAR_TABLE:
       return {
         ...state,
         products: []
       };
+    case SYNCED_TABLE_TO_DB:
+      return { ...state };
     default:
       return state;
   }

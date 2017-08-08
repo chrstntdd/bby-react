@@ -56,17 +56,18 @@ export class ProductTable extends React.PureComponent {
           },
           {
             Header: 'Name',
-            accessor: 'name'
+            accessor: 'name',
+            minWidth: 200
           },
           {
             Header: 'UPC',
             accessor: 'upc',
-            minWidth: 120
+            minWidth: 100
           },
           {
             Header: 'Quantity',
             accessor: 'quantity',
-            minWidth: 75
+            minWidth: 50
           }
         ]
       },
@@ -112,7 +113,7 @@ export class ProductTable extends React.PureComponent {
         pageSize={`${products.length < 10 ? 10 : products.length}`}
         showPagination={false}
         style={{
-          height: `${printing ? 'auto' : '600px'}`
+          height: `${printing ? 'auto' : '520px'}`
         }}
       />
     );

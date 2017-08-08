@@ -13,8 +13,10 @@ import {
   DECREMENT_PRODUCT_QUANTITY,
   REMOVE_PRODUCT_FROM_TABLE,
   FORMAT_TABLE,
-  PRINT_TABLE,
-  CLEAR_TABLE
+  HIDE_ACTIONS,
+  SHOW_ACTIONS,
+  CLEAR_TABLE,
+  SYNCED_TABLE_TO_DB
 } from './types';
 const _find = require('lodash.find');
 
@@ -59,11 +61,35 @@ export const formatTable = () => dispatch => {
 };
 
 export const printTable = () => dispatch => {
-  dispatch({ type: PRINT_TABLE });
-  setTimeout(() => {
-    window.print();
-    dispatch({ type: PRINT_TABLE });
-  }, 100);
+  // setTimeout(() => {
+  window.print();
+  // }, 500);
+
+  const beforePrint = () => {
+    console.log('before print');
+    return dispatch({ type: HIDE_ACTIONS });
+  };
+
+  const afterPrint = () => {
+    console.log('after print');
+    return dispatch({ type: SHOW_ACTIONS });
+  };
+  window.onbeforeprint = beforePrint;
+  window.onafterprint = afterPrint;
+
+  (() => {
+    /* if chrome */
+    if (window.matchMedia) {
+      let mediaQueryList = window.matchMedia('print');
+      mediaQueryList.addListener(mql => {
+        if (mql.matches) {
+          beforePrint();
+        } else {
+          afterPrint();
+        }
+      });
+    }
+  })();
 };
 
 export const clearTable = () => dispatch => {
@@ -86,6 +112,28 @@ export const errorHandler = (dispatch, error, type) => {
     type,
     payload: errorMessage
   });
+};
+
+/* PUTs all products in the current table to the DB on a timer
+ * on PUT, replace previous table state with the current table 
+ * state (array)
+ */
+
+export const syncDatabaseWithClient = () => (dispatch, getState) => {
+  const state = getState();
+  const products = state.table.products;
+  console.log('Working');
+  dispatch({ type: SYNCED_TABLE_TO_DB });
+  // axios
+  //   .put(`${API_URL}/tables/${userId}/${tableId}`, products, {
+  //     headers: { Authorization: cookie.get('token') }
+  //   })
+  //   .then(res => {
+  //     dispatch({ type: SYNCED_TABLE_TO_DB });
+  //   })
+  //   .catch(err => {
+  //     errorHandler(dispatch, err.response, AUTH_ERROR);
+  //   });
 };
 
 /* takes in props from login form */

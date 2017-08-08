@@ -1,6 +1,9 @@
 @import '../colors.scss';
 
 @media print {
+  @page {
+    size: landscape;
+  }
   .hide-on-print,
   .ReactTable .rt-thead input,
   .ReactTable .rt-td button,
@@ -34,7 +37,6 @@
   .ReactTable {
     margin: 0;
     width: auto;
-    height: auto;
   }
 }
 
@@ -55,6 +57,8 @@
 .decrement-btn {
   @include tableButton(blue);
 }
+
+/* Styles from React-Table */
 
 .ReactTable {
   position: relative;

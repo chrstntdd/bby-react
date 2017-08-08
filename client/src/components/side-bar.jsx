@@ -27,18 +27,6 @@ export class SideBar extends React.Component {
   render() {
     return (
       <aside id="side-bar">
-        {/* <div className="btn-container">
-          <button>
-            <img src={undoButton} alt="" />
-            <p>Undo</p>
-          </button>
-        </div>
-        <div className="btn-container">
-          <button>
-            <img src={redoButton} alt="" />
-            <p>Redo</p>
-          </button>
-        </div> */}
         <div className="btn-container">
           {' '}<button onClick={() => this.handleTableFormat()}>
             <img src={formatIcon} alt="" />
