@@ -14,7 +14,7 @@ const HeroArea = () => {
           <button id="btn-signup">Sign Up</button>
         </LinkOnPage>
 
-        <Link to="/login">
+        <Link to="/sign-in">
           <button id="btn-signin">Sign In</button>
         </Link>
       </div>

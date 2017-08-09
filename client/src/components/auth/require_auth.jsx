@@ -11,12 +11,12 @@ export default ComposedComponent => {
     };
     componentWillMount() {
       if (!this.props.authenticated) {
-        this.props.history.push('/login');
+        this.props.history.push('/sign-in');
       }
     }
     componentWillUpdate(nextProps) {
       if (!nextProps.authenticated) {
-        this.props.history.push('/login');
+        this.props.history.push('/sign-in');
       }
     }
     render() {

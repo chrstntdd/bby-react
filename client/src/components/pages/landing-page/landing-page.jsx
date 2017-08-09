@@ -12,24 +12,20 @@ export default class LandingPage extends React.Component {
     this.state = {
       formData: [
         {
-          name: 'Home',
-          link: ''
-        },
-        {
           name: 'Official Best Buy API Status',
           link: 'https://developer.bestbuy.com/api-status'
         },
         {
           name: 'Sign up',
-          link: `/#register-section`
+          link: '/sign-up'
         },
         {
           name: 'Sign in',
-          link: '/login'
+          link: '/sign-in'
         },
         {
           name: 'Contact',
-          link: ''
+          link: '#'
         }
       ]
     };

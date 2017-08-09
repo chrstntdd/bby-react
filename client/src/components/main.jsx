@@ -23,12 +23,12 @@ const Main = () =>
   <main>
     <Switch>
       <Route exact path="/" component={LandingPage} />
-      {/* <Route exact path="/register" component={Register} /> */}
-      <Route exact path="/login" component={Login} />
+      <Route exact path="/sign-up" component={Register} />
+      <Route exact path="/sign-in" component={Login} />
       {/* wrap Dashboard in requireAuth decorator in production
         * removing now to offer full access to the static site
         */}
-      <Route exact path="/dashboard" component={Dashboard} />
+      <Route exact path="/dashboard" component={RequireAuth(Dashboard)} />
       <Route exact path="/logout" component={Logout} />
       <Route exact path="/forgot-password" component={ForgotPassword} />
       <Route
