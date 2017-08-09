@@ -9,6 +9,7 @@ import {
   SHOW_ACTIONS,
   HIDE_ACTIONS,
   CLEAR_TABLE,
+  SET_NEW_TABLE_ID,
   SYNCED_TABLE_TO_DB
 } from '../actions/types';
 const orderBy = require('lodash.orderby');
@@ -140,7 +141,8 @@ const INITIAL_STATE = {
   ],
   formatted: false,
   printing: false,
-  timer: null
+  timer: null,
+  tableId: ''
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -214,6 +216,11 @@ export default function(state = INITIAL_STATE, action) {
       };
     case SYNCED_TABLE_TO_DB:
       return { ...state };
+    case SET_NEW_TABLE_ID:
+      return {
+        ...state,
+        tableId: action.payload
+      };
     default:
       return state;
   }

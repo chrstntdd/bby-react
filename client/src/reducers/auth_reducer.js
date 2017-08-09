@@ -4,7 +4,8 @@ import {
   AUTH_ERROR,
   FORGOT_PASSWORD_REQUEST,
   RESET_PASSWORD_REQUEST,
-  PROTECTED_TEST
+  REGISTER_EMAIL_SENT,
+  REGISTER_ERROR
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -28,6 +29,10 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, message: action.payload.message };
     case PROTECTED_TEST:
       return { ...state, content: action.payload.message };
+    case REGISTER_EMAIL_SENT:
+      return { ...state, content: action.payload };
+    case REGISTER_ERROR:
+      return { ...state, error: action.payload };
     default:
       return state;
   }

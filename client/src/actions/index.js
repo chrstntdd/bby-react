@@ -16,11 +16,19 @@ import {
   HIDE_ACTIONS,
   SHOW_ACTIONS,
   CLEAR_TABLE,
-  SYNCED_TABLE_TO_DB
+  SYNCED_TABLE_TO_DB,
+  REGISTER_EMAIL_SENT,
+  REGISTER_ERROR,
+  SET_NEW_TABLE_ID,
+  LOAD_TABLE
 } from './types';
 const _find = require('lodash.find');
 
-const API_URL = 'http://localhost:3000/api/v1';
+let API_URL;
+process.env.NODE_ENV === 'development'
+  ? (API_URL = 'http://localhost:3000/api/v1')
+  : (API_URL = 'https://aqueous-headland-43492.herokuapp.com/api/v1');
+
 const CLIENT_ROOT_URL = 'http://localhost:4444';
 
 // CREATE INSTANCE OF UNIVERSAL COOKIE
@@ -119,21 +127,38 @@ export const errorHandler = (dispatch, error, type) => {
  * state (array)
  */
 
-export const syncDatabaseWithClient = () => (dispatch, getState) => {
+export const syncToDatabase = () => (dispatch, getState) => {
   const state = getState();
+  const user = cookie.get('user', { path: '/' });
   const products = state.table.products;
-  console.log('Working');
+  const tableId = state.table.tableId;
   dispatch({ type: SYNCED_TABLE_TO_DB });
-  // axios
-  //   .put(`${API_URL}/tables/${userId}/${tableId}`, products, {
-  //     headers: { Authorization: cookie.get('token') }
-  //   })
-  //   .then(res => {
-  //     dispatch({ type: SYNCED_TABLE_TO_DB });
-  //   })
-  //   .catch(err => {
-  //     errorHandler(dispatch, err.response, AUTH_ERROR);
-  //   });
+  axios
+    .put(`${API_URL}/tables/${user.id}/${tableId}`, products, {
+      headers: { Authorization: cookie.get('token') }
+    })
+    .then(res => {
+      dispatch({ type: SYNCED_TABLE_TO_DB });
+    })
+    .catch(err => {
+      errorHandler(dispatch, err.response, AUTH_ERROR);
+    });
+};
+
+/* Creates a new table for the user, then loads that table state into the view */
+export const createNewTable = () => (dispatch, getState) => {
+  const user = cookie.get('user', { path: '/' });
+  axios
+    .post(`${API_URL}/tables/${user.id}`)
+    .then(res => {
+      dispatch({ type: SET_NEW_TABLE_ID, payload: res.data._id });
+    })
+    .then(() => {
+      dispatch({ type: LOAD_TABLE, payload: res.data._id });
+    })
+    .catch(err => {
+      errorHandler(dispatch, err.response, AUTH_ERROR);
+    });
 };
 
 /* takes in props from login form */
@@ -144,7 +169,6 @@ export const loginUser = ({ employeeNumber, password }) => dispatch => {
       password
     })
     .then(res => {
-      console.log(res);
       cookie.set('token', res.data.token, { path: '/' });
       cookie.set('user', res.data.user, { path: '/' });
       dispatch({ type: AUTH_USER });
@@ -171,10 +195,15 @@ export const registerUser = ({
     })
     .then(res => {
       // TELL USER TO CHECK THEIR EMAIL
-      console.log('CHECK YOUR EMAIL FAM');
+      dispatch({
+        type: REGISTER_EMAIL_SENT,
+        payload:
+          'Registered successfully, now check your work email to verify your account'
+      });
     })
     .catch(err => {
-      errorHandler(dispatch, err.response, AUTH_ERROR);
+      const errorMessages = err.response.data.messages;
+      dispatch({ type: REGISTER_ERROR, payload: errorMessages });
     });
 };
 
