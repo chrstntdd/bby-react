@@ -6,7 +6,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import reduxThunk from 'redux-thunk';
 import Cookies from 'universal-cookie';
 import reducers from './reducers/index';
-import App from './components/app';
+import Main from './components/main';
 import { AUTH_USER } from './actions/types';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { autoRehydrate, persistStore } from 'redux-persist';
@@ -39,7 +39,7 @@ import './index.scss';
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <App />
+      <Main />
     </Router>
   </Provider>,
   document.getElementById('root')
