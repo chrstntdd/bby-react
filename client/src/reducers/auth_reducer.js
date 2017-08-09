@@ -27,8 +27,6 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, message: action.payload.message };
     case RESET_PASSWORD_REQUEST:
       return { ...state, message: action.payload.message };
-    case PROTECTED_TEST:
-      return { ...state, content: action.payload.message };
     case REGISTER_EMAIL_SENT:
       return { ...state, content: action.payload };
     case REGISTER_ERROR:

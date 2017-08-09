@@ -10,7 +10,8 @@ import {
   HIDE_ACTIONS,
   CLEAR_TABLE,
   SET_NEW_TABLE_ID,
-  SYNCED_TABLE_TO_DB
+  SYNCED_TABLE_TO_DB,
+  LOAD_TABLE
 } from '../actions/types';
 const orderBy = require('lodash.orderby');
 
@@ -220,6 +221,11 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         tableId: action.payload
+      };
+    case LOAD_TABLE:
+      return {
+        ...state,
+        products: []
       };
     default:
       return state;

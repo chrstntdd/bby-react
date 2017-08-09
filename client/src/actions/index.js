@@ -7,7 +7,6 @@ import {
   UNAUTH_USER,
   FORGOT_PASSWORD_REQUEST,
   RESET_PASSWORD_REQUEST,
-  PROTECTED_TEST,
   POST_UPC,
   INCREMENT_PRODUCT_QUANTITY,
   DECREMENT_PRODUCT_QUANTITY,
@@ -132,7 +131,6 @@ export const syncToDatabase = () => (dispatch, getState) => {
   const user = cookie.get('user', { path: '/' });
   const products = state.table.products;
   const tableId = state.table.tableId;
-  dispatch({ type: SYNCED_TABLE_TO_DB });
   axios
     .put(`${API_URL}/tables/${user.id}/${tableId}`, products, {
       headers: { Authorization: cookie.get('token') }
@@ -154,7 +152,8 @@ export const createNewTable = () => (dispatch, getState) => {
       dispatch({ type: SET_NEW_TABLE_ID, payload: res.data._id });
     })
     .then(() => {
-      dispatch({ type: LOAD_TABLE, payload: res.data._id });
+      /* load blank table */
+      dispatch({ type: LOAD_TABLE });
     })
     .catch(err => {
       errorHandler(dispatch, err.response, AUTH_ERROR);
