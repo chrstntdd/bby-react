@@ -11,7 +11,8 @@ import {
   CLEAR_TABLE,
   SET_NEW_TABLE_ID,
   SYNCED_TABLE_TO_DB,
-  LOAD_TABLE,
+  LOAD_BLANK_TABLE,
+  LOAD_SAVED_TABLE,
   TOGGLE_LOAD_TABLE_MODAL,
   GET_USER_TABLE_DATA_SUCCESS
 } from '../actions/types';
@@ -226,10 +227,15 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         tableId: action.payload
       };
-    case LOAD_TABLE:
+    case LOAD_BLANK_TABLE:
       return {
         ...state,
         products: []
+      };
+    case LOAD_SAVED_TABLE:
+      return {
+        ...state,
+        products: action.payload
       };
     case TOGGLE_LOAD_TABLE_MODAL:
       return {

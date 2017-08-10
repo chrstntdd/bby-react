@@ -19,7 +19,8 @@ import {
   REGISTER_EMAIL_SENT,
   REGISTER_ERROR,
   SET_NEW_TABLE_ID,
-  LOAD_TABLE,
+  LOAD_BLANK_TABLE,
+  LOAD_SAVED_TABLE,
   TOGGLE_LOAD_TABLE_MODAL,
   GET_USER_TABLE_DATA_SUCCESS
 } from './types';
@@ -153,7 +154,6 @@ export const getPreviousTableData = () => dispatch => {
   axios
     .get(`${API_URL}/tables/${user.id}`)
     .then(response => {
-      // console.log(response);
       return response.data.map(tableInstance => {
         const tableId = tableInstance._id;
         /* date type coming from mongo */
@@ -179,7 +179,7 @@ export const getPreviousTableData = () => dispatch => {
 };
 
 /* Creates a new table for the user, then loads that table state into the view */
-export const createNewTable = () => (dispatch, getState) => {
+export const createNewTable = () => dispatch => {
   const user = cookie.get('user', { path: '/' });
   axios
     .post(`${API_URL}/tables/${user.id}`)
@@ -188,10 +188,26 @@ export const createNewTable = () => (dispatch, getState) => {
     })
     .then(() => {
       /* load blank table into current view */
-      dispatch({ type: LOAD_TABLE });
+      dispatch({ type: LOAD_BLANK_TABLE });
     })
     .catch(err => {
       errorHandler(dispatch, err.response, AUTH_ERROR);
+    });
+};
+
+/* loads existing table from user's collection of past tables */
+export const loadTable = tableId => dispatch => {
+  const user = cookie.get('user', { path: '/' });
+  axios
+    .get(`${API_URL}/tables/${user.id}/${tableId}`)
+    .then(response => {
+      dispatch({ type: LOAD_SAVED_TABLE, payload: response.data.products });
+    })
+    .then(() => {
+      dispatch({ type: SET_NEW_TABLE_ID, payload: tableId });
+    })
+    .catch(err => {
+      console.error(err);
     });
 };
 
