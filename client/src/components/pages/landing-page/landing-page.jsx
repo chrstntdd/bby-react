@@ -10,7 +10,7 @@ export default class LandingPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formData: [
+      footerData: [
         {
           name: 'Official Best Buy API Status',
           link: 'https://developer.bestbuy.com/api-status'
@@ -37,7 +37,7 @@ export default class LandingPage extends React.Component {
         <HowSection />
         <AboutSection />
         <Register />
-        <Footer footerData={this.state.formData} />
+        <Footer footerData={this.state.footerData} />
       </div>
     );
   }

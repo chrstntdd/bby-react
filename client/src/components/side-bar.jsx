@@ -4,10 +4,13 @@ import {
   printTable,
   clearTable,
   syncToDatabase,
-  createNewTable
+  createNewTable,
+  toggleShowTableModal
 } from '../actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+
+import TableModal from './table-modal';
 
 import printIcon from '../static/noun_772280_cc.svg';
 import formatIcon from '../static/noun_796398_cc.svg';
@@ -16,6 +19,7 @@ import redoButton from '../static/noun_1031802_cc.svg';
 import clearIcon from '../static/noun_926276_cc.svg';
 import newTable from '../static/noun_1074124_cc.svg';
 import databaseSync from '../static/noun_932928_cc.svg';
+import loadTable from '../static/noun_1161316_cc.svg';
 
 import './side-bar.scss';
 
@@ -40,9 +44,19 @@ export class SideBar extends React.Component {
     this.props.clearTable();
   }
 
+  handleShowModal() {
+    this.props.toggleShowTableModal();
+  }
+
   render() {
     return (
       <aside id="side-bar">
+        <div className="btn-container">
+          <button onClick={() => this.handleShowModal()}>
+            <img src={loadTable} alt="" />
+            <p>Load Table</p>
+          </button>
+        </div>
         <div className="btn-container">
           <button onClick={() => this.handleCreateNewTable()}>
             <img src={newTable} alt="" />
@@ -80,7 +94,8 @@ export class SideBar extends React.Component {
 
 const mapStateToProps = state => ({
   products: state.table.products,
-  printing: state.table.printing
+  printing: state.table.printing,
+  showModal: state.table.showModal
 });
 
 export default withRouter(
@@ -89,6 +104,7 @@ export default withRouter(
     printTable,
     clearTable,
     syncToDatabase,
-    createNewTable
+    createNewTable,
+    toggleShowTableModal
   })(SideBar)
 );

@@ -11,7 +11,9 @@ import {
   CLEAR_TABLE,
   SET_NEW_TABLE_ID,
   SYNCED_TABLE_TO_DB,
-  LOAD_TABLE
+  LOAD_TABLE,
+  TOGGLE_LOAD_TABLE_MODAL,
+  GET_USER_TABLE_DATA_SUCCESS
 } from '../actions/types';
 const orderBy = require('lodash.orderby');
 
@@ -143,7 +145,9 @@ const INITIAL_STATE = {
   formatted: false,
   printing: false,
   timer: null,
-  tableId: ''
+  tableId: '',
+  showModal: false,
+  selectOptionData: null
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -226,6 +230,16 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         products: []
+      };
+    case TOGGLE_LOAD_TABLE_MODAL:
+      return {
+        ...state,
+        showModal: !state.showModal
+      };
+    case GET_USER_TABLE_DATA_SUCCESS:
+      return {
+        ...state,
+        selectOptionData: action.payload
       };
     default:
       return state;

@@ -19,7 +19,9 @@ import {
   REGISTER_EMAIL_SENT,
   REGISTER_ERROR,
   SET_NEW_TABLE_ID,
-  LOAD_TABLE
+  LOAD_TABLE,
+  TOGGLE_LOAD_TABLE_MODAL,
+  GET_USER_TABLE_DATA_SUCCESS
 } from './types';
 const _find = require('lodash.find');
 
@@ -143,6 +145,39 @@ export const syncToDatabase = () => (dispatch, getState) => {
     });
 };
 
+/* Makes request for all past tables, 
+ * retrieving the date and the unique id of the table.
+ */
+export const getPreviousTableData = () => dispatch => {
+  const user = cookie.get('user', { path: '/' });
+  axios
+    .get(`${API_URL}/tables/${user.id}`)
+    .then(response => {
+      // console.log(response);
+      return response.data.map(tableInstance => {
+        const tableId = tableInstance._id;
+        /* date type coming from mongo */
+        const createdOnMongo = tableInstance.createdOn;
+
+        /* parse date to JS date object*/
+        const parsedDate = new Date(createdOnMongo);
+
+        const formattedDate = `${parsedDate.toDateString()} | ${parsedDate.toLocaleTimeString()}`;
+
+        return {
+          tableId,
+          formattedDate
+        };
+      });
+    })
+    .then(tableData => {
+      dispatch({ type: GET_USER_TABLE_DATA_SUCCESS, payload: tableData });
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
+
 /* Creates a new table for the user, then loads that table state into the view */
 export const createNewTable = () => (dispatch, getState) => {
   const user = cookie.get('user', { path: '/' });
@@ -152,12 +187,16 @@ export const createNewTable = () => (dispatch, getState) => {
       dispatch({ type: SET_NEW_TABLE_ID, payload: res.data._id });
     })
     .then(() => {
-      /* load blank table */
+      /* load blank table into current view */
       dispatch({ type: LOAD_TABLE });
     })
     .catch(err => {
       errorHandler(dispatch, err.response, AUTH_ERROR);
     });
+};
+
+export const toggleShowTableModal = () => dispatch => {
+  dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
 };
 
 /* takes in props from login form */
