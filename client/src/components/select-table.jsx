@@ -17,13 +17,16 @@ export class SelectTable extends React.Component {
   }
   render(props) {
     const { userTables, loadedTable } = this.props;
+
     return (
       <select
-        defaultValue={loadedTable}
         name="select"
         id="select"
         onChange={e => this.handleSelectTableToLoad(e, userTables)}
       >
+        <option disabled selected value>
+          {' '}-- Select a table --{' '}
+        </option>
         {userTables.map((tableData, index) =>
           <option key={index} value={tableData._id}>
             {tableData.formattedDate}

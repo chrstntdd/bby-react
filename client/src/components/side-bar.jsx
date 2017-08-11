@@ -4,7 +4,6 @@ import {
   printTable,
   clearTable,
   syncToDatabase,
-  createNewTable,
   toggleShowTableModal
 } from '../actions';
 import { connect } from 'react-redux';
@@ -17,17 +16,12 @@ import formatIcon from '../static/noun_796398_cc.svg';
 import undoButton from '../static/noun_1031806_cc.svg';
 import redoButton from '../static/noun_1031802_cc.svg';
 import clearIcon from '../static/noun_926276_cc.svg';
-import newTable from '../static/noun_1074124_cc.svg';
 import databaseSync from '../static/noun_932928_cc.svg';
-import loadTable from '../static/noun_1161316_cc.svg';
+import manage from '../static/noun_1082747_cc.svg';
 
 import './side-bar.scss';
 
 export class SideBar extends React.Component {
-  handleCreateNewTable() {
-    this.props.createNewTable();
-  }
-
   handleSyncToDatabase() {
     this.props.syncToDatabase();
   }
@@ -53,14 +47,8 @@ export class SideBar extends React.Component {
       <aside id="side-bar">
         <div className="btn-container">
           <button onClick={() => this.handleShowModal()}>
-            <img src={loadTable} alt="" />
-            <p>Load Table</p>
-          </button>
-        </div>
-        <div className="btn-container">
-          <button onClick={() => this.handleCreateNewTable()}>
-            <img src={newTable} alt="" />
-            <p>New table</p>
+            <img src={manage} alt="" />
+            <p>Manage</p>
           </button>
         </div>
         <div className="btn-container">
@@ -104,7 +92,7 @@ export default withRouter(
     printTable,
     clearTable,
     syncToDatabase,
-    createNewTable,
+    // createNewTable,
     toggleShowTableModal
   })(SideBar)
 );
