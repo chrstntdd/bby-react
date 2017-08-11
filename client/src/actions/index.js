@@ -76,35 +76,38 @@ export const formatTable = () => dispatch => {
 };
 
 export const printTable = () => dispatch => {
-  // setTimeout(() => {
-  window.print();
-  // }, 500);
-
-  const beforePrint = () => {
-    console.log('before print');
+  // const afterPrint = () => {
+  //   return dispatch({ type: SHOW_ACTIONS });
+  // };
+  setTimeout(() => {
     return dispatch({ type: HIDE_ACTIONS });
-  };
+  }, 10);
 
-  const afterPrint = () => {
-    console.log('after print');
+  setTimeout(() => {
+    return window.print();
+  }, 10);
+
+  setTimeout(() => {
     return dispatch({ type: SHOW_ACTIONS });
-  };
-  window.onbeforeprint = beforePrint;
-  window.onafterprint = afterPrint;
+  }, 10);
 
-  (() => {
-    /* if chrome */
-    if (window.matchMedia) {
-      let mediaQueryList = window.matchMedia('print');
-      mediaQueryList.addListener(mql => {
-        if (mql.matches) {
-          beforePrint();
-        } else {
-          afterPrint();
-        }
-      });
-    }
-  })();
+  /* if anything other than chrome */
+  // window.onbeforeprint = beforePrint;
+  // window.onafterprint = beforePrint;
+
+  // (() => {
+  //   /* if chrome */
+  //   if (window.matchMedia) {
+  //     let mediaQueryList = window.matchMedia('print');
+  //     mediaQueryList.addListener(mql => {
+  //       if (mql.matches) {
+  //         beforePrint();
+  //       } else {
+  //         beforePrint();
+  //       }
+  //     });
+  //   }
+  // })();
 };
 
 export const clearTable = () => dispatch => {

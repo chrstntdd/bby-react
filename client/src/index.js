@@ -24,7 +24,7 @@ const store = createStore(
 );
 
 // BEGIN PERSISTING STATE
-persistStore(store, { blacklist: ['auth'] }, () => {
+persistStore(store, { blacklist: ['auth', 'products.printing'] }, () => {
   console.log('rehydration complete!');
 });
 
