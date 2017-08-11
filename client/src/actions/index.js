@@ -41,8 +41,13 @@ export const getProductDetails = upc => (dispatch, getState) => {
   const state = getState();
   const products = state.table.products;
   if (_find(products, upc) !== undefined) {
-    // IF THE PRODUCT EXISTS ALREADY
-    dispatch({ type: INCREMENT_PRODUCT_QUANTITY, payload: upc.upc });
+    /* If the product upc is already in the table state, increment the quantity.
+     * Dispatch is wrapped in a timeout to that ensures the proper timing of the
+     * resetting on the text input.
+     */
+    setTimeout(() => {
+      dispatch({ type: INCREMENT_PRODUCT_QUANTITY, payload: upc.upc });
+    }, 100);
   } else {
     // IF THE PRODUCT IS UNIQUE AND DOESN'T EXIST WITHIN THE ARRAY
     axios
