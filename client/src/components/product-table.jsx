@@ -5,15 +5,15 @@ import ReactTable from 'react-table';
 import {
   decrementProductQuantity,
   removeItemFromTable,
-  printTable
+  printTable,
+  getPreviousTableData
 } from '../actions/index';
 
 import styles from './product-table.scss';
 
 export class ProductTable extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    console.log(this.props.products.length);
+  componentDidMount() {
+    this.props.getPreviousTableData();
   }
   removeItem(upc) {
     this.props.removeItemFromTable(upc);
@@ -129,6 +129,7 @@ export default withRouter(
   connect(mapStateToProps, {
     decrementProductQuantity,
     removeItemFromTable,
-    printTable
+    printTable,
+    getPreviousTableData
   })(ProductTable)
 );

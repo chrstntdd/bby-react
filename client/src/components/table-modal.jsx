@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  toggleShowTableModal,
-  getPreviousTableData,
-  createNewTable
-} from '../actions';
+import { toggleShowTableModal, createNewTable } from '../actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import SelectTable from './select-table';
@@ -13,9 +9,6 @@ import './table-modal.scss';
 import newTable from '../static/noun_1074124_cc.svg';
 
 export class TableModal extends React.Component {
-  componentWillMount() {
-    this.props.getPreviousTableData();
-  }
   handleShowModal() {
     this.props.toggleShowTableModal();
   }
@@ -68,7 +61,6 @@ const mapStateToProps = state => ({
 export default withRouter(
   connect(mapStateToProps, {
     toggleShowTableModal,
-    createNewTable,
-    getPreviousTableData
+    createNewTable
   })(TableModal)
 );
