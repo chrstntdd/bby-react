@@ -22,10 +22,6 @@ export default class LandingPage extends React.Component {
         {
           name: 'Sign in',
           link: '/sign-in'
-        },
-        {
-          name: 'Contact',
-          link: '#'
         }
       ]
     };

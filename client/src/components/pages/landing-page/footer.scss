@@ -3,15 +3,28 @@
 footer {
   width: 100vw;
   background-color: $DARK_GREY;
+  padding: auto 50px;
   ul {
-    margin-top: 0;
+    padding-left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     li {
+      margin-top: 2%;
       list-style: none;
       padding-left: 0;
       a {
+        text-transform: uppercase;
+        font-size: 1.5rem;
         text-decoration: none;
         color: white;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+        transition-property: color;
+        transition-duration: 0.5s;
+        &:hover {
+          transition-property: color;
+          color: $BESTBUY_YELLOW;
+        }
       }
     }
   }

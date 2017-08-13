@@ -28,7 +28,6 @@ const HeroArea = () => {
           </a>{' '}
         </h3>
       </div>
-      <div className="mock-app" />
     </section>
   );
 };

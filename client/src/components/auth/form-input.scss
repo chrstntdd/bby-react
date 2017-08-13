@@ -36,7 +36,7 @@
     left: 0;
     width: 0;
     height: 2px;
-    background-color: #3399ff;
+    background-color: $BESTBUY_YELLOW;
     transition: 0.4s;
   }
   .register-label {
@@ -60,7 +60,7 @@
   input.has-content ~ .register-label {
     top: -25px; //HOW HIGH THE .register-label RAISES UP
     font-size: 14px;
-    color: #3399ff;
+    color: $BESTBUY_YELLOW;
     transition: 0.3s;
   }
 }
