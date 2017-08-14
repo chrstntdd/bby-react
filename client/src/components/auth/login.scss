@@ -26,12 +26,18 @@
       font-family: 'Lobster', cursive;
       margin-top: 0;
       text-align: center;
+      margin-bottom: 2%;
     }
     form {
       display: flex;
       flex-direction: column;
       align-content: center;
       align-items: center;
+      .error-message {
+        text-align: center;
+        color: darken(#ec6d75, 5%);
+        font-size: 1.4rem;
+      }
       .input-wrapper {
         margin: 30px auto;
         input {

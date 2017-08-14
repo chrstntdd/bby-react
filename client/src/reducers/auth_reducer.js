@@ -5,7 +5,8 @@ import {
   FORGOT_PASSWORD_REQUEST,
   RESET_PASSWORD_REQUEST,
   REGISTER_EMAIL_SENT,
-  REGISTER_ERROR
+  REGISTER_ERROR,
+  NOT_VERIFIED_LOGIN_ERROR
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -23,6 +24,12 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, authenticated: false, error: action.payload };
     case AUTH_ERROR:
       return { ...state, error: action.payload };
+    /* TODO: PROVIDE MORE HELPFUL ERROR MESSAGES INSTEAD OF A BLANKET STATEMENT */
+    case NOT_VERIFIED_LOGIN_ERROR:
+      return {
+        ...state,
+        error: 'Please verify your account before logging in.'
+      };
     case FORGOT_PASSWORD_REQUEST:
       return { ...state, message: action.payload.message };
     case RESET_PASSWORD_REQUEST:

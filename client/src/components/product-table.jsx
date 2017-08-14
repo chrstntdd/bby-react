@@ -77,7 +77,8 @@ export class ProductTable extends React.PureComponent {
           {
             Header: 'Remove',
             filterable: false,
-            show: !printing, // <-- NEEDED TO HIDE COLUMNS WHEN PRINTING
+            /* used to toggle visibility on print */
+            show: !printing,
             Cell: props =>
               <button
                 className="remove-btn"
@@ -89,7 +90,8 @@ export class ProductTable extends React.PureComponent {
           {
             Header: '-1',
             filterable: false,
-            show: !printing, // <-- NEEDED TO HIDE COLUMNS WHEN PRINTING
+            /* used to toggle visibility on print */
+            show: !printing,
             Cell: props =>
               <button
                 className="decrement-btn"

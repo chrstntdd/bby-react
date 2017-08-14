@@ -41,8 +41,7 @@ export class Login extends React.Component {
     if (this.props.errorMessage) {
       return (
         <div>
-          <span>
-            <strong>Error!</strong>
+          <span className="error-message">
             {this.props.errorMessage}
           </span>
         </div>
@@ -50,7 +49,7 @@ export class Login extends React.Component {
     }
   }
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, valid } = this.props;
 
     const formInputs = this.state.loginInputs.map((input, index) =>
       <Input key={index} {...input} />
@@ -63,7 +62,9 @@ export class Login extends React.Component {
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
             {this.renderAlert()}
             {formInputs}
-            <button type="submit">Login</button>
+            <button type="submit" disabled={!valid}>
+              Login
+            </button>
             <Link to="/forgot-password">Forgot password?</Link>
           </form>
         </div>

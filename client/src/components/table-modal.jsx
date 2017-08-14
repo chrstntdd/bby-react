@@ -17,7 +17,7 @@ export class TableModal extends React.Component {
   }
   render() {
     const selectComponent = (
-      <div>
+      <div className="selectWrapper">
         <h3>Please choose a previously saved table</h3>
         <SelectTable userTables={this.props.selectOptionData} />
       </div>
@@ -25,20 +25,16 @@ export class TableModal extends React.Component {
 
     return (
       <div className="global-modal">
-        <div className="overlay" />
+        <div className="overlay" onClick={() => this.handleShowModal()} />
         <div className="global-modal_contents modal-transition">
           <div className="global-modal-header">
             <h3>Load another table</h3>
-            <a href="#" onClick={() => this.handleShowModal()}>
-              X
-            </a>
           </div>
           <div className="global-modal-body">
             <div className="content-left">
               <h3>Create a new table</h3>
               <button onClick={() => this.handleCreateNewTable()}>
-                <img src={newTable} alt="" />
-                <p>New table</p>
+                <img src={newTable} alt="create new table icon" />
               </button>
             </div>
             <div className="content-right">

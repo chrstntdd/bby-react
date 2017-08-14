@@ -22,7 +22,9 @@ import {
   LOAD_BLANK_TABLE,
   LOAD_SAVED_TABLE,
   TOGGLE_LOAD_TABLE_MODAL,
-  GET_USER_TABLE_DATA_SUCCESS
+  GET_USER_TABLE_DATA_SUCCESS,
+  NOT_VERIFIED_LOGIN_ERROR,
+  INVALID_UPC
 } from './types';
 const _find = require('lodash.find');
 
@@ -58,7 +60,8 @@ export const getProductDetails = upc => (dispatch, getState) => {
         dispatch({ type: POST_UPC, payload: res.data });
       })
       .catch(err => {
-        errorHandler(dispatch, err.response, AUTH_ERROR);
+        alert(err.response.data.message);
+        dispatch({ type: INVALID_UPC });
       });
   }
 };
@@ -76,10 +79,8 @@ export const formatTable = () => dispatch => {
 };
 
 export const printTable = () => dispatch => {
-  // const afterPrint = () => {
-  //   return dispatch({ type: SHOW_ACTIONS });
-  // };
   setTimeout(() => {
+    alert('before print');
     return dispatch({ type: HIDE_ACTIONS });
   }, 10);
 
@@ -88,26 +89,10 @@ export const printTable = () => dispatch => {
   }, 10);
 
   setTimeout(() => {
+    alert('after print');
+
     return dispatch({ type: SHOW_ACTIONS });
   }, 10);
-
-  /* if anything other than chrome */
-  // window.onbeforeprint = beforePrint;
-  // window.onafterprint = beforePrint;
-
-  // (() => {
-  //   /* if chrome */
-  //   if (window.matchMedia) {
-  //     let mediaQueryList = window.matchMedia('print');
-  //     mediaQueryList.addListener(mql => {
-  //       if (mql.matches) {
-  //         beforePrint();
-  //       } else {
-  //         beforePrint();
-  //       }
-  //     });
-  //   }
-  // })();
 };
 
 export const clearTable = () => dispatch => {
@@ -236,7 +221,11 @@ export const loginUser = ({ employeeNumber, password }) => dispatch => {
       dispatch({ type: AUTH_USER });
     })
     .catch(err => {
-      errorHandler(dispatch, err.response, AUTH_ERROR);
+      err.response.status === 401
+        ? /* when user is not verified */
+          dispatch({ type: NOT_VERIFIED_LOGIN_ERROR, payload: err.response })
+        : /* some other error */
+          errorHandler(dispatch, err.response, AUTH_ERROR);
     });
 };
 

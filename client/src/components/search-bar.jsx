@@ -1,4 +1,5 @@
 import React from 'react';
+import { INVALID_UPC } from '../actions/types.js';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { withRouter } from 'react-router-dom';
@@ -11,7 +12,7 @@ const form = reduxForm({
 });
 
 export class SearchBar extends React.Component {
-  handleInputChange(formProps) {
+  handleInputChange(formProps, dispatch) {
     const inputValue = formProps.currentTarget.value;
 
     if (!isNaN(Number(inputValue)) && inputValue.length == 12) {
@@ -19,6 +20,9 @@ export class SearchBar extends React.Component {
       this.handleFormSubmit(inputValue);
     } else if (isNaN(Number(inputValue))) {
       // IF ANY OF THE VALUES ARE NOT NUMBERS
+      setTimeout(() => {
+        this.props.dispatch({ type: INVALID_UPC });
+      }, 10);
       alert(`Looks like you didn't quite scan the UPC. Try again please.`);
     } else if (inputValue.length < 12) {
       // IF THE INPUT LENGTH IS SHORTER THAN 12
@@ -43,7 +47,7 @@ export class SearchBar extends React.Component {
     }
   }
   render() {
-    const { onChange } = this.props;
+    const { onChange, tableId } = this.props;
     return (
       <section id="search-section">
         <form>
@@ -56,6 +60,9 @@ export class SearchBar extends React.Component {
               name="upc"
               component="input"
               placeholder="UPC"
+              type="number"
+              /* disable input if there is no current table loaded */
+              disabled={tableId ? false : true}
             />
           </div>
         </form>
@@ -65,7 +72,8 @@ export class SearchBar extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  products: state.table.products
+  products: state.table.products,
+  tableId: state.table.tableId
 });
 
 export default withRouter(

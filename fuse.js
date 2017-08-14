@@ -23,7 +23,7 @@ const POSTCSS_PLUGINS = [
       'Chrome >= 52',
       'FireFox >= 44',
       'Safari >= 7',
-      'Explorer 11',
+      'Explorer 8',
       'last 4 Edge versions'
     ]
   })
@@ -55,7 +55,7 @@ Sparky.task('build', () => {
         CSSPlugin(
           {
             // group: 'bundle.css',
-            // outFile: 'client/dist/static/bundle.css',
+            // outFile: 'client/dist/static/bundle.css'
             // inject: file => `client/dist/static/${file}`
           }
         )
