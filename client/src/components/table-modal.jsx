@@ -1,5 +1,9 @@
 import React from 'react';
-import { toggleShowTableModal, createNewTable } from '../actions';
+import {
+  toggleShowTableModal,
+  createNewTable,
+  getPreviousTableData
+} from '../actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import SelectTable from './select-table';
@@ -9,6 +13,9 @@ import './table-modal.scss';
 import newTable from '../static/noun_1074124_cc.svg';
 
 export class TableModal extends React.Component {
+  componentDidMount() {
+    this.props.getPreviousTableData();
+  }
   handleShowModal() {
     this.props.toggleShowTableModal();
   }
@@ -18,7 +25,7 @@ export class TableModal extends React.Component {
   render() {
     const selectComponent = (
       <div className="selectWrapper">
-        <h3>Please choose a previously saved table</h3>
+        <h3>Load a saved table</h3>
         <SelectTable userTables={this.props.selectOptionData} />
       </div>
     );
@@ -28,7 +35,7 @@ export class TableModal extends React.Component {
         <div className="overlay" onClick={() => this.handleShowModal()} />
         <div className="global-modal_contents modal-transition">
           <div className="global-modal-header">
-            <h3>Load another table</h3>
+            <h2>Manage tables</h2>
           </div>
           <div className="global-modal-body">
             <div className="content-left">
@@ -57,6 +64,7 @@ const mapStateToProps = state => ({
 export default withRouter(
   connect(mapStateToProps, {
     toggleShowTableModal,
-    createNewTable
+    createNewTable,
+    getPreviousTableData
   })(TableModal)
 );

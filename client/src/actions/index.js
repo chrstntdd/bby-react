@@ -80,19 +80,16 @@ export const formatTable = () => dispatch => {
 
 export const printTable = () => dispatch => {
   setTimeout(() => {
-    alert('before print');
-    return dispatch({ type: HIDE_ACTIONS });
+    dispatch({ type: HIDE_ACTIONS });
   }, 10);
 
   setTimeout(() => {
     return window.print();
-  }, 10);
+  }, 1000);
 
   setTimeout(() => {
-    alert('after print');
-
-    return dispatch({ type: SHOW_ACTIONS });
-  }, 10);
+    dispatch({ type: SHOW_ACTIONS });
+  }, 1000);
 };
 
 export const clearTable = () => dispatch => {
@@ -128,9 +125,13 @@ export const syncToDatabase = () => (dispatch, getState) => {
   const products = state.table.products;
   const tableId = state.table.tableId;
   axios
-    .put(`${API_URL}/tables/${user.id}/${tableId}`, products, {
-      headers: { Authorization: cookie.get('token') }
-    })
+    .put(
+      `${API_URL}/tables/${user.id}/${tableId}`,
+      { products: products },
+      {
+        headers: { Authorization: cookie.get('token') }
+      }
+    )
     .then(res => {
       dispatch({ type: SYNCED_TABLE_TO_DB });
     })
@@ -155,7 +156,8 @@ export const getPreviousTableData = () => dispatch => {
         /* parse date to JS date object*/
         const parsedDate = new Date(createdOnMongo);
 
-        const formattedDate = `${parsedDate.toDateString()} | ${parsedDate.toLocaleTimeString()}`;
+        /* Simpler alternative needed for IE11 */
+        const formattedDate = `${parsedDate.toDateString()}-${parsedDate.toLocaleTimeString()}`;
 
         return {
           tableId,
@@ -212,13 +214,19 @@ export const toggleShowTableModal = () => dispatch => {
 export const loginUser = ({ employeeNumber, password }) => dispatch => {
   axios
     .post(`${API_URL}/users/sign-in`, {
-      email: `${employeeNumber}@bestbuy.com`,
+      email: `${employeeNumber.trim()}@bestbuy.com`,
       password
     })
     .then(res => {
       cookie.set('token', res.data.token, { path: '/' });
       cookie.set('user', res.data.user, { path: '/' });
-      dispatch({ type: AUTH_USER });
+      dispatch({
+        type: AUTH_USER,
+        payload: {
+          firstName: res.data.user.firstName,
+          lastName: res.data.user.lastName
+        }
+      });
     })
     .catch(err => {
       err.response.status === 401

@@ -20,13 +20,14 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   reducers,
   undefined,
-  composeEnhancers(applyMiddleware(reduxThunk), autoRehydrate())
+  composeEnhancers(applyMiddleware(reduxThunk))
 );
 
 // BEGIN PERSISTING STATE
-persistStore(store, { blacklist: ['auth', 'products.printing'] }, () => {
-  console.log('rehydration complete!');
-});
+/* TODO: BREAK OUT REDUCERS INTO SEPARATE CONCERNS SO THAT STATE CAN BE PERSISTED CONDITIONALLY */
+// persistStore(store, { blacklist: ['auth', 'products.printing'] }, () => {
+//   console.log('rehydration complete!');
+// });
 
 const token = cookie.get('token');
 if (token) {

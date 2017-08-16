@@ -15,7 +15,7 @@ import './dashboard.scss';
 
 export class Dashboard extends React.Component {
   render() {
-    let { showModal } = this.props;
+    let { showModal, userProfile } = this.props;
     let modal;
     if (showModal) {
       modal = <TableModal />;
@@ -23,7 +23,7 @@ export class Dashboard extends React.Component {
     return (
       <div id="dashboard-wrapper">
         {modal}
-        <DashboardHeader />
+        <DashboardHeader userData={userProfile} />
         <div id="main-content-area">
           <SideBar />
           <section id="main-table-area">
@@ -38,6 +38,7 @@ export class Dashboard extends React.Component {
 
 const mapStateToProps = state => ({
   content: state.auth.content,
+  userProfile: state.auth.userProfile,
   showModal: state.table.showModal
 });
 

@@ -21,9 +21,6 @@ export class SelectTable extends React.Component {
       }
     }
 
-    /* FOR TESTING IE */
-    alert(tableIdToLoad);
-
     this.props.loadTable(tableIdToLoad);
   }
   render(props) {

@@ -10,6 +10,7 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
+  userProfile: null,
   error: '',
   message: '',
   content: '',
@@ -19,7 +20,13 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case AUTH_USER:
-      return { ...state, error: '', message: '', authenticated: true };
+      return {
+        ...state,
+        error: '',
+        message: '',
+        authenticated: true,
+        userProfile: action.payload
+      };
     case UNAUTH_USER:
       return { ...state, authenticated: false, error: action.payload };
     case AUTH_ERROR:

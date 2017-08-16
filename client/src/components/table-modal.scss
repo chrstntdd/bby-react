@@ -26,11 +26,12 @@
   border-bottom: 1px solid #ccc;
 }
 
-.global-modal-header h3 {
+.global-modal-header h2 {
+  text-transform: uppercase;
   color: $BESTBUY_BLUE;
   text-align: center;
   font-weight: bold;
-  font-size: 22px;
+  font-size: 3rem;
 }
 
 .global-modal-header .mobile-close {

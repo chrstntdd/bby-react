@@ -112,10 +112,10 @@ export class ProductTable extends React.PureComponent {
         filterable={true}
         resizable={true}
         sortable={false}
-        pageSize={`${products.length < 10 ? 10 : products.length}`}
+        pageSize={`${!products || products.length < 10 ? 10 : products.length}`}
         showPagination={false}
         style={{
-          height: `${printing ? 'auto' : '520px'}`
+          height: `${printing ? 'initial' : '520px'}`
         }}
       />
     );
