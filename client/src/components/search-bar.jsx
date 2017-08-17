@@ -14,6 +14,7 @@ const form = reduxForm({
 export class SearchBar extends React.Component {
   handleInputChange(formProps, dispatch) {
     const inputValue = formProps.currentTarget.value;
+    formProps.preventDefault();
 
     if (!isNaN(Number(inputValue)) && inputValue.length == 12) {
       // IF VALID UPC
