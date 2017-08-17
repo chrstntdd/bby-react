@@ -2,9 +2,11 @@ import { combineReducers } from 'redux';
 import {
   POST_UPC,
   INCREMENT_PRODUCT_QUANTITY,
-  INVALID_UPC
+  INVALID_UPC,
+  LOGIN_VALIDATION_ERROR,
+  NOT_VERIFIED_LOGIN_ERROR
 } from '../actions/types';
-import { reducer as formReducer, change as CHANGE } from 'redux-form';
+import { reducer as formReducer } from 'redux-form';
 import authReducer from './auth_reducer';
 import bbyAPIReducer from './bby_reducer';
 
@@ -15,13 +17,18 @@ const rootReducer = combineReducers({
     postUPC: (state, action) => {
       switch (action.type) {
         case POST_UPC:
-          return undefined;
         case INCREMENT_PRODUCT_QUANTITY:
-          return undefined;
         case INVALID_UPC:
           return undefined;
-        case 'persist/REHYDRATE':
-          return { ...state, persistedState: action.payload };
+        default:
+          return state;
+      }
+    },
+    login: (state, action) => {
+      switch (action.type) {
+        case LOGIN_VALIDATION_ERROR:
+        case NOT_VERIFIED_LOGIN_ERROR:
+          return undefined;
         default:
           return state;
       }

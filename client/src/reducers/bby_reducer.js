@@ -22,7 +22,6 @@ const INITIAL_STATE = {
   products: [],
   formatted: false,
   printing: false,
-  timer: null,
   tableId: '',
   showModal: false,
   selectOptionData: null
@@ -31,9 +30,12 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case POST_UPC:
-      // ADD IN NEW PRODUCT AT THE TOP OF THE ARRAY
+      /* Adds a new product to the top of the array.
+       * Also flips 'formatted' to false
+       */
       return Object.assign({}, state, {
         ...state,
+        formatted: false,
         products: [action.payload, ...state.products]
       });
     case INCREMENT_PRODUCT_QUANTITY:

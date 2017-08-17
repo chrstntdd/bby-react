@@ -6,7 +6,9 @@ import {
   RESET_PASSWORD_REQUEST,
   REGISTER_EMAIL_SENT,
   REGISTER_ERROR,
-  NOT_VERIFIED_LOGIN_ERROR
+  NOT_VERIFIED_LOGIN_ERROR,
+  LOGIN_VALIDATION_ERROR,
+  CLEAR_FLASH_MESSAGE
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -35,8 +37,19 @@ export default function(state = INITIAL_STATE, action) {
     case NOT_VERIFIED_LOGIN_ERROR:
       return {
         ...state,
-        error: 'Please verify your account before logging in.'
+        error: action.payload
       };
+    case LOGIN_VALIDATION_ERROR:
+      return {
+        ...state,
+        error: action.payload
+      };
+    case CLEAR_FLASH_MESSAGE: {
+      return {
+        ...state,
+        error: ''
+      };
+    }
     case FORGOT_PASSWORD_REQUEST:
       return { ...state, message: action.payload.message };
     case RESET_PASSWORD_REQUEST:

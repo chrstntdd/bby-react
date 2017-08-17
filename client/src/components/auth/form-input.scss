@@ -58,7 +58,10 @@
   }
   input:focus ~ .register-label,
   input.has-content ~ .register-label {
-    top: -25px; //HOW HIGH THE .register-label RAISES UP
+    @media (min-width: $bp-xxsmall) {
+      //HOW HIGH THE .register-label RAISES UP
+      top: between(-15px, -25px, $bp-xxsmall, $bp-xlarge);
+    }
     font-size: 14px;
     color: $BESTBUY_YELLOW;
     transition: 0.3s;

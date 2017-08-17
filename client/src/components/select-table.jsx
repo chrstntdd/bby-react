@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { loadTable } from '../actions';
 import { withRouter } from 'react-router-dom';
-const _filter = require('lodash.filter');
 
 import './select-table.scss';
 

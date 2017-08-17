@@ -40,10 +40,10 @@ export class Login extends React.Component {
   renderAlert() {
     if (this.props.errorMessage) {
       return (
-        <div>
-          <span className="error-message">
+        <div className="error-message">
+          <p>
             {this.props.errorMessage}
-          </span>
+          </p>
         </div>
       );
     }
@@ -57,10 +57,10 @@ export class Login extends React.Component {
 
     const form = (
       <section id="login-wrapper">
+        {this.renderAlert()}
         <div id="login-card">
           <h1>Sign In</h1>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-            {this.renderAlert()}
             {formInputs}
             <button type="submit" disabled={!valid}>
               Login

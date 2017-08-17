@@ -8,6 +8,40 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  .error-message {
+    animation: fadeIn 1.5s, slideUp 1.5s;
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translate(-50%, -10%);
+      }
+      to {
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    padding: 0.5rem;
+    background-color: darken(#ec6d75, 5%);
+    border: 3px solid darken(#ec6d75, 10%);
+    border-radius: 3px;
+    left: 50%;
+    top: 8%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    p {
+      color: white;
+      text-align: center;
+      font-size: 1.4rem;
+    }
+  }
   #login-card {
     @media (min-width: $bp-xxsmall) {
       width: between(300px, 600px, $bp-xxsmall, $bp-xlarge);
@@ -33,11 +67,7 @@
       flex-direction: column;
       align-content: center;
       align-items: center;
-      .error-message {
-        text-align: center;
-        color: darken(#ec6d75, 5%);
-        font-size: 1.4rem;
-      }
+
       .input-wrapper {
         margin: 30px auto;
         input {

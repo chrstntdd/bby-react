@@ -9,13 +9,23 @@ import SideBar from './side-bar';
 import DashboardHeader from './dashboard-header';
 import TableModal from './table-modal';
 
-import { syncDatabaseWithClient } from '../actions/index.js';
+import { syncToDatabase } from '../actions/index.js';
 
 import './dashboard.scss';
 
 export class Dashboard extends React.Component {
+  componentWillUpdate() {
+    /* Save table to DB ever 2 minutes ONLY if there is a table loaded*/
+    this.props.tableId && setInterval(() => this.handleAutoSave(), 120000);
+  }
+
+  handleAutoSave() {
+    this.props.syncToDatabase();
+  }
+
   render() {
     let { showModal, userProfile } = this.props;
+
     let modal;
     if (showModal) {
       modal = <TableModal />;
@@ -39,9 +49,10 @@ export class Dashboard extends React.Component {
 const mapStateToProps = state => ({
   content: state.auth.content,
   userProfile: state.auth.userProfile,
-  showModal: state.table.showModal
+  showModal: state.table.showModal,
+  tableId: state.table.tableId
 });
 
 export default withRouter(
-  connect(mapStateToProps, { syncDatabaseWithClient })(Dashboard)
+  connect(mapStateToProps, { syncToDatabase })(Dashboard)
 );

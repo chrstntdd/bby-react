@@ -86,7 +86,7 @@ export class Register extends React.Component {
     }
   }
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, valid } = this.props;
 
     const formInputs = this.state.registerInputs.map((input, index) =>
       <Input key={index} {...input} />
@@ -98,7 +98,9 @@ export class Register extends React.Component {
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
             {this.renderAlert()}
             {formInputs}
-            <button type="submit">Sign Up</button>
+            <button disabled={!valid} type="submit">
+              Sign Up
+            </button>
           </form>
         </section>
       </Element>

@@ -24,7 +24,9 @@ import {
   TOGGLE_LOAD_TABLE_MODAL,
   GET_USER_TABLE_DATA_SUCCESS,
   NOT_VERIFIED_LOGIN_ERROR,
-  INVALID_UPC
+  INVALID_UPC,
+  LOGIN_VALIDATION_ERROR,
+  CLEAR_FLASH_MESSAGE
 } from './types';
 const _find = require('lodash.find');
 
@@ -185,6 +187,9 @@ export const createNewTable = () => dispatch => {
       /* load blank table into current view */
       dispatch({ type: LOAD_BLANK_TABLE });
     })
+    .then(() => {
+      dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
+    })
     .catch(err => {
       errorHandler(dispatch, err.response, AUTH_ERROR);
     });
@@ -200,6 +205,9 @@ export const loadTable = tableId => dispatch => {
     })
     .then(() => {
       dispatch({ type: SET_NEW_TABLE_ID, payload: tableId });
+    })
+    .then(() => {
+      dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
     })
     .catch(err => {
       console.error(err);
@@ -229,11 +237,28 @@ export const loginUser = ({ employeeNumber, password }) => dispatch => {
       });
     })
     .catch(err => {
-      err.response.status === 401
-        ? /* when user is not verified */
-          dispatch({ type: NOT_VERIFIED_LOGIN_ERROR, payload: err.response })
-        : /* some other error */
-          errorHandler(dispatch, err.response, AUTH_ERROR);
+      /* 406 errors are validation errors stored in an array
+       * 400 errors are passport errors as a string
+       * Clear messages after 8 seconds.
+       */
+      if (err.response.status === 406) {
+        const validationErrors = [];
+        err.response.data.validationErrors.forEach(error => {
+          validationErrors.push(error.msg);
+        });
+        dispatch({ type: LOGIN_VALIDATION_ERROR, payload: validationErrors });
+        setTimeout(() => {
+          dispatch({ type: CLEAR_FLASH_MESSAGE });
+        }, 8000);
+      } else if (err.response.status === 400) {
+        dispatch({
+          type: NOT_VERIFIED_LOGIN_ERROR,
+          payload: err.response.data.passportError
+        });
+        setTimeout(() => {
+          dispatch({ type: CLEAR_FLASH_MESSAGE });
+        }, 8000);
+      }
     });
 };
 
