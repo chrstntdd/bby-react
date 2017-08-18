@@ -12,50 +12,32 @@ const form = reduxForm({
 });
 
 export class SearchBar extends React.Component {
-  handleInputChange(formProps, dispatch) {
-    const inputValue = formProps.currentTarget.value;
+  handleChange = (e, props) => {
+    const { getProductDetails, dispatch } = this.props;
+    const inputValue = e.currentTarget.value;
 
-    if (!isNaN(Number(inputValue)) && inputValue.length == 12) {
-      // IF VALID UPC
-      this.handleFormSubmit(inputValue);
+    if (!isNaN(Number(inputValue)) && inputValue.length === 12) {
+      /* If the UPC is valid */
+      getProductDetails({ upc: inputValue.toString() });
     } else if (isNaN(Number(inputValue))) {
-      // IF ANY OF THE VALUES ARE NOT NUMBERS
+      /* If the input is not a number  */
       setTimeout(() => {
-        this.props.dispatch({ type: INVALID_UPC });
+        dispatch({ type: INVALID_UPC });
       }, 10);
       alert(`Looks like you didn't quite scan the UPC. Try again please.`);
-    } else if (inputValue.length < 12) {
-      // IF THE INPUT LENGTH IS SHORTER THAN 12
-      console.log(`We need a valid UPC my guy.`);
     }
-  }
+  };
 
-  handleFormSubmit(inputValue) {
-    this.props.getProductDetails({ upc: inputValue.toString() });
-  }
-
-  renderAlert() {
-    if (this.props.errorMessage) {
-      return (
-        <div>
-          <span>
-            <strong>Error!</strong>
-            {this.props.errorMessage}
-          </span>
-        </div>
-      );
-    }
-  }
   render() {
-    const { onChange, tableId } = this.props;
+    const { tableId, handleSubmit } = this.props;
+
     return (
       <section id="search-section">
-        <form>
-          {this.renderAlert()}
+        <form onSubmit={handleSubmit}>
           <div className="input-group">
             <Field
               id="upcInput"
-              onChange={this.handleInputChange.bind(this)}
+              onChange={e => this.handleChange(e)}
               autoComplete="false"
               name="upc"
               component="input"
