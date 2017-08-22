@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import { loginUser } from '../../actions';
-import Cookies from 'universal-cookie';
 import Input from './form-input';
 import './form-input.scss';
 import './login.scss';
@@ -29,10 +28,6 @@ export class Login extends React.Component {
         }
       ]
     };
-  }
-  componentDidMount() {
-    const cookie = new Cookies();
-    const token = cookie.get('token');
   }
   handleFormSubmit(formProps) {
     this.props.loginUser(formProps);

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
-import Cookies from 'universal-cookie';
 import {
   AUTH_USER,
   AUTH_ERROR,
@@ -37,12 +36,9 @@ process.env.NODE_ENV === 'development'
 
 const CLIENT_ROOT_URL = 'http://localhost:4444';
 
-// CREATE INSTANCE OF UNIVERSAL COOKIE
-// COMMENT OUT TO RUN TESTS!
-const cookie = new Cookies();
-
 export const getProductDetails = upc => (dispatch, getState) => {
   const state = getState();
+  const jwt = state.auth.jwt;
   const products = state.table.products;
   if (_find(products, upc) !== undefined) {
     /* If the product upc is already in the table state, increment the quantity.
@@ -50,20 +46,18 @@ export const getProductDetails = upc => (dispatch, getState) => {
      * resetting on the text input.
      */
     setTimeout(() => {
-      dispatch({ type: INCREMENT_PRODUCT_QUANTITY, payload: upc.upc });
+      return dispatch({ type: INCREMENT_PRODUCT_QUANTITY, payload: upc.upc });
     }, 100);
   } else {
     // IF THE PRODUCT IS UNIQUE AND DOESN'T EXIST WITHIN THE ARRAY
-    axios
+    return axios
       .post(`${API_URL}/best-buy/upc`, upc, {
-        headers: { Authorization: cookie.get('token') }
+        headers: { Authorization: jwt }
       })
-      .then(res => {
-        dispatch({ type: POST_UPC, payload: res.data });
-      })
+      .then(res => dispatch({ type: POST_UPC, payload: res.data }))
       .catch(err => {
+        return dispatch({ type: INVALID_UPC, err });
         alert(err.response.data.message);
-        dispatch({ type: INVALID_UPC });
       });
   }
 };
@@ -91,7 +85,7 @@ export const printTable = () => dispatch => {
 
   setTimeout(() => {
     dispatch({ type: SHOW_ACTIONS });
-  }, 1000);
+  }, 10000);
 };
 
 export const clearTable = () => dispatch => {
@@ -123,15 +117,16 @@ export const errorHandler = (dispatch, error, type) => {
 
 export const syncToDatabase = () => (dispatch, getState) => {
   const state = getState();
-  const user = cookie.get('user', { path: '/' });
+  const userId = state.auth.userProfile.id;
+  const jwt = state.auth.jwt;
   const products = state.table.products;
   const tableId = state.table.tableId;
-  axios
+  return axios
     .put(
-      `${API_URL}/tables/${user.id}/${tableId}`,
+      `${API_URL}/tables/${userId}/${tableId}`,
       { products: products },
       {
-        headers: { Authorization: cookie.get('token') }
+        headers: { Authorization: jwt }
       }
     )
     .then(res => {
@@ -142,13 +137,35 @@ export const syncToDatabase = () => (dispatch, getState) => {
     });
 };
 
+/* Creates a new table for the user, then loads that table state into the view */
+export const createNewTable = () => (dispatch, getState) => {
+  const state = getState();
+  const userId = state.auth.userProfile.id;
+  return axios
+    .post(`${API_URL}/tables/${userId}`)
+    .then(res => {
+      dispatch({ type: SET_NEW_TABLE_ID, payload: res.data._id });
+    })
+    .then(() => {
+      /* load blank table into current view */
+      dispatch({ type: LOAD_BLANK_TABLE });
+    })
+    .then(() => {
+      dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
+    })
+    .catch(err => {
+      errorHandler(dispatch, err.response, AUTH_ERROR);
+    });
+};
+
 /* Makes request for all past tables, 
  * retrieving the date and the unique id of the table.
  */
-export const getPreviousTableData = () => dispatch => {
-  const user = cookie.get('user', { path: '/' });
-  axios
-    .get(`${API_URL}/tables/${user.id}`)
+export const getPreviousTableData = () => (dispatch, getState) => {
+  const state = getState();
+  const userId = state.auth.userProfile.id;
+  return axios
+    .get(`${API_URL}/tables/${userId}`)
     .then(response => {
       return response.data.map(tableInstance => {
         const tableId = tableInstance._id;
@@ -175,31 +192,12 @@ export const getPreviousTableData = () => dispatch => {
     });
 };
 
-/* Creates a new table for the user, then loads that table state into the view */
-export const createNewTable = () => dispatch => {
-  const user = cookie.get('user', { path: '/' });
-  axios
-    .post(`${API_URL}/tables/${user.id}`)
-    .then(res => {
-      dispatch({ type: SET_NEW_TABLE_ID, payload: res.data._id });
-    })
-    .then(() => {
-      /* load blank table into current view */
-      dispatch({ type: LOAD_BLANK_TABLE });
-    })
-    .then(() => {
-      dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
-    })
-    .catch(err => {
-      errorHandler(dispatch, err.response, AUTH_ERROR);
-    });
-};
-
 /* loads existing table from user's collection of past tables */
-export const loadTable = tableId => dispatch => {
-  const user = cookie.get('user', { path: '/' });
-  axios
-    .get(`${API_URL}/tables/${user.id}/${tableId}`)
+export const loadTable = tableId => (dispatch, getState) => {
+  const state = getState();
+  const userId = state.auth.userProfile.id;
+  return axios
+    .get(`${API_URL}/tables/${userId}/${tableId}`)
     .then(response => {
       dispatch({ type: LOAD_SAVED_TABLE, payload: response.data.products });
     })
@@ -220,19 +218,17 @@ export const toggleShowTableModal = () => dispatch => {
 
 /* takes in props from login form */
 export const loginUser = ({ employeeNumber, password }) => dispatch => {
-  axios
+  return axios
     .post(`${API_URL}/users/sign-in`, {
       email: `${employeeNumber.trim()}@bestbuy.com`,
       password
     })
     .then(res => {
-      cookie.set('token', res.data.token, { path: '/' });
-      cookie.set('user', res.data.user, { path: '/' });
       dispatch({
         type: AUTH_USER,
         payload: {
-          firstName: res.data.user.firstName,
-          lastName: res.data.user.lastName
+          user: res.data.user,
+          jwt: res.data.token
         }
       });
     })
@@ -253,7 +249,7 @@ export const loginUser = ({ employeeNumber, password }) => dispatch => {
       } else if (err.response.status === 400) {
         dispatch({
           type: NOT_VERIFIED_LOGIN_ERROR,
-          payload: err.response.data.passportError
+          payload: err.response.data.emailMessage
         });
         setTimeout(() => {
           dispatch({ type: CLEAR_FLASH_MESSAGE });
@@ -269,7 +265,7 @@ export const registerUser = ({
   employeeNumber,
   storeNumber
 }) => dispatch => {
-  axios
+  return axios
     .post(`${API_URL}/users`, {
       firstName,
       lastName,
@@ -293,12 +289,10 @@ export const registerUser = ({
 
 export const logoutUser = error => dispatch => {
   dispatch({ type: UNAUTH_USER, payload: error || '' });
-  cookie.remove('token', { path: '/' });
-  cookie.remove('user', { path: '/' });
 };
 
 export const getForgotPasswordToken = ({ email }) => dispatch => {
-  axios
+  return axios
     .post(`${API_URL}/users/forgot-password`, { email })
     .then(res => {
       dispatch({
@@ -314,7 +308,7 @@ export const getForgotPasswordToken = ({ email }) => dispatch => {
 };
 
 export const resetPassword = (token, { password }) => dispatch => {
-  axios
+  return axios
     .post(`${API_URL}/users/reset-password/${token}`, { password })
     .then(res => {
       dispatch({
@@ -329,11 +323,15 @@ export const resetPassword = (token, { password }) => dispatch => {
 };
 
 export const confirmEmail = token => dispatch => {
-  axios.post(`${API_URL}/users/verify-email/${token}`).then(res => {
+  return axios.post(`${API_URL}/users/verify-email/${token}`).then(res => {
     if (res.status === 200) {
-      cookie.set('token', res.data.token, { path: '/' });
-      cookie.set('user', res.data.user, { path: '/' });
-      dispatch({ type: AUTH_USER });
+      dispatch({
+        type: AUTH_USER,
+        payload: {
+          user: res.data.user,
+          jwt: res.data.jwt
+        }
+      });
     } else {
       dispatch({ type: UNAUTH_USER });
     }

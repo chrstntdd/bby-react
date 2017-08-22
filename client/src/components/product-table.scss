@@ -28,8 +28,9 @@
   body {
     margin: 0;
     padding: 0;
-    height: auto;
+    height: initial !important;
     overflow: visible;
+    size: landscape;
   }
   .rt-resizable-header {
     border-left: 1px solid black;
@@ -37,6 +38,9 @@
   .ReactTable {
     margin: 0;
     width: auto;
+    overflow: visible;
+    display: block !important;
+    height: inherit !important;
   }
 }
 
@@ -61,6 +65,7 @@
 /* Styles from React-Table */
 
 .ReactTable {
+  height: 540px;
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;

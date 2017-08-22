@@ -13,6 +13,7 @@ import {
 
 const INITIAL_STATE = {
   userProfile: null,
+  jwt: null,
   error: '',
   message: '',
   content: '',
@@ -27,7 +28,8 @@ export default function(state = INITIAL_STATE, action) {
         error: '',
         message: '',
         authenticated: true,
-        userProfile: action.payload
+        userProfile: action.payload.user,
+        jwt: action.payload.jwt
       };
     case UNAUTH_USER:
       return { ...state, authenticated: false, error: action.payload };

@@ -115,7 +115,7 @@ export class ProductTable extends React.PureComponent {
         pageSize={`${!products || products.length < 10 ? 10 : products.length}`}
         showPagination={false}
         style={{
-          height: `${printing ? 'initial' : '520px'}`
+          height: `${printing ? 'initial' : '530px'}`
         }}
       />
     );

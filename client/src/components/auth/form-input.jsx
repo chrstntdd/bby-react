@@ -16,7 +16,7 @@ const renderField = (field, props) =>
 const Input = props =>
   <div className="input-wrapper">
     <Field
-      name={props.name}
+      name={props.name || 'input'}
       component={renderField}
       type={props.type}
       validate={required}
