@@ -1,14 +1,17 @@
 import {
-  AUTH_USER,
   UNAUTH_USER,
   AUTH_ERROR,
   FORGOT_PASSWORD_REQUEST,
   RESET_PASSWORD_REQUEST,
-  REGISTER_EMAIL_SENT,
   REGISTER_ERROR,
   NOT_VERIFIED_LOGIN_ERROR,
-  LOGIN_VALIDATION_ERROR,
-  CLEAR_FLASH_MESSAGE
+  CLEAR_FLASH_MESSAGE,
+  LOGIN_REQUEST,
+  LOGIN_FAILURE,
+  LOGIN_SUCCESS,
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS,
+  REGISTER_FAILURE
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -22,7 +25,7 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case AUTH_USER:
+    case LOGIN_SUCCESS:
       return {
         ...state,
         error: '',
@@ -32,16 +35,15 @@ export default function(state = INITIAL_STATE, action) {
         jwt: action.payload.jwt
       };
     case UNAUTH_USER:
-      return { ...state, authenticated: false, error: action.payload };
+      return { ...state, authenticated: false, jwt: null, userProfile: null };
     case AUTH_ERROR:
       return { ...state, error: action.payload };
-    /* TODO: PROVIDE MORE HELPFUL ERROR MESSAGES INSTEAD OF A BLANKET STATEMENT */
     case NOT_VERIFIED_LOGIN_ERROR:
       return {
         ...state,
         error: action.payload
       };
-    case LOGIN_VALIDATION_ERROR:
+    case LOGIN_FAILURE:
       return {
         ...state,
         error: action.payload
@@ -56,9 +58,9 @@ export default function(state = INITIAL_STATE, action) {
       return { ...state, message: action.payload.message };
     case RESET_PASSWORD_REQUEST:
       return { ...state, message: action.payload.message };
-    case REGISTER_EMAIL_SENT:
+    case REGISTER_SUCCESS:
       return { ...state, content: action.payload };
-    case REGISTER_ERROR:
+    case REGISTER_FAILURE:
       return { ...state, error: action.payload };
     default:
       return state;

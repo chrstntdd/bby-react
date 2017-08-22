@@ -76,11 +76,10 @@ export class Register extends React.Component {
   renderAlert() {
     if (this.props.errorMessage) {
       return (
-        <div>
-          <span>
-            <strong>ERROR!</strong>
+        <div className="error-message">
+          <p>
             {this.props.errorMessage}
-          </span>
+          </p>
         </div>
       );
     }

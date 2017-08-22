@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 import {
-  AUTH_USER,
   AUTH_ERROR,
   UNAUTH_USER,
   FORGOT_PASSWORD_REQUEST,
@@ -15,8 +14,6 @@ import {
   SHOW_ACTIONS,
   CLEAR_TABLE,
   SYNCED_TABLE_TO_DB,
-  REGISTER_EMAIL_SENT,
-  REGISTER_ERROR,
   SET_NEW_TABLE_ID,
   LOAD_BLANK_TABLE,
   LOAD_SAVED_TABLE,
@@ -24,15 +21,20 @@ import {
   GET_USER_TABLE_DATA_SUCCESS,
   NOT_VERIFIED_LOGIN_ERROR,
   INVALID_UPC,
-  LOGIN_VALIDATION_ERROR,
-  CLEAR_FLASH_MESSAGE
+  CLEAR_FLASH_MESSAGE,
+  LOGIN_FAILURE,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  REGISTER_FAILURE,
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS
 } from './types';
 const _find = require('lodash.find');
 
 let API_URL;
-process.env.NODE_ENV === 'development'
-  ? (API_URL = 'http://localhost:3000/api/v1')
-  : (API_URL = 'https://aqueous-headland-43492.herokuapp.com/api/v1');
+process.env.NODE_ENV === 'production'
+  ? (API_URL = 'https://aqueous-headland-43492.herokuapp.com/api/v1')
+  : (API_URL = 'http://localhost:3000/api/v1');
 
 const CLIENT_ROOT_URL = 'http://localhost:4444';
 
@@ -85,7 +87,7 @@ export const printTable = () => dispatch => {
 
   setTimeout(() => {
     dispatch({ type: SHOW_ACTIONS });
-  }, 10000);
+  }, 1000);
 };
 
 export const clearTable = () => dispatch => {
@@ -218,6 +220,7 @@ export const toggleShowTableModal = () => dispatch => {
 
 /* takes in props from login form */
 export const loginUser = ({ employeeNumber, password }) => dispatch => {
+  dispatch({ type: LOGIN_REQUEST });
   return axios
     .post(`${API_URL}/users/sign-in`, {
       email: `${employeeNumber.trim()}@bestbuy.com`,
@@ -225,7 +228,7 @@ export const loginUser = ({ employeeNumber, password }) => dispatch => {
     })
     .then(res => {
       dispatch({
-        type: AUTH_USER,
+        type: LOGIN_SUCCESS,
         payload: {
           user: res.data.user,
           jwt: res.data.token
@@ -233,27 +236,59 @@ export const loginUser = ({ employeeNumber, password }) => dispatch => {
       });
     })
     .catch(err => {
-      /* 406 errors are validation errors stored in an array
-       * 400 errors are passport errors as a string
-       * Clear messages after 8 seconds.
-       */
-      if (err.response.status === 406) {
-        const validationErrors = [];
-        err.response.data.validationErrors.forEach(error => {
-          validationErrors.push(error.msg);
-        });
-        dispatch({ type: LOGIN_VALIDATION_ERROR, payload: validationErrors });
-        setTimeout(() => {
-          dispatch({ type: CLEAR_FLASH_MESSAGE });
-        }, 8000);
-      } else if (err.response.status === 400) {
-        dispatch({
-          type: NOT_VERIFIED_LOGIN_ERROR,
-          payload: err.response.data.emailMessage
-        });
-        setTimeout(() => {
-          dispatch({ type: CLEAR_FLASH_MESSAGE });
-        }, 8000);
+      let errorResponse = Object.keys(err.response.data)[0];
+
+      switch (errorResponse) {
+        case 'validationErrors':
+          const validationErrors = [];
+          err.response.data.validationErrors.forEach(error => {
+            validationErrors.push(error.msg);
+          });
+          dispatch({ type: LOGIN_FAILURE, payload: validationErrors });
+          setTimeout(() => {
+            dispatch({ type: CLEAR_FLASH_MESSAGE });
+          }, 8000);
+          break;
+
+        case 'emailMessage':
+          dispatch({
+            type: LOGIN_FAILURE,
+            payload: err.response.data.emailMessage
+          });
+          setTimeout(() => {
+            dispatch({ type: CLEAR_FLASH_MESSAGE });
+          }, 8000);
+          break;
+
+        case 'verifyMessage':
+          dispatch({
+            type: NOT_VERIFIED_LOGIN_ERROR,
+            payload: err.response.data.emailMessage
+          });
+          setTimeout(() => {
+            dispatch({ type: CLEAR_FLASH_MESSAGE });
+          }, 8000);
+          break;
+
+        case 'passwordMessage':
+          dispatch({
+            type: LOGIN_FAILURE,
+            payload: err.response.data.passwordMessage
+          });
+          setTimeout(() => {
+            dispatch({ type: CLEAR_FLASH_MESSAGE });
+          }, 8000);
+          break;
+
+        default:
+          dispatch({
+            type: LOGIN_FAILURE,
+            payload: 'IT ALL BLEW UP'
+          });
+          setTimeout(() => {
+            dispatch({ type: CLEAR_FLASH_MESSAGE });
+          }, 8000);
+          break;
       }
     });
 };
@@ -265,6 +300,7 @@ export const registerUser = ({
   employeeNumber,
   storeNumber
 }) => dispatch => {
+  dispatch({ type: REGISTER_REQUEST });
   return axios
     .post(`${API_URL}/users`, {
       firstName,
@@ -274,16 +310,22 @@ export const registerUser = ({
       storeNumber
     })
     .then(res => {
-      // TELL USER TO CHECK THEIR EMAIL
       dispatch({
-        type: REGISTER_EMAIL_SENT,
+        type: REGISTER_SUCCESS,
         payload:
           'Registered successfully, now check your work email to verify your account'
       });
+      setTimeout(() => {
+        dispatch({ type: CLEAR_FLASH_MESSAGE });
+      }, 8000);
     })
     .catch(err => {
-      const errorMessages = err.response.data.messages;
-      dispatch({ type: REGISTER_ERROR, payload: errorMessages });
+      const errorMessages = err.response.data.messages[0].msg;
+      console.log(err);
+      dispatch({ type: REGISTER_FAILURE, payload: errorMessages });
+      setTimeout(() => {
+        dispatch({ type: CLEAR_FLASH_MESSAGE });
+      }, 8000);
     });
 };
 
@@ -326,7 +368,7 @@ export const confirmEmail = token => dispatch => {
   return axios.post(`${API_URL}/users/verify-email/${token}`).then(res => {
     if (res.status === 200) {
       dispatch({
-        type: AUTH_USER,
+        type: LOGIN_SUCCESS,
         payload: {
           user: res.data.user,
           jwt: res.data.jwt

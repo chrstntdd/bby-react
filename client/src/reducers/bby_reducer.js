@@ -14,7 +14,8 @@ import {
   LOAD_BLANK_TABLE,
   LOAD_SAVED_TABLE,
   TOGGLE_LOAD_TABLE_MODAL,
-  GET_USER_TABLE_DATA_SUCCESS
+  GET_USER_TABLE_DATA_SUCCESS,
+  UNAUTH_USER
 } from '../actions/types';
 const orderBy = require('lodash.orderby');
 
@@ -125,6 +126,16 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         selectOptionData: action.payload
+      };
+    case UNAUTH_USER:
+      return {
+        ...state,
+        products: [],
+        formatted: false,
+        printing: false,
+        tableId: '',
+        showModal: false,
+        selectOptionData: null
       };
     default:
       return state;
