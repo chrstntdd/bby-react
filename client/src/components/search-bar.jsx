@@ -21,9 +21,7 @@ export class SearchBar extends React.Component {
       getProductDetails({ upc: inputValue.toString() });
     } else if (isNaN(Number(inputValue))) {
       /* If the input is not a number  */
-      setTimeout(() => {
-        dispatch({ type: INVALID_UPC });
-      }, 10);
+      setTimeout(() => dispatch({ type: INVALID_UPC }), 10);
       alert(`Looks like you didn't quite scan the UPC. Try again please.`);
     }
   };

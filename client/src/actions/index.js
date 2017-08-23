@@ -38,7 +38,9 @@ process.env.NODE_ENV === 'production'
 
 const CLIENT_ROOT_URL = 'http://localhost:4444';
 
-export const getProductDetails = upc => (dispatch, getState) => {
+let timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+export const getProductDetails = upc => async (dispatch, getState) => {
   const state = getState();
   const jwt = state.auth.jwt;
   const products = state.table.products;
@@ -47,20 +49,24 @@ export const getProductDetails = upc => (dispatch, getState) => {
      * Dispatch is wrapped in a timeout to that ensures the proper timing of the
      * resetting on the text input.
      */
-    setTimeout(() => {
-      return dispatch({ type: INCREMENT_PRODUCT_QUANTITY, payload: upc.upc });
-    }, 100);
+    await timeout(100);
+    await dispatch({ type: INCREMENT_PRODUCT_QUANTITY, payload: upc.upc });
   } else {
     // IF THE PRODUCT IS UNIQUE AND DOESN'T EXIST WITHIN THE ARRAY
-    return axios
-      .post(`${API_URL}/best-buy/upc`, upc, {
+    try {
+      let response;
+      response = await axios.post(`${API_URL}/best-buy/upc`, upc, {
         headers: { Authorization: jwt }
-      })
-      .then(res => dispatch({ type: POST_UPC, payload: res.data }))
-      .catch(err => {
-        return dispatch({ type: INVALID_UPC, err });
-        alert(err.response.data.message);
       });
+      await dispatch({ type: POST_UPC, payload: response.data });
+    } catch (error) {
+      await dispatch({ type: INVALID_UPC });
+
+      process.env.NODE_ENV !== 'test' &&
+        window.alert(
+          "Looks like you didn't scan the right bar code. Please make sure you scan the UPC label"
+        );
+    }
   }
 };
 
@@ -76,18 +82,25 @@ export const formatTable = () => dispatch => {
   dispatch({ type: FORMAT_TABLE });
 };
 
-export const printTable = () => dispatch => {
-  setTimeout(() => {
-    dispatch({ type: HIDE_ACTIONS });
-  }, 10);
+export const hideActions = () => async dispatch => {
+  await timeout(10);
+  dispatch({ type: HIDE_ACTIONS });
+};
 
-  setTimeout(() => {
-    return window.print();
-  }, 1000);
+export const showActions = () => async dispatch => {
+  await timeout(1000);
+  dispatch({ type: SHOW_ACTIONS });
+};
 
-  setTimeout(() => {
-    dispatch({ type: SHOW_ACTIONS });
-  }, 1000);
+export const printTable = () => async dispatch => {
+  try {
+    await dispatch(hideActions(dispatch));
+    await timeout(100);
+    await window.print();
+    await dispatch(showActions(dispatch));
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const clearTable = () => dispatch => {
@@ -117,101 +130,88 @@ export const errorHandler = (dispatch, error, type) => {
  * state (array)
  */
 
-export const syncToDatabase = () => (dispatch, getState) => {
-  const state = getState();
-  const userId = state.auth.userProfile.id;
-  const jwt = state.auth.jwt;
-  const products = state.table.products;
-  const tableId = state.table.tableId;
-  return axios
-    .put(
+export const syncToDatabase = () => async (dispatch, getState) => {
+  try {
+    const state = getState();
+    const userId = state.auth.userProfile.id;
+    const jwt = state.auth.jwt;
+    const products = state.table.products;
+    const tableId = state.table.tableId;
+
+    const response = await axios.put(
       `${API_URL}/tables/${userId}/${tableId}`,
       { products: products },
       {
         headers: { Authorization: jwt }
       }
-    )
-    .then(res => {
-      dispatch({ type: SYNCED_TABLE_TO_DB });
-    })
-    .catch(err => {
-      errorHandler(dispatch, err.response, AUTH_ERROR);
-    });
+    );
+
+    await dispatch({ type: SYNCED_TABLE_TO_DB });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 /* Creates a new table for the user, then loads that table state into the view */
-export const createNewTable = () => (dispatch, getState) => {
-  const state = getState();
-  const userId = state.auth.userProfile.id;
-  return axios
-    .post(`${API_URL}/tables/${userId}`)
-    .then(res => {
-      dispatch({ type: SET_NEW_TABLE_ID, payload: res.data._id });
-    })
-    .then(() => {
-      /* load blank table into current view */
-      dispatch({ type: LOAD_BLANK_TABLE });
-    })
-    .then(() => {
-      dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
-    })
-    .catch(err => {
-      errorHandler(dispatch, err.response, AUTH_ERROR);
-    });
+export const createNewTable = () => async (dispatch, getState) => {
+  try {
+    const state = getState();
+    const userId = state.auth.userProfile.id;
+
+    const response = await axios.post(`${API_URL}/tables/${userId}`);
+
+    await dispatch({ type: SET_NEW_TABLE_ID, payload: response.data._id });
+    await dispatch({ type: LOAD_BLANK_TABLE });
+    await dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 /* Makes request for all past tables, 
  * retrieving the date and the unique id of the table.
  */
-export const getPreviousTableData = () => (dispatch, getState) => {
-  const state = getState();
-  const userId = state.auth.userProfile.id;
-  return axios
-    .get(`${API_URL}/tables/${userId}`)
-    .then(response => {
-      return response.data.map(tableInstance => {
-        const tableId = tableInstance._id;
-        /* date type coming from mongo */
-        const createdOnMongo = tableInstance.createdOn;
+export const getPreviousTableData = () => async (dispatch, getState) => {
+  try {
+    const state = getState();
+    const userId = state.auth.userProfile.id;
 
-        /* parse date to JS date object*/
-        const parsedDate = new Date(createdOnMongo);
+    const response = await axios.get(`${API_URL}/tables/${userId}`);
+    const tableData = response.data.map(tableInstance => {
+      const tableId = tableInstance._id;
 
-        /* Simpler alternative needed for IE11 */
-        const formattedDate = `${parsedDate.toDateString()}-${parsedDate.toLocaleTimeString()}`;
+      /* parse date to JS date object*/
+      const parsedDate = new Date(tableInstance.createdOn);
 
-        return {
-          tableId,
-          formattedDate
-        };
-      });
-    })
-    .then(tableData => {
-      dispatch({ type: GET_USER_TABLE_DATA_SUCCESS, payload: tableData });
-    })
-    .catch(err => {
-      console.error(err);
+      /* Simpler alternative needed for IE11 */
+      const formattedDate = `${parsedDate.toDateString()}-${parsedDate.toLocaleTimeString()}`;
+
+      return {
+        tableId,
+        formattedDate
+      };
     });
+
+    await dispatch({ type: GET_USER_TABLE_DATA_SUCCESS, payload: tableData });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 /* loads existing table from user's collection of past tables */
-export const loadTable = tableId => (dispatch, getState) => {
-  const state = getState();
-  const userId = state.auth.userProfile.id;
-  return axios
-    .get(`${API_URL}/tables/${userId}/${tableId}`)
-    .then(response => {
-      dispatch({ type: LOAD_SAVED_TABLE, payload: response.data.products });
-    })
-    .then(() => {
-      dispatch({ type: SET_NEW_TABLE_ID, payload: tableId });
-    })
-    .then(() => {
-      dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
-    })
-    .catch(err => {
-      console.error(err);
-    });
+export const loadTable = tableId => async (dispatch, getState) => {
+  try {
+    const state = getState();
+    const userId = state.auth.userProfile.id;
+
+    const response = await axios.get(`${API_URL}/tables/${userId}/${tableId}`);
+
+    await dispatch({ type: LOAD_SAVED_TABLE, payload: response.data.products });
+    await dispatch({ type: SET_NEW_TABLE_ID, payload: tableId });
+    await dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const toggleShowTableModal = () => dispatch => {
