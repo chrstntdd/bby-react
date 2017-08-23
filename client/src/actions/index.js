@@ -219,78 +219,77 @@ export const toggleShowTableModal = () => dispatch => {
 };
 
 /* takes in props from login form */
-export const loginUser = ({ employeeNumber, password }) => dispatch => {
-  dispatch({ type: LOGIN_REQUEST });
-  return axios
-    .post(`${API_URL}/users/sign-in`, {
+export const loginUser = ({ employeeNumber, password }) => async dispatch => {
+  try {
+    await dispatch({ type: LOGIN_REQUEST });
+
+    const response = await axios.post(`${API_URL}/users/sign-in`, {
       email: `${employeeNumber.trim()}@bestbuy.com`,
       password
-    })
-    .then(res => {
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: {
-          user: res.data.user,
-          jwt: res.data.token
-        }
-      });
-    })
-    .catch(err => {
-      let errorResponse = Object.keys(err.response.data)[0];
+    });
 
-      switch (errorResponse) {
-        case 'validationErrors':
-          const validationErrors = [];
-          err.response.data.validationErrors.forEach(error => {
-            validationErrors.push(error.msg);
-          });
-          dispatch({ type: LOGIN_FAILURE, payload: validationErrors });
-          setTimeout(() => {
-            dispatch({ type: CLEAR_FLASH_MESSAGE });
-          }, 8000);
-          break;
-
-        case 'emailMessage':
-          dispatch({
-            type: LOGIN_FAILURE,
-            payload: err.response.data.emailMessage
-          });
-          setTimeout(() => {
-            dispatch({ type: CLEAR_FLASH_MESSAGE });
-          }, 8000);
-          break;
-
-        case 'verifyMessage':
-          dispatch({
-            type: NOT_VERIFIED_LOGIN_ERROR,
-            payload: err.response.data.emailMessage
-          });
-          setTimeout(() => {
-            dispatch({ type: CLEAR_FLASH_MESSAGE });
-          }, 8000);
-          break;
-
-        case 'passwordMessage':
-          dispatch({
-            type: LOGIN_FAILURE,
-            payload: err.response.data.passwordMessage
-          });
-          setTimeout(() => {
-            dispatch({ type: CLEAR_FLASH_MESSAGE });
-          }, 8000);
-          break;
-
-        default:
-          dispatch({
-            type: LOGIN_FAILURE,
-            payload: 'IT ALL BLEW UP'
-          });
-          setTimeout(() => {
-            dispatch({ type: CLEAR_FLASH_MESSAGE });
-          }, 8000);
-          break;
+    await dispatch({
+      type: LOGIN_SUCCESS,
+      payload: {
+        user: response.data.user,
+        jwt: response.data.token
       }
     });
+  } catch (err) {
+    let errorResponse = Object.keys(err.response.data)[0];
+
+    switch (errorResponse) {
+      case 'validationErrors':
+        const validationErrors = [];
+        err.response.data.validationErrors.forEach(error => {
+          validationErrors.push(error.msg);
+        });
+        await dispatch({ type: LOGIN_FAILURE, payload: validationErrors });
+        await timeout(8000);
+        await dispatch({ type: CLEAR_FLASH_MESSAGE });
+
+        break;
+
+      case 'emailMessage':
+        await dispatch({
+          type: LOGIN_FAILURE,
+          payload: err.response.data.emailMessage
+        });
+        await timeout(8000);
+        await dispatch({ type: CLEAR_FLASH_MESSAGE });
+
+        break;
+
+      case 'verifyMessage':
+        await dispatch({
+          type: NOT_VERIFIED_LOGIN_ERROR,
+          payload: err.response.data.emailMessage
+        });
+        await timeout(8000);
+        await dispatch({ type: CLEAR_FLASH_MESSAGE });
+
+        break;
+
+      case 'passwordMessage':
+        await dispatch({
+          type: LOGIN_FAILURE,
+          payload: err.response.data.passwordMessage
+        });
+        await timeout(8000);
+        await dispatch({ type: CLEAR_FLASH_MESSAGE });
+        break;
+
+      default:
+        await dispatch({
+          type: LOGIN_FAILURE,
+          payload: 'IT ALL BLEW UP'
+        });
+        await timeout(8000);
+        await dispatch({ type: CLEAR_FLASH_MESSAGE });
+
+        break;
+    }
+  }
 };
 
 export const registerUser = ({
@@ -299,83 +298,79 @@ export const registerUser = ({
   password,
   employeeNumber,
   storeNumber
-}) => dispatch => {
-  dispatch({ type: REGISTER_REQUEST });
-  return axios
-    .post(`${API_URL}/users`, {
+}) => async dispatch => {
+  try {
+    await dispatch({ type: REGISTER_REQUEST });
+    const response = await axios.post(`${API_URL}/users`, {
       firstName,
       lastName,
       password,
       employeeNumber,
       storeNumber
-    })
-    .then(res => {
-      dispatch({
-        type: REGISTER_SUCCESS,
-        payload:
-          'Registered successfully, now check your work email to verify your account'
-      });
-      setTimeout(() => {
-        dispatch({ type: CLEAR_FLASH_MESSAGE });
-      }, 8000);
-    })
-    .catch(err => {
-      const errorMessages = err.response.data.messages[0].msg;
-      console.log(err);
-      dispatch({ type: REGISTER_FAILURE, payload: errorMessages });
-      setTimeout(() => {
-        dispatch({ type: CLEAR_FLASH_MESSAGE });
-      }, 8000);
     });
+
+    await dispatch({
+      type: REGISTER_SUCCESS,
+      payload:
+        'Registered successfully, now check your work email to verify your account'
+    });
+
+    await timeout(8000);
+    await dispatch({ type: CLEAR_FLASH_MESSAGE });
+  } catch (error) {
+    /* TODO: gracefully handle error responses */
+    const errorMessages = error.response.data.messages[0].msg;
+    await dispatch({ type: REGISTER_FAILURE, payload: errorMessages });
+    await timeout(8000);
+    await dispatch({ type: CLEAR_FLASH_MESSAGE });
+  }
 };
 
 export const logoutUser = error => dispatch => {
   dispatch({ type: UNAUTH_USER, payload: error || '' });
 };
 
-export const getForgotPasswordToken = ({ email }) => dispatch => {
-  return axios
-    .post(`${API_URL}/users/forgot-password`, { email })
-    .then(res => {
-      dispatch({
-        type: FORGOT_PASSWORD_REQUEST,
-        payload: res.data.message
-      });
-      // REDIRECT TO LOGIN PAGE ON SUCCESSFUL PASSWORD RESET
-      // SOMEWHERE HERE
-    })
-    .catch(err => {
-      errorHandler(dispatch, errorHandler.response, AUTH_ERROR);
+export const getForgotPasswordToken = ({ email }) => async dispatch => {
+  try {
+    const response = await axios.post(`${API_URL}/users/forgot-password`, {
+      email
     });
+    await dispatch({
+      type: FORGOT_PASSWORD_REQUEST,
+      payload: response.data.message
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-export const resetPassword = (token, { password }) => dispatch => {
-  return axios
-    .post(`${API_URL}/users/reset-password/${token}`, { password })
-    .then(res => {
-      dispatch({
-        type: RESET_PASSWORD_REQUEST,
-        payload: res.data.message
-      });
-      // REDIRECT TO LOGIN PAGE WHEN SUCCESSFUL
-    })
-    .catch(err => {
-      errorHandler(dispatch, err.response, AUTH_ERROR);
+export const resetPassword = (token, { password }) => async dispatch => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/users/reset-password/${token}`,
+      { password }
+    );
+
+    await dispatch({
+      type: RESET_PASSWORD_REQUEST,
+      payload: response.data.message
     });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-export const confirmEmail = token => dispatch => {
-  return axios.post(`${API_URL}/users/verify-email/${token}`).then(res => {
-    if (res.status === 200) {
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: {
-          user: res.data.user,
-          jwt: res.data.jwt
-        }
-      });
-    } else {
-      dispatch({ type: UNAUTH_USER });
-    }
-  });
+export const confirmEmail = token => async dispatch => {
+  try {
+    const response = await axios.post(`${API_URL}/users/verify-email/${token}`);
+    await dispatch({
+      type: LOGIN_SUCCESS,
+      payload: {
+        user: response.data.user,
+        jwt: response.data.jwt
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };

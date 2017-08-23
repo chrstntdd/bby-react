@@ -84,9 +84,265 @@ const initialState = {
 const API_URL = 'http://localhost:3000/api/v1';
 
 describe('auth actions', () => {
-  describe('', () => {
-    it('', () => {
-      /*  */
+  describe('loginUser', () => {
+    it('should dispatch LOGIN_REQUEST and LOGIN_SUCCESS', async () => {
+      const mock = new MockAdapter(axios);
+      const employeeNumber = 'a1075394';
+      const password = 'dummy';
+
+      mock
+        .onPost(`${API_URL}/users/sign-in`, {
+          email: `${employeeNumber.trim()}@bestbuy.com`,
+          password
+        })
+        .reply(200, {
+          token: 'stub',
+          user: 'yeh'
+        });
+
+      const store = mockStore(initialState);
+      await store.dispatch(actions.loginUser({ employeeNumber, password }));
+      const response = store.getActions();
+
+      expect(response.length).toEqual(2);
+      expect(response).toContainEqual(
+        {
+          type: types.LOGIN_REQUEST
+        },
+        {
+          type: types.LOGIN_SUCCESS,
+          payload: {
+            token: 'stub',
+            user: 'yeh'
+          }
+        }
+      );
+    });
+    it(
+      'should dispatch LOGIN_FAILURE if there was a problem',
+      async () => {
+        const mock = new MockAdapter(axios);
+        const employeeNumber = 'a1075394';
+        const password = '<>';
+
+        mock
+          .onPost(`${API_URL}/users/sign-in`, {
+            email: `${employeeNumber.trim()}@bestbuy.com`,
+            password
+          })
+          .reply(400, {
+            error: 'error'
+          });
+        const store = mockStore(initialState);
+
+        await store.dispatch(actions.loginUser({ employeeNumber, password }));
+        const response = store.getActions();
+
+        expect(response.length).toEqual(3);
+        expect(response).toContainEqual(
+          {
+            type: types.LOGIN_REQUEST
+          },
+          {
+            type: types.LOGIN_FAILURE,
+            payload: {
+              error: 'error'
+            }
+          },
+          {
+            type: types.CLEAR_FLASH_MESSAGE
+          }
+        );
+      },
+      10000 /* timeout to wait for all actions to be dispatched */
+    );
+  });
+  describe('registerUser', () => {
+    it(
+      'should dispatch REGISTER_REQUEST and REGISTER_SUCCESS on valid credentials',
+      async () => {
+        const mock = new MockAdapter(axios);
+        const mockEmployee = {
+          firstName: 'Christian',
+          lastName: 'Todd',
+          password: 'dumbothicc',
+          employeeNumber: 'a1',
+          storeNumber: 420
+        };
+        const {
+          firstName,
+          lastName,
+          password,
+          employeeNumber,
+          storeNumber
+        } = mockEmployee;
+
+        mock
+          .onPost(`${API_URL}/users`, {
+            firstName,
+            lastName,
+            password,
+            employeeNumber,
+            storeNumber
+          })
+          .reply(201, {
+            message: 'Your account has been created.'
+          });
+
+        const store = mockStore(initialState);
+
+        await store.dispatch(
+          actions.registerUser({
+            firstName,
+            lastName,
+            password,
+            employeeNumber,
+            storeNumber
+          })
+        );
+        const response = store.getActions();
+
+        expect(response.length).toEqual(3);
+        expect(response).toContainEqual(
+          {
+            type: types.REGISTER_REQUEST
+          },
+          {
+            type: types.REGISTER_SUCCESS,
+            payload: {
+              message: 'your account has been created'
+            }
+          },
+          {
+            type: types.CLEAR_FLASH_MESSAGE
+          }
+        );
+      },
+      10000
+    );
+    it(
+      'should dispatch REGISTER_REQUEST and REGISTER_FAILURE on invalid credentials',
+      async () => {
+        const mock = new MockAdapter(axios);
+        const mockEmployee = {
+          firstName: 'Christian',
+          lastName: 'Todd',
+          password: '<>',
+          employeeNumber: 'a1',
+          storeNumber: 'what'
+        };
+        const {
+          firstName,
+          lastName,
+          password,
+          employeeNumber,
+          storeNumber
+        } = mockEmployee;
+
+        mock
+          .onPost(`${API_URL}/users`, {
+            firstName,
+            lastName,
+            password,
+            employeeNumber,
+            storeNumber
+          })
+          .reply(400, {
+            messages: [{ msg: 'an error' }]
+          });
+
+        const store = mockStore(initialState);
+
+        await store.dispatch(
+          actions.registerUser({
+            firstName,
+            lastName,
+            password,
+            employeeNumber,
+            storeNumber
+          })
+        );
+        const response = store.getActions();
+
+        expect(response.length).toEqual(3);
+        expect(response).toContainEqual(
+          {
+            type: types.REGISTER_REQUEST
+          },
+          {
+            type: types.REGISTER_FAILURE,
+            payload: 'some error'
+          },
+          {
+            type: types.CLEAR_FLASH_MESSAGE
+          }
+        );
+      },
+      10000
+    );
+  });
+
+  describe('getForgotPasswordToken', () => {
+    it('should dispatch FORGOT_PASSWORD_REQUEST', async () => {
+      const mock = new MockAdapter(axios);
+      const email = 'a1@bestbuy.com';
+      const store = mockStore(initialState);
+
+      mock
+        .onPost(`${API_URL}/users/forgot-password`, { email })
+        .reply(200, { resetToken: 'a token', message: 'thanks' });
+
+      await store.dispatch(actions.getForgotPasswordToken({ email }));
+
+      const response = store.getActions();
+      expect(response.length).toEqual(1);
+      expect(response).toContainEqual({
+        type: types.FORGOT_PASSWORD_REQUEST,
+        payload: 'thanks'
+      });
+    });
+  });
+
+  describe('resetPassword', () => {
+    it('should dispatch RESET_PASSWORD_REQUEST', async () => {
+      const mock = new MockAdapter(axios);
+      const store = mockStore(initialState);
+      const password = 'fakeNews';
+      const token = 'asdfjfks';
+
+      mock
+        .onPost(`${API_URL}/users/reset-password/${token}`, { password })
+        .reply(200, { message: 'your password has been changed' });
+
+      await store.dispatch(actions.resetPassword(token, { password }));
+      const response = store.getActions();
+
+      expect(response.length).toEqual(1);
+      expect(response).toContainEqual({
+        type: types.RESET_PASSWORD_REQUEST,
+        payload: 'your password has been changed'
+      });
+    });
+  });
+
+  describe('confirmEmail', () => {
+    it('should dispatch LOGIN_SUCCESS', async () => {
+      const mock = new MockAdapter(axios);
+      const store = mockStore(initialState);
+      const token = 'asdfjfks';
+
+      mock
+        .onPost(`${API_URL}/users/verify-email/${token}`)
+        .reply(200, { jwt: 'jwt token', user: 'user' });
+
+      await store.dispatch(actions.confirmEmail(token));
+      const response = store.getActions();
+
+      expect(response.length).toEqual(1);
+      expect(response).toContainEqual({
+        type: types.LOGIN_SUCCESS,
+        payload: { user: 'user', jwt: 'jwt token' }
+      });
     });
   });
 });
