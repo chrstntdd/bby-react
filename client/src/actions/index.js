@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 import {
-  AUTH_ERROR,
   UNAUTH_USER,
   FORGOT_PASSWORD_REQUEST,
   RESET_PASSWORD_REQUEST,
@@ -105,24 +104,6 @@ export const printTable = () => async dispatch => {
 
 export const clearTable = () => dispatch => {
   dispatch({ type: CLEAR_TABLE });
-};
-
-export const errorHandler = (dispatch, error, type) => {
-  console.error(`Error type: ${type}`);
-  console.error(error);
-
-  let errorMessage = error.response ? error.response.data : error;
-
-  // NOT AUTHENTICATED ERROR
-  if (error.status === 401 || error.response.status === 401) {
-    errorMessage = 'You are not authorized to do this.';
-    return dispatch(logoutUser(errorMessage));
-  }
-
-  dispatch({
-    type,
-    payload: errorMessage
-  });
 };
 
 /* PUTs all products in the current table to the DB on a timer

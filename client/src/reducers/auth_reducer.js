@@ -1,6 +1,5 @@
 import {
   UNAUTH_USER,
-  AUTH_ERROR,
   FORGOT_PASSWORD_REQUEST,
   RESET_PASSWORD_REQUEST,
   REGISTER_ERROR,
@@ -28,6 +27,7 @@ export default function(state = INITIAL_STATE, action) {
     case LOGIN_SUCCESS:
       return {
         ...state,
+        content: '',
         error: '',
         message: '',
         authenticated: true,
@@ -36,8 +36,6 @@ export default function(state = INITIAL_STATE, action) {
       };
     case UNAUTH_USER:
       return { ...state, authenticated: false, jwt: null, userProfile: null };
-    case AUTH_ERROR:
-      return { ...state, error: action.payload };
     case NOT_VERIFIED_LOGIN_ERROR:
       return {
         ...state,
@@ -55,11 +53,11 @@ export default function(state = INITIAL_STATE, action) {
       };
     }
     case FORGOT_PASSWORD_REQUEST:
-      return { ...state, message: action.payload.message };
+      return { ...state, message: action.payload };
     case RESET_PASSWORD_REQUEST:
-      return { ...state, message: action.payload.message };
+      return { ...state, message: action.payload };
     case REGISTER_SUCCESS:
-      return { ...state, content: action.payload };
+      return { ...state, message: action.payload };
     case REGISTER_FAILURE:
       return { ...state, error: action.payload };
     default:
