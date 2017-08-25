@@ -1,4 +1,5 @@
 @import '../../../colors.scss';
+@import '../../../rwd-helpers.scss';
 
 footer {
   width: 100vw;
@@ -11,7 +12,10 @@ footer {
     align-items: center;
     flex-direction: column;
     li {
-      margin-top: 2%;
+      @media (min-width: $bp-xxsmall) {
+        margin-top: between(9px, 12px, $bp-xxsmall, $bp-xlarge);
+        margin-bottom: between(9px, 12px, $bp-xxsmall, $bp-xlarge);
+      }
       list-style: none;
       padding-left: 0;
       a {

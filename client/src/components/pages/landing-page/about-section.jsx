@@ -6,19 +6,19 @@ const AboutSection = props => {
     <section id="about-section">
       <h1>About Quantified</h1>
       <h3>
-        Powered by the Best Buy API, Quantified is a project that helps
-        streamline the receiving of high cost products in addition to being a
-        general purpose tool for creating tabular data within Best Buy.
+        Powered by the Best Buy API, Quantified is a project/utility that
+        streamlines the receiving of products by organizing product metadata
+        into a table that can be saved, organized, filtered, and altered at a
+        later time. Additionally, it can be used as general purpose tool for
+        creating and organizing tabular data within Best Buy.
       </h3>
       <h3>
-        Built by a Best Buy employee, Quantified was created with the employee
-        in mind and will be consistently improved to ensure reliability and
-        accuracy.
+        In its current form, Quantified is loosely coupled to Best Buy, but
+        could easily be adapted to any other retail environment.
       </h3>
       <h3>
-        Quantified is built with industry leading technology for enhanced
-        reliability, speed, and security. These technologies include NodeJS with
-        Express, React, Redux, SCSS, Fuse-Box, MongoDB, and more!
+        Quantified is built with battle tested and industry leading technology
+        for guaranteed reliability, security, and of course speed.
       </h3>
     </section>
   );

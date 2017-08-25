@@ -15,22 +15,22 @@ export default class HowSection extends React.Component {
         {
           name: 'simple',
           img: simple,
-          desc: 'lorem ipsum'
+          desc: '...but powerful'
         },
         {
           name: 'reliable',
           img: reliable,
-          desc: 'lorem ipsum'
+          desc: 'There when you need it'
         },
         {
-          name: 'secure',
+          name: 'safe',
           img: secure,
-          desc: 'lorem ipsum'
+          desc: 'Without compromises'
         },
         {
           name: 'fast',
           img: fast,
-          desc: 'lorem ipsum'
+          desc: 'Designed with speed in mind'
         }
       ]
     };

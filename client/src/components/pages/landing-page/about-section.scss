@@ -15,13 +15,16 @@
   }
   h1 {
     @media (min-width: $bp-xxsmall) {
-      font-size: between(55px, 120px, $bp-xxsmall, $bp-xlarge);
+      font-size: between(48px, 80px, $bp-xxsmall, $bp-xlarge);
     }
+    font-family: 'Lobster', cursive;
+    margin-bottom: 0.5rem;
     font-weight: 200;
   }
   h3 {
     margin-bottom: 0;
     font-weight: 400;
+    letter-spacing: 0.1rem;
     @media (min-width: $bp-xxsmall) {
       font-size: between(16px, 45px, $bp-xxsmall, $bp-xlarge);
       width: between(310px, 1536px, $bp-xxsmall, $bp-xlarge);
