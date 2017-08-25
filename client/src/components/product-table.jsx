@@ -37,7 +37,7 @@ export class ProductTable extends React.PureComponent {
           },
           {
             Header: 'Department',
-            accessor: 'department',
+            accessor: 'departmentId',
             show: false
           },
           {

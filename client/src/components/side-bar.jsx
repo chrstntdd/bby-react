@@ -22,55 +22,35 @@ import manage from '../static/noun_1082747_cc.svg';
 import './side-bar.scss';
 
 export class SideBar extends React.Component {
-  handleSyncToDatabase() {
-    this.props.syncToDatabase();
-  }
-
-  handleTableFormat() {
-    this.props.formatTable();
-  }
-
-  handlePrintTable() {
-    this.props.printTable();
-  }
-
-  handelClearTable() {
-    this.props.clearTable();
-  }
-
-  handleShowModal() {
-    this.props.toggleShowTableModal();
-  }
-
   render() {
     return (
       <aside id="side-bar">
         <div className="btn-container">
-          <button onClick={() => this.handleShowModal()}>
+          <button id="manageButton" onClick={this.props.toggleShowTableModal}>
             <img src={manage} alt="" />
             <p>Manage</p>
           </button>
         </div>
         <div className="btn-container">
-          <button onClick={() => this.handleSyncToDatabase()}>
+          <button id="saveButton" onClick={this.props.syncToDatabase}>
             <img src={databaseSync} alt="" />
             <p>Save</p>
           </button>
         </div>
         <div className="btn-container">
-          {' '}<button onClick={() => this.handleTableFormat()}>
+          <button id="formatButton" onClick={this.props.formatTable}>
             <img src={formatIcon} alt="" />
             <p>Format</p>
           </button>
         </div>
         <div className="btn-container">
-          <button onClick={() => this.handlePrintTable()}>
+          <button id="printButton" onClick={this.props.printTable}>
             <img src={printIcon} alt="" />
             <p>Print</p>
           </button>
         </div>
         <div className="btn-container">
-          <button onClick={() => this.handelClearTable()}>
+          <button id="clearTableButton" onClick={this.props.clearTable}>
             <img id="clear-icon" src={clearIcon} alt="" />
             <p>Clear</p>
           </button>
@@ -92,7 +72,6 @@ export default withRouter(
     printTable,
     clearTable,
     syncToDatabase,
-    // createNewTable,
     toggleShowTableModal
   })(SideBar)
 );

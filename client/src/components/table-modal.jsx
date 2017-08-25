@@ -16,9 +16,6 @@ export class TableModal extends React.Component {
   componentDidMount() {
     this.props.getPreviousTableData();
   }
-  handleShowModal() {
-    this.props.toggleShowTableModal();
-  }
   handleCreateNewTable() {
     this.props.createNewTable();
   }
@@ -32,7 +29,7 @@ export class TableModal extends React.Component {
 
     return (
       <div className="global-modal">
-        <div className="overlay" onClick={() => this.handleShowModal()} />
+        <div className="overlay" onClick={this.props.toggleShowTableModal} />
         <div className="global-modal_contents modal-transition">
           <div className="global-modal-header">
             <h2>Manage tables</h2>

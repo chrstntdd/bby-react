@@ -35,6 +35,8 @@
     "enzyme": "^2.9.1",
     "fuse-box": "latest",
     "jest": "^20.0.4",
+    "jsdom": "^11.2.0",
+    "jsdom-global": "^3.0.2",
     "node-sass": "^4.5.3",
     "postcss-flexibility": "^2.0.0",
     "postcss-modules": "^0.8.0",
