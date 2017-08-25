@@ -49,6 +49,8 @@ const initialState = {
   }
 };
 
+let timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const setup = () => {
   const middlewares = [thunk];
   const context = createRouterContext();
@@ -94,51 +96,56 @@ describe('SMART <ConnectedSideBar/>', () => {
     const { enzymeWrapper, props } = setup();
     expect(enzymeWrapper).not.toBe(null);
   });
-  // describe('MANAGE button', () => {
-  //   it('should dispatch handleShowModal', () => {
-  //     const { enzymeWrapper, props } = setup();
+  describe('MANAGE button', () => {
+    it('should dispatch handleShowModal', () => {
+      const { enzymeWrapper, props } = setup();
 
-  //     const button = enzymeWrapper.find('#manageButton');
-  //     button.simulate('click');
+      const button = enzymeWrapper.find('#manageButton');
+      button.simulate('click');
 
-  //     console.log(button.props().onClick);
-  //     expect(props.toggleShowTableModal).toHaveBeenCalled();
-  //   });
-  // });
-  // describe('SAVE button', () => {
-  //   it('should dispatch handleSyncToDatabase', () => {
-  //     const { enzymeWrapper, props } = setup();
+      expect(props.toggleShowTableModal).toHaveBeenCalled();
+    });
+  });
+  describe('SAVE button', () => {
+    it.skip('should dispatch syncToDatabase', async () => {
+      /* TODO. figure out how to test the async debounce function */
+      try {
+        const { enzymeWrapper, props } = setup();
 
-  //     const button = enzymeWrapper.find('#saveButton');
-  //     button.simulate('click');
-  //     expect(props.handleSyncToDatabase).toHaveBeenCalled();
-  //   });
-  // });
-  // describe('FORMAT button', () => {
-  //   it('should dispatch toggleShowTableModal', () => {
-  //     const { enzymeWrapper, props } = setup();
+        const button = enzymeWrapper.find('#saveButton');
+        button.simulate('click');
+        await timeout(6000);
+        expect(props.syncToDatabase).toHaveBeenCalled();
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  });
+  describe('FORMAT button', () => {
+    it('should dispatch formatTable', () => {
+      const { enzymeWrapper, props } = setup();
 
-  //     const button = enzymeWrapper.find('#formatButton');
-  //     button.simulate('click');
-  //     expect(props.handleTableFormat).toHaveBeenCalled();
-  //   });
-  // });
-  // describe('{PRINT button', () => {
-  //   it('should dispatch toggleShowTableModal', () => {
-  //     const { enzymeWrapper, props } = setup();
+      const button = enzymeWrapper.find('#formatButton');
+      button.simulate('click');
+      expect(props.formatTable).toHaveBeenCalled();
+    });
+  });
+  describe('PRINT button', () => {
+    it('should dispatch printTable', () => {
+      const { enzymeWrapper, props } = setup();
 
-  //     const button = enzymeWrapper.find('#printButton');
-  //     button.simulate('click');
-  //     expect(props.handlePrintTable).toHaveBeenCalled();
-  //   });
-  // });
-  // describe('CLEAR TABLE button', () => {
-  //   it('should dispatch toggleShowTableModal', () => {
-  //     const { enzymeWrapper, props } = setup();
+      const button = enzymeWrapper.find('#printButton');
+      button.simulate('click');
+      expect(props.printTable).toHaveBeenCalled();
+    });
+  });
+  describe('CLEAR TABLE button', () => {
+    it('should dispatch clearTable', () => {
+      const { enzymeWrapper, props } = setup();
 
-  //     const button = enzymeWrapper.find('#clearTableButton');
-  //     button.simulate('click');
-  //     expect(props.handelClearTable).toHaveBeenCalled();
-  //   });
-  // });
+      const button = enzymeWrapper.find('#clearTableButton');
+      button.simulate('click');
+      expect(props.clearTable).toHaveBeenCalled();
+    });
+  });
 });
