@@ -4,9 +4,11 @@
   @page {
     size: landscape;
   }
+
   .hide-on-print,
   .ReactTable .rt-thead input,
   .ReactTable .rt-td button,
+  .ReactTable .rt-thead.-headerGroups,
   .-filters,
   #side-bar *,
   #search-section,
@@ -17,8 +19,12 @@
     display: none;
   }
 
+  /* CRUCIAL for printing multiple pages in IE11 */
+  .ReactTable .rt-table,
+  .ReactTable .rt-tbody,
   #dashboard-wrapper {
     height: auto !important;
+    overflow: visible !important;
   }
 
   html,
@@ -29,7 +35,7 @@
     margin: 0;
     padding: 0;
     height: initial !important;
-    overflow: visible;
+    overflow: visible !important;
     size: landscape;
   }
   .rt-resizable-header {
@@ -37,8 +43,8 @@
   }
   .ReactTable {
     margin: 0;
-    width: auto;
-    overflow: visible;
+    width: 100%;
+    overflow: visible !important;
     display: block !important;
     height: inherit !important;
   }

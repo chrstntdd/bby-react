@@ -78,10 +78,12 @@ const setup = () => {
 
 describe('DUMB <SideBar/>', () => {
   it('should render without crashing', () => {
-    shallow(<SideBar />);
+    const { props } = setup();
+    const wrapper = shallow(<SideBar {...props} />);
   });
   it('should render all buttons', () => {
-    const wrapper = shallow(<SideBar />);
+    const { props } = setup();
+    const wrapper = shallow(<SideBar {...props} />);
     const buttons = wrapper.find('button');
     expect(buttons.length).toBe(5);
   });
