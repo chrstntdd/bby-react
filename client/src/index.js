@@ -17,14 +17,14 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   reducers,
   undefined,
-  composeEnhancers(applyMiddleware(reduxThunk))
+  composeEnhancers(applyMiddleware(reduxThunk), autoRehydrate())
 );
 
 // BEGIN PERSISTING STATE
 /* TODO: BREAK OUT REDUCERS INTO SEPARATE CONCERNS SO THAT STATE CAN BE PERSISTED CONDITIONALLY */
-// persistStore(store, { blacklist: ['auth'] }, () => {
-//   console.log('rehydration complete!');
-// });
+persistStore(store, () => {
+  console.log('rehydration complete!');
+});
 
 import './index.scss';
 

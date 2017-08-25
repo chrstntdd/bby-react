@@ -8,6 +8,7 @@ import {
 } from '../actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+const _debounce = require('lodash.debounce');
 
 import TableModal from './table-modal';
 
@@ -32,7 +33,10 @@ export class SideBar extends React.Component {
           </button>
         </div>
         <div className="btn-container">
-          <button id="saveButton" onClick={this.props.syncToDatabase}>
+          <button
+            id="saveButton"
+            onClick={_debounce(this.props.syncToDatabase, 5000)}
+          >
             <img src={databaseSync} alt="" />
             <p>Save</p>
           </button>

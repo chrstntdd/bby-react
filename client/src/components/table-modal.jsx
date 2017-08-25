@@ -4,6 +4,7 @@ import {
   createNewTable,
   getPreviousTableData
 } from '../actions';
+
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import SelectTable from './select-table';
@@ -13,12 +14,6 @@ import './table-modal.scss';
 import newTable from '../static/noun_1074124_cc.svg';
 
 export class TableModal extends React.Component {
-  componentDidMount() {
-    this.props.getPreviousTableData();
-  }
-  handleCreateNewTable() {
-    this.props.createNewTable();
-  }
   render() {
     const selectComponent = (
       <div className="selectWrapper">
@@ -37,7 +32,7 @@ export class TableModal extends React.Component {
           <div className="global-modal-body">
             <div className="content-left">
               <h3>Create a new table</h3>
-              <button onClick={() => this.handleCreateNewTable()}>
+              <button onClick={this.props.createNewTable}>
                 <img src={newTable} alt="create new table icon" />
               </button>
             </div>

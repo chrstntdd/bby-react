@@ -9,11 +9,14 @@ import SideBar from './side-bar';
 import DashboardHeader from './dashboard-header';
 import TableModal from './table-modal';
 
-import { syncToDatabase } from '../actions/index.js';
+import { syncToDatabase, getPreviousTableData } from '../actions/index.js';
 
 import './dashboard.scss';
 
 export class Dashboard extends React.Component {
+  componentDidMount() {
+    this.props.getPreviousTableData();
+  }
   componentWillUpdate() {
     /* Save table to DB ever 2 minutes ONLY if there is a table loaded*/
     this.props.tableId && setInterval(() => this.handleAutoSave(), 120000);
@@ -54,5 +57,5 @@ const mapStateToProps = state => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, { syncToDatabase })(Dashboard)
+  connect(mapStateToProps, { syncToDatabase, getPreviousTableData })(Dashboard)
 );

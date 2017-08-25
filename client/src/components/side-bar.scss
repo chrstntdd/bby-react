@@ -6,7 +6,7 @@
   flex-direction: column;
   .btn-container {
     z-index: 100;
-    cursor: pointer;
+    cursor: pointer !important;
     margin-bottom: 20px;
     border-left: 4px solid $BESTBUY_YELLOW;
     transition-property: background, color, border;
@@ -41,8 +41,12 @@
     &:last-child {
       // CLEAR BUTTON
       button {
+        p {
+          margin-top: -16px;
+        }
         img {
-          margin: 22px 0;
+          margin-top: 20px;
+          margin-bottom: 20px;
           height: 50px;
         }
       }
