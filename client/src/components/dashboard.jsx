@@ -9,21 +9,27 @@ import SideBar from './side-bar';
 import DashboardHeader from './dashboard-header';
 import TableModal from './table-modal';
 
-import { syncToDatabase, getPreviousTableData } from '../actions/index.js';
+import {
+  syncToDatabase,
+  getPreviousTableData,
+  formatTable,
+  printTable,
+  clearTable,
+  toggleShowTableModal
+} from '../actions/index.js';
 
 import './dashboard.scss';
 
 export class Dashboard extends React.Component {
   componentDidMount() {
-    this.props.getPreviousTableData();
+    setTimeout(() => {
+      this.props.getPreviousTableData();
+    }, 500);
   }
   componentWillUpdate() {
     /* Save table to DB ever 2 minutes ONLY if there is a table loaded*/
-    this.props.tableId && setInterval(() => this.handleAutoSave(), 120000);
-  }
-
-  handleAutoSave() {
-    this.props.syncToDatabase();
+    this.props.tableId &&
+      setInterval(() => this.props.syncToDatabase(), 120000);
   }
 
   render() {
@@ -38,7 +44,14 @@ export class Dashboard extends React.Component {
         {modal}
         <DashboardHeader userData={userProfile} />
         <div id="main-content-area">
-          <SideBar />
+          <SideBar
+            tableId={this.props.tableId}
+            toggleShowTableModal={this.props.toggleShowTableModal}
+            syncToDatabase={this.props.syncToDatabase}
+            formatTable={this.props.formatTable}
+            printTable={this.props.printTable}
+            clearTable={this.props.clearTable}
+          />
           <section id="main-table-area">
             <SearchBar />
             <ProductTable />
@@ -57,5 +70,13 @@ const mapStateToProps = state => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, { syncToDatabase, getPreviousTableData })(Dashboard)
+  connect(mapStateToProps, {
+    syncToDatabase,
+    getPreviousTableData,
+    formatTable,
+    printTable,
+    clearTable,
+    syncToDatabase,
+    toggleShowTableModal
+  })(Dashboard)
 );

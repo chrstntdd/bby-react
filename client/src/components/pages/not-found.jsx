@@ -1,13 +1,10 @@
 import React from 'react';
 import './not-found.scss';
-import { Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
-export default class NotFoundPage extends React.Component {
-  handleBackToSafety() {
-    this.props.history.push('/dashboard');
-  }
-  render() {
-    return (
+const NotFoundPage = () =>
+  <Route
+    render={({ history }) =>
       <div>
         <svg viewBox="0 0 600 300">
           <symbol id="s-text">
@@ -22,10 +19,10 @@ export default class NotFoundPage extends React.Component {
           <use className="text" xlinkHref="#s-text" />
         </svg>
 
-        <button id="safety" onClick={() => this.handleBackToSafety()}>
+        <button id="safety" onClick={() => history.push('/dashboard')}>
           Back to Safety
         </button>
-      </div>
-    );
-  }
-}
+      </div>}
+  />;
+
+export default NotFoundPage;

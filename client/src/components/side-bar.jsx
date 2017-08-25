@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-  formatTable,
-  printTable,
-  clearTable,
-  syncToDatabase,
-  toggleShowTableModal
-} from '../actions';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 const _debounce = require('lodash.debounce');
-
-import TableModal from './table-modal';
 
 import printIcon from '../static/noun_772280_cc.svg';
 import formatIcon from '../static/noun_796398_cc.svg';
@@ -22,60 +11,47 @@ import manage from '../static/noun_1082747_cc.svg';
 
 import './side-bar.scss';
 
-export class SideBar extends React.Component {
-  render() {
-    return (
-      <aside id="side-bar">
-        <div className="btn-container">
-          <button id="manageButton" onClick={this.props.toggleShowTableModal}>
-            <img src={manage} alt="" />
-            <p>Manage</p>
-          </button>
-        </div>
-        <div className="btn-container">
-          <button
-            id="saveButton"
-            onClick={_debounce(this.props.syncToDatabase, 5000)}
-          >
-            <img src={databaseSync} alt="" />
-            <p>Save</p>
-          </button>
-        </div>
-        <div className="btn-container">
-          <button id="formatButton" onClick={this.props.formatTable}>
-            <img src={formatIcon} alt="" />
-            <p>Format</p>
-          </button>
-        </div>
-        <div className="btn-container">
-          <button id="printButton" onClick={this.props.printTable}>
-            <img src={printIcon} alt="" />
-            <p>Print</p>
-          </button>
-        </div>
-        <div className="btn-container">
-          <button id="clearTableButton" onClick={this.props.clearTable}>
-            <img id="clear-icon" src={clearIcon} alt="" />
-            <p>Clear</p>
-          </button>
-        </div>
-      </aside>
-    );
-  }
-}
+export const SideBar = props => {
+  return (
+    <aside id="side-bar">
+      <div className="btn-container">
+        <button id="manageButton" onClick={() => props.toggleShowTableModal()}>
+          <img src={manage} alt="" />
+          <p>Manage</p>
+        </button>
+      </div>
+      <div className="btn-container">
+        {/* button is disabled until a tableId is set.
+          * also the button can't be spammed :) */}
+        <button
+          id="saveButton"
+          disabled={!props.tableId}
+          onClick={_debounce(() => props.syncToDatabase(), 5000)}
+        >
+          <img src={databaseSync} alt="" />
+          <p>Save</p>
+        </button>
+      </div>
+      <div className="btn-container">
+        <button id="formatButton" onClick={() => props.formatTable()}>
+          <img src={formatIcon} alt="" />
+          <p>Format</p>
+        </button>
+      </div>
+      <div className="btn-container">
+        <button id="printButton" onClick={() => props.printTable()}>
+          <img src={printIcon} alt="" />
+          <p>Print</p>
+        </button>
+      </div>
+      <div className="btn-container">
+        <button id="clearTableButton" onClick={() => props.clearTable()}>
+          <img id="clear-icon" src={clearIcon} alt="" />
+          <p>Clear</p>
+        </button>
+      </div>
+    </aside>
+  );
+};
 
-const mapStateToProps = state => ({
-  products: state.table.products,
-  printing: state.table.printing,
-  showModal: state.table.showModal
-});
-
-export default withRouter(
-  connect(mapStateToProps, {
-    formatTable,
-    printTable,
-    clearTable,
-    syncToDatabase,
-    toggleShowTableModal
-  })(SideBar)
-);
+export default SideBar;

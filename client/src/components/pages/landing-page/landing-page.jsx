@@ -6,6 +6,11 @@ import AboutSection from './about-section';
 import Register from '../../auth/register';
 import Footer from './footer';
 
+import simple from '../../../static/noun_971031_cc.svg';
+import reliable from '../../../static/noun_1007187_cc.svg';
+import secure from '../../../static/noun_821171_cc.svg';
+import fast from '../../../static/noun_658468_cc.svg';
+
 export default class LandingPage extends React.Component {
   constructor(props) {
     super(props);
@@ -23,6 +28,28 @@ export default class LandingPage extends React.Component {
           name: 'Sign in',
           link: '/sign-in'
         }
+      ],
+      cardData: [
+        {
+          name: 'simple',
+          img: simple,
+          desc: '...but powerful'
+        },
+        {
+          name: 'reliable',
+          img: reliable,
+          desc: 'There when you need it'
+        },
+        {
+          name: 'safe',
+          img: secure,
+          desc: 'Without compromises'
+        },
+        {
+          name: 'fast',
+          img: fast,
+          desc: 'Designed with speed in mind'
+        }
       ]
     };
   }
@@ -30,7 +57,7 @@ export default class LandingPage extends React.Component {
     return (
       <div className="landing-page">
         <HeroArea />
-        <HowSection />
+        <HowSection cardData={this.state.cardData} />
         <AboutSection />
         <Register />
         <Footer footerData={this.state.footerData} />
