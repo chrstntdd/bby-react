@@ -3,6 +3,13 @@
 [![Build Status](https://travis-ci.org/chrstntdd/bby-react.svg?branch=master)](https://travis-ci.org/chrstntdd/bby-react)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
+### Table of Contents
++ [About](#about)
++ [Screenshots](#screenshots)
++ [Technology](#front-end-technology)
++ [API Documentation](#api-documentation)
++ [Icon Credit](#icon-credit)
+
 
 
 ## About
@@ -87,3 +94,18 @@ POST
 + `/upc` takes upc string and returns product information from the best buy API if the UPC is valid
 
 ---
+
+## Icon Credit
+
+**ALL** Icons used in this project are from [The Noun Project](https://thenounproject.com/) and are used under the Creative Commons License. The SVG files themselves were altered to remove the watermark and text elements due to incompatibility issues, so I will list the credit here. BIG thank you to The Noun Project for existing and providing such a wonderful service.
+
++ [Manage Icon](https://thenounproject.com/search/?q=manage&i=1082747)
++ [Save Icon](https://thenounproject.com/DewDrops/)
++ [Format Icon](https://thenounproject.com/search/?q=clean%20brush&i=796398)
++ [Print Icon](https://thenounproject.com/search/?q=print&i=772280)
++ [Clear Icon](https://thenounproject.com/search/?q=X&i=926276)
++ [Sign Out Icon](https://thenounproject.com/search/?q=logout&i=1155291)
++ [Atom Icon](https://thenounproject.com/search/?q=atom&i=1093501)
++ [Handshake Icon](https://thenounproject.com/search/?q=handshake&i=1007187)
++ [Lock Icon](https://thenounproject.com/search/?q=Lock%20check&i=821171)
++ [Rocket Icon](https://thenounproject.com/search/?q=Rocket%20ship&i=658468)
