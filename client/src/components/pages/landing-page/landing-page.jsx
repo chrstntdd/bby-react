@@ -3,7 +3,6 @@ import React from 'react';
 import HeroArea from './hero-area';
 import HowSection from './how-section';
 import AboutSection from './about-section';
-import Register from '../../auth/register';
 import Footer from './footer';
 
 import simple from '../../../static/noun_971031_cc.svg';
@@ -59,7 +58,6 @@ export default class LandingPage extends React.Component {
         <HeroArea />
         <HowSection cardData={this.state.cardData} />
         <AboutSection />
-        <Register />
         <Footer footerData={this.state.footerData} />
       </div>
     );

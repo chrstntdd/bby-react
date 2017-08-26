@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { getForgotPasswordToken } from '../../actions/index';
-import PropTypes from 'prop-types';
 
 import './forgot_password.scss';
 

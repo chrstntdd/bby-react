@@ -3,33 +3,27 @@ import { Link } from 'react-router-dom';
 
 import './hero-area.scss';
 
-const Scroll = require('react-scroll');
-const LinkOnPage = Scroll.Link;
+const HeroArea = () =>
+  <section id="hero-atf">
+    <div className="button-container">
+      <Link id="sign-up-button" to="/sign-up">
+        <button id="btn-signup">Sign Up</button>
+      </Link>
 
-const HeroArea = () => {
-  return (
-    <section id="hero-atf">
-      <div className="button-container">
-        <LinkOnPage smooth={true} to="register">
-          <button id="btn-signup">Sign Up</button>
-        </LinkOnPage>
-
-        <Link to="/sign-in">
-          <button id="btn-signin">Sign In</button>
-        </Link>
-      </div>
-      <div className="hero-img" />
-      <div className="hero-content">
-        <h1>Quantified</h1>
-        <h3>
-          by{' '}
-          <a href="https://github.com/chrstntdd" target="_blank">
-            Christian Todd
-          </a>{' '}
-        </h3>
-      </div>
-    </section>
-  );
-};
+      <Link id="sign-in-button" to="/sign-in">
+        <button id="btn-signin">Sign In</button>
+      </Link>
+    </div>
+    <div className="hero-img" />
+    <div className="hero-content">
+      <h1>Quantified</h1>
+      <h3>
+        by{' '}
+        <a href="https://github.com/chrstntdd" target="_blank">
+          Christian Todd
+        </a>{' '}
+      </h3>
+    </div>
+  </section>;
 
 export default HeroArea;

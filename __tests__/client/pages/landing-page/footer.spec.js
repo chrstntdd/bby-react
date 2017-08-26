@@ -4,8 +4,8 @@ import { shallow } from 'enzyme';
 import Footer from '../../../../client/src/components/pages/landing-page/footer.jsx';
 
 describe('<Footer/>', () => {
-  it('should render without crashing', () => {
-    const footerData = [
+  const props = {
+    footerData: [
       {
         name: 'Official Best Buy API Status',
         link: 'https://developer.bestbuy.com/api-status'
@@ -18,7 +18,14 @@ describe('<Footer/>', () => {
         name: 'Sign in',
         link: '/sign-in'
       }
-    ];
-    shallow(<Footer footerData={footerData} />);
+    ]
+  };
+  it('should render without crashing', () => {
+    shallow(<Footer {...props} />);
+  });
+  it('should render 3 items in a list', () => {
+    const wrapper = shallow(<Footer {...props} />);
+    const listItems = wrapper.find('ul').props().children;
+    expect(listItems.length).toBe(3);
   });
 });

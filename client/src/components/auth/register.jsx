@@ -6,9 +6,6 @@ import { registerUser } from '../../actions';
 import Input from './form-input';
 import './register.scss';
 
-const Scroll = require('react-scroll');
-const Element = Scroll.Element;
-
 const form = reduxForm({
   form: 'register',
   validate
@@ -91,7 +88,7 @@ export class Register extends React.Component {
       <Input key={index} {...input} />
     );
     return (
-      <Element id="register-section" name="register">
+      <section id="register-section">
         <section id="register-card">
           <h1>Register here</h1>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
@@ -102,7 +99,7 @@ export class Register extends React.Component {
             </button>
           </form>
         </section>
-      </Element>
+      </section>
     );
   }
 }

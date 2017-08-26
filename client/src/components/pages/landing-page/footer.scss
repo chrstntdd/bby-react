@@ -3,14 +3,16 @@
 
 footer {
   width: 100vw;
-  background-color: $DARK_GREY;
+  background-color: $BESTBUY_BLUE;
   padding: auto 50px;
   ul {
+    padding-top: 1%;
     padding-left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin: 0 auto;
     li {
       @media (min-width: $bp-xxsmall) {
         margin-top: between(9px, 12px, $bp-xxsmall, $bp-xlarge);
