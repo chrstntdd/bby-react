@@ -139,8 +139,11 @@ export const createNewTable = () => async (dispatch, getState) => {
   try {
     const state = getState();
     const userId = state.auth.userProfile.id;
+    const jwt = state.auth.jwt;
 
-    const response = await axios.post(`${API_URL}/tables/${userId}`);
+    const response = await axios.post(`${API_URL}/tables/${userId}`, {
+      headers: { Authorization: jwt }
+    });
 
     await dispatch({ type: SET_NEW_TABLE_ID, payload: response.data._id });
     await dispatch({ type: LOAD_BLANK_TABLE });
@@ -157,8 +160,11 @@ export const getPreviousTableData = () => async (dispatch, getState) => {
   try {
     const state = getState();
     const userId = state.auth.userProfile.id;
+    const jwt = state.auth.jwt;
 
-    const response = await axios.get(`${API_URL}/tables/${userId}`);
+    const response = await axios.get(`${API_URL}/tables/${userId}`, {
+      headers: { Authorization: jwt }
+    });
     const tableData = response.data.map(tableInstance => {
       const tableId = tableInstance._id;
 
@@ -185,8 +191,11 @@ export const loadTable = tableId => async (dispatch, getState) => {
   try {
     const state = getState();
     const userId = state.auth.userProfile.id;
+    const jwt = state.auth.jwt;
 
-    const response = await axios.get(`${API_URL}/tables/${userId}/${tableId}`);
+    const response = await axios.get(`${API_URL}/tables/${userId}/${tableId}`, {
+      headers: { Authorization: jwt }
+    });
 
     await dispatch({ type: LOAD_SAVED_TABLE, payload: response.data.products });
     await dispatch({ type: SET_NEW_TABLE_ID, payload: tableId });
