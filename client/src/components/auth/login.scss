@@ -8,6 +8,49 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  .test-credentials {
+    box-shadow: 0px 0px 55px -2px rgba(0, 0, 0, 0.75);
+    padding: 0.5rem;
+    left: 50%;
+    @media (min-width: $bp-xxsmall) {
+      top: 90%;
+    }
+    @media (min-width: $bp-medium) {
+      top: 80%;
+    }
+    transform: translate(-50%, -50%);
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: #1e5799;
+    background: -moz-linear-gradient(-45deg, #1e5799 0%, #316377 100%);
+    background: -webkit-gradient(
+      linear,
+      left top,
+      right bottom,
+      color-stop(0%, #1e5799),
+      color-stop(100%, #316377)
+    );
+    background: -webkit-linear-gradient(-45deg, #1e5799 0%, #316377 100%);
+    background: -o-linear-gradient(-45deg, #1e5799 0%, #316377 100%);
+    background: -ms-linear-gradient(-45deg, #1e5799 0%, #316377 100%);
+    background: linear-gradient(135deg, #1e5799 0%, #316377 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(
+        startColorstr='#1e5799',
+        endColorstr='#316377',
+        GradientType=1
+      );
+    border-radius: 2px;
+    span {
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    p {
+      color: white;
+    }
+  }
   .error-message {
     animation: fadeIn 1.5s, slideUp 1.5s;
     @keyframes fadeIn {
@@ -67,7 +110,9 @@
       flex-direction: column;
       align-content: center;
       align-items: center;
-
+      p {
+        color: lightgray;
+      }
       .input-wrapper {
         margin: 30px auto;
         input {

@@ -52,6 +52,14 @@ export class Login extends React.Component {
 
     const form = (
       <section id="login-wrapper">
+        <div className="test-credentials">
+          <p>
+            <span>Employee Number</span>: a1
+          </p>
+          <p>
+            <span>Password</span>:testtesttest
+          </p>
+        </div>
         {this.renderAlert()}
         <div id="login-card">
           <h1>Sign In</h1>
@@ -61,6 +69,7 @@ export class Login extends React.Component {
               Login
             </button>
             <Link to="/forgot-password">Forgot password?</Link>
+            <p>Just testing? Use the credentials below.</p>
           </form>
         </div>
       </section>
