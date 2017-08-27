@@ -27,7 +27,11 @@ const setup = tableId => {
           tableId: '599aec4c2ea3f20011051fe1',
           formattedDate: 'Mon Aug 21 2017-10:21:00 AM'
         }
-      ]
+      ],
+      lastItemScanned: {
+        sku: '1234567',
+        upc: '123456789963'
+      }
     }
   };
   const context = createRouterContext();
@@ -48,13 +52,20 @@ const setup = tableId => {
 
   return {
     props,
-    enzymeWrapper
+    enzymeWrapper,
+    initialState
   };
 };
 
 describe('DUMB <SearchBar/>', () => {
   it('should render without crashing', () => {
-    shallow(<SearchBar />);
+    const props = {
+      lastItemScanned: {
+        sku: '1234567',
+        upc: '123456789632'
+      }
+    };
+    shallow(<SearchBar {...props} />);
   });
 });
 
@@ -73,5 +84,24 @@ describe('SMART <ConnectedSearchBar/>', () => {
 
     const input = enzymeWrapper.find('input');
     expect(input.props().disabled).toBe(false);
+  });
+  it('should render the most most recently scanned item container', () => {
+    const { enzymeWrapper, props, initialState } = setup('1234');
+    const lastItemScannedContainer = enzymeWrapper.find('#last-item-scanned');
+    expect(lastItemScannedContainer).not.toBe(null);
+  });
+  it("should render the most most recently scanned item's SKU", () => {
+    const { enzymeWrapper, props, initialState } = setup('1234');
+    const lastItemScannedSKU = enzymeWrapper.find('#last-item-scanned .sku');
+    expect(lastItemScannedSKU.text()).toEqual(
+      `SKU: ${initialState.table.lastItemScanned.sku}`
+    );
+  });
+  it("should render the most most recently scanned item's UPC", () => {
+    const { enzymeWrapper, props, initialState } = setup('1234');
+    const lastItemScannedUPC = enzymeWrapper.find('#last-item-scanned .upc');
+    expect(lastItemScannedUPC.text()).toEqual(
+      `UPC: ${initialState.table.lastItemScanned.upc}`
+    );
   });
 });

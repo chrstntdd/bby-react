@@ -31,6 +31,11 @@ export class SearchBar extends React.Component {
 
     return (
       <section id="search-section">
+        <div id="last-time-saved">
+          <p>
+            Last saved at: {this.props.lastTimeSaved}
+          </p>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <Field
@@ -46,6 +51,15 @@ export class SearchBar extends React.Component {
             />
           </div>
         </form>
+        <div id="last-item-scanned">
+          <p>Last item scanned</p>
+          <p className="sku">
+            SKU: {this.props.lastItemScanned.sku}
+          </p>
+          <p className="upc">
+            UPC: {this.props.lastItemScanned.upc}
+          </p>
+        </div>
       </section>
     );
   }
@@ -53,7 +67,9 @@ export class SearchBar extends React.Component {
 
 const mapStateToProps = state => ({
   products: state.table.products,
-  tableId: state.table.tableId
+  tableId: state.table.tableId,
+  lastTimeSaved: state.table.lastTimeSaved,
+  lastItemScanned: state.table.lastItemScanned
 });
 
 export default withRouter(

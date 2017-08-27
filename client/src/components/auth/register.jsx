@@ -79,6 +79,14 @@ export class Register extends React.Component {
           </p>
         </div>
       );
+    } else if (this.props.message) {
+      return (
+        <div className="success-message">
+          <p>
+            {this.props.message}
+          </p>
+        </div>
+      );
     }
   }
   render() {

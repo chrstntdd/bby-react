@@ -128,7 +128,10 @@ export const syncToDatabase = () => async (dispatch, getState) => {
       }
     );
 
-    await dispatch({ type: SYNCED_TABLE_TO_DB });
+    await dispatch({
+      type: SYNCED_TABLE_TO_DB,
+      payload: new Date().toLocaleTimeString()
+    });
   } catch (error) {
     console.error(error);
   }
@@ -254,7 +257,7 @@ export const loginUser = ({ employeeNumber, password }) => async dispatch => {
       case 'verifyMessage':
         await dispatch({
           type: NOT_VERIFIED_LOGIN_ERROR,
-          payload: err.response.data.emailMessage
+          payload: err.response.data.verifyMessage
         });
         await timeout(8000);
         await dispatch({ type: CLEAR_FLASH_MESSAGE });
@@ -291,8 +294,8 @@ export const registerUser = ({
   storeNumber
 }) => async dispatch => {
   try {
-    await dispatch({ type: REGISTER_REQUEST });
-    const response = await axios.post(`${API_URL}/users`, {
+    dispatch({ type: REGISTER_REQUEST });
+    await axios.post(`${API_URL}/users`, {
       firstName,
       lastName,
       password,
@@ -300,20 +303,43 @@ export const registerUser = ({
       storeNumber
     });
 
-    await dispatch({
+    dispatch({
       type: REGISTER_SUCCESS,
       payload:
         'Registered successfully, now check your work email to verify your account'
     });
-
     await timeout(8000);
-    await dispatch({ type: CLEAR_FLASH_MESSAGE });
+    dispatch({ type: CLEAR_FLASH_MESSAGE });
   } catch (error) {
-    /* TODO: gracefully handle error responses */
-    const errorMessages = error.response.data.messages[0].msg;
-    await dispatch({ type: REGISTER_FAILURE, payload: errorMessages });
-    await timeout(8000);
-    await dispatch({ type: CLEAR_FLASH_MESSAGE });
+    const errorResponse = Object.keys(error.response.data)[0];
+    switch (errorResponse) {
+      /* conflict error */
+      case 'message':
+        dispatch({
+          type: REGISTER_FAILURE,
+          payload: error.response.data.message
+        });
+        await timeout(8000);
+        dispatch({ type: CLEAR_FLASH_MESSAGE });
+        break;
+      /* validation error */
+      case 'messages':
+        dispatch({
+          type: REGISTER_FAILURE,
+          payload: error.response.data.messages[0].msg
+        });
+        await timeout(8000);
+        dispatch({ type: CLEAR_FLASH_MESSAGE });
+        break;
+      default:
+        dispatch({
+          type: REGISTER_FAILURE,
+          payload: 'IT ALL BLEW UP'
+        });
+        await timeout(8000);
+        dispatch({ type: CLEAR_FLASH_MESSAGE });
+        break;
+    }
   }
 };
 

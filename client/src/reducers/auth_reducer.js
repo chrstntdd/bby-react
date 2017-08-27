@@ -49,7 +49,9 @@ export default function(state = INITIAL_STATE, action) {
     case CLEAR_FLASH_MESSAGE: {
       return {
         ...state,
-        error: ''
+        error: '',
+        message: '',
+        content: ''
       };
     }
     case FORGOT_PASSWORD_REQUEST:

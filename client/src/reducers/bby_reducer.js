@@ -25,7 +25,12 @@ const INITIAL_STATE = {
   printing: false,
   tableId: '',
   showModal: false,
-  selectOptionData: null
+  selectOptionData: null,
+  lastTimeSaved: null,
+  lastItemScanned: {
+    sku: '',
+    upc: ''
+  }
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -37,7 +42,11 @@ export default function(state = INITIAL_STATE, action) {
       return Object.assign({}, state, {
         ...state,
         formatted: false,
-        products: [action.payload, ...state.products]
+        products: [action.payload, ...state.products],
+        lastItemScanned: {
+          sku: action.payload.sku,
+          upc: action.payload.upc
+        }
       });
     case INCREMENT_PRODUCT_QUANTITY:
       // INCREMENT QUANTITY AND CALCULATE NEW VALUE BASED ON UPDATED QTY
@@ -101,7 +110,10 @@ export default function(state = INITIAL_STATE, action) {
         products: []
       };
     case SYNCED_TABLE_TO_DB:
-      return { ...state };
+      return {
+        ...state,
+        lastTimeSaved: action.payload
+      };
     case SET_NEW_TABLE_ID:
       return {
         ...state,

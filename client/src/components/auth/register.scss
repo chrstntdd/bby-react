@@ -1,6 +1,41 @@
 @import '../../colors.scss';
 @import '../../rwd-helpers.scss';
 
+@mixin FlashMessage($COLOR) {
+  animation: fadeIn 1.5s, slideUp 1.5s;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translate(-50%, -10%);
+    }
+    to {
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  padding: 0.5rem;
+  background-color: darken($COLOR, 5%);
+  border: 3px solid darken($COLOR, 10%);
+  border-radius: 3px;
+  left: 50%;
+  top: 5%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  p {
+    color: white;
+    text-align: center;
+    font-size: 1.4rem;
+  }
+}
+
 #register-section {
   &:focus {
     outline: none;
@@ -24,38 +59,10 @@
     width: 80vw;
     box-shadow: 0px 0px 48px -2px rgba(0, 0, 0, 0.75);
     .error-message {
-      animation: fadeIn 1.5s, slideUp 1.5s;
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-
-      @keyframes slideUp {
-        from {
-          transform: translate(-50%, -10%);
-        }
-        to {
-          transform: translate(-50%, -50%);
-        }
-      }
-
-      padding: 0.5rem;
-      background-color: darken(#ec6d75, 5%);
-      border: 3px solid darken(#ec6d75, 10%);
-      border-radius: 3px;
-      left: 50%;
-      top: 5%;
-      transform: translate(-50%, -50%);
-      position: absolute;
-      p {
-        color: white;
-        text-align: center;
-        font-size: 1.4rem;
-      }
+      @include FlashMessage(#ec6d75);
+    }
+    .success-message {
+      @include FlashMessage(#4CB963);
     }
     h1 {
       font-family: 'Lobster', cursive;

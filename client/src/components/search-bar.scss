@@ -2,7 +2,7 @@
 
 #search-section {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   padding: 30px;
   #upcInput {
     text-align: center;
@@ -14,6 +14,18 @@
     &:focus {
       outline-color: transparent;
       border: 2px solid $BESTBUY_BLUE;
+    }
+  }
+  #last-time-saved {
+    height: 50px;
+  }
+  #last-item-scanned {
+    height: 50px;
+    p {
+      margin: 0;
+    }
+    h6 {
+      margin: 0;
     }
   }
 }

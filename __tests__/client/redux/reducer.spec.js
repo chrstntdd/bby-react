@@ -17,7 +17,12 @@ const BBY_INITIAL_STATE = {
   printing: false,
   tableId: '',
   showModal: false,
-  selectOptionData: null
+  selectOptionData: null,
+  lastTimeSaved: null,
+  lastItemScanned: {
+    sku: '',
+    upc: ''
+  }
 };
 
 const mockOptionData = [
@@ -325,7 +330,12 @@ describe('bby reducer', () => {
           printing: false,
           tableId: '',
           showModal: false,
-          selectOptionData: null
+          selectOptionData: null,
+          lastTimeSaved: null,
+          lastItemScanned: {
+            sku: '',
+            upc: ''
+          }
         },
         {
           type: types.POST_UPC,
@@ -338,7 +348,12 @@ describe('bby reducer', () => {
       printing: false,
       tableId: '',
       showModal: false,
-      selectOptionData: null
+      selectOptionData: null,
+      lastTimeSaved: null,
+      lastItemScanned: {
+        sku: 5781143,
+        upc: '847843005010'
+      }
     });
   });
   it('should handle INCREMENT_PRODUCT_QUANTITY', () => {
@@ -350,7 +365,12 @@ describe('bby reducer', () => {
           printing: false,
           tableId: '',
           showModal: false,
-          selectOptionData: null
+          selectOptionData: null,
+          lastTimeSaved: null,
+          lastItemScanned: {
+            sku: 5781143,
+            upc: '847843005010'
+          }
         },
         {
           type: types.INCREMENT_PRODUCT_QUANTITY,
@@ -377,7 +397,12 @@ describe('bby reducer', () => {
       printing: false,
       tableId: '',
       showModal: false,
-      selectOptionData: null
+      selectOptionData: null,
+      lastTimeSaved: null,
+      lastItemScanned: {
+        sku: 5781143,
+        upc: '847843005010'
+      }
     });
   });
 

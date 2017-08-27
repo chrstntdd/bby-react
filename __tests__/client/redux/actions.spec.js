@@ -504,7 +504,8 @@ describe('table actions', () => {
 
       expect(response.length).toEqual(1);
       expect(response).toContainEqual({
-        type: types.SYNCED_TABLE_TO_DB
+        type: types.SYNCED_TABLE_TO_DB,
+        payload: new Date().toLocaleTimeString()
       });
     });
   });
