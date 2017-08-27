@@ -53,11 +53,8 @@ export class SearchBar extends React.Component {
         </form>
         <div id="last-item-scanned">
           <p>Last item scanned</p>
-          <p className="sku">
-            SKU: {this.props.lastItemScanned.sku}
-          </p>
           <p className="upc">
-            UPC: {this.props.lastItemScanned.upc}
+            UPC: {this.props.lastItemScanned}
           </p>
         </div>
       </section>

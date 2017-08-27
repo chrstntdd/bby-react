@@ -27,10 +27,7 @@ const INITIAL_STATE = {
   showModal: false,
   selectOptionData: null,
   lastTimeSaved: null,
-  lastItemScanned: {
-    sku: '',
-    upc: ''
-  }
+  lastItemScanned: ''
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -43,10 +40,7 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         formatted: false,
         products: [action.payload, ...state.products],
-        lastItemScanned: {
-          sku: action.payload.sku,
-          upc: action.payload.upc
-        }
+        lastItemScanned: action.payload.upc
       });
     case INCREMENT_PRODUCT_QUANTITY:
       // INCREMENT QUANTITY AND CALCULATE NEW VALUE BASED ON UPDATED QTY
@@ -61,7 +55,8 @@ export default function(state = INITIAL_STATE, action) {
                   totalValue: Math.round((product.quantity + 1) * product.value)
                 }
               : product
-        )
+        ),
+        lastItemScanned: action.payload
       };
     case DECREMENT_PRODUCT_QUANTITY:
       return {
