@@ -8,7 +8,8 @@ const AUTH_INITIAL_STATE = {
   error: '',
   message: '',
   content: '',
-  authenticated: false
+  authenticated: false,
+  waiting: false
 };
 
 const BBY_INITIAL_STATE = {
@@ -104,7 +105,8 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-      authenticated: true
+      authenticated: true,
+      waiting: false
     });
   });
   it('should handle UNAUTH_USER', () => {
@@ -154,7 +156,8 @@ describe('auth reducer', () => {
       error: errorMessage,
       message: '',
       content: '',
-      authenticated: false
+      authenticated: false,
+      waiting: false
     });
   });
   it('should handle LOGIN_FAILURE', () => {
@@ -180,7 +183,8 @@ describe('auth reducer', () => {
       error: errorMessage,
       message: '',
       content: '',
-      authenticated: false
+      authenticated: false,
+      waiting: false
     });
   });
   it('should handle CLEAR_FLASH_MESSAGE', () => {
@@ -205,7 +209,8 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-      authenticated: false
+      authenticated: false,
+      waiting: false
     });
   });
   it('should handle FORGOT_PASSWORD_REQUEST', () => {
@@ -283,7 +288,8 @@ describe('auth reducer', () => {
       error: '',
       message: responseMessage,
       content: '',
-      authenticated: false
+      authenticated: false,
+      waiting: false
     });
   });
   it('should handle REGISTER_FAILURE', () => {

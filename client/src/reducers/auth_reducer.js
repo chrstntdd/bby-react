@@ -19,7 +19,8 @@ const INITIAL_STATE = {
   error: '',
   message: '',
   content: '',
-  authenticated: false
+  authenticated: false,
+  waiting: false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -32,26 +33,30 @@ export default function(state = INITIAL_STATE, action) {
         message: '',
         authenticated: true,
         userProfile: action.payload.user,
-        jwt: action.payload.jwt
+        jwt: action.payload.jwt,
+        waiting: false
       };
     case UNAUTH_USER:
       return { ...state, authenticated: false, jwt: null, userProfile: null };
     case NOT_VERIFIED_LOGIN_ERROR:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
+        waiting: false
       };
     case LOGIN_FAILURE:
       return {
         ...state,
-        error: action.payload
+        error: action.payload,
+        waiting: false
       };
     case CLEAR_FLASH_MESSAGE: {
       return {
         ...state,
         error: '',
         message: '',
-        content: ''
+        content: '',
+        waiting: false
       };
     }
     case FORGOT_PASSWORD_REQUEST:
@@ -59,9 +64,12 @@ export default function(state = INITIAL_STATE, action) {
     case RESET_PASSWORD_REQUEST:
       return { ...state, message: action.payload };
     case REGISTER_SUCCESS:
-      return { ...state, message: action.payload };
+      return { ...state, message: action.payload, waiting: false };
     case REGISTER_FAILURE:
       return { ...state, error: action.payload };
+    case LOGIN_REQUEST:
+    case REGISTER_REQUEST:
+      return { ...state, waiting: true };
     default:
       return state;
   }
