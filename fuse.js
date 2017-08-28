@@ -52,13 +52,7 @@ Sparky.task('build', () => {
         CSSResourcePlugin({
           inline: true
         }),
-        CSSPlugin(
-          {
-            // group: 'bundle.css',
-            // outFile: 'client/dist/static/bundle.css'
-            // inject: file => `client/dist/static/${file}`
-          }
-        )
+        CSSPlugin()
       ],
       SVGPlugin(),
       BabelPlugin(),
@@ -104,15 +98,22 @@ Sparky.task('build', () => {
 });
 
 // COPY FILES TO BUILD FOLDER
-Sparky.task('copy', () => {
-  Sparky.src('./config/netlify/**/**.*').dest('/client/dist/static');
-});
+Sparky.task('copy-redirect', () =>
+  Sparky.src('./netlify/**', { base: './config' }).dest('./client/dist')
+);
+Sparky.task('copy-favicons', () =>
+  Sparky.src('./favicons', { base: './config' }).dest('./client/dist/static')
+);
 
 // YARN START
 Sparky.task('default', ['clean', 'build'], () => {});
 
 // YARN DIST
-Sparky.task('dist', ['clean', 'set-production-env', 'build'], () => {});
+Sparky.task(
+  'dist',
+  ['clean', 'set-production-env', 'build', 'copy-redirect', 'copy-favicons'],
+  () => {}
+);
 
 // TASKS FOR BUILD
 Sparky.task('clean', () => Sparky.src('client/dist/*').clean('client/dist/'));
