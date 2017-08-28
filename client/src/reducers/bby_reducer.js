@@ -15,7 +15,8 @@ import {
   LOAD_SAVED_TABLE,
   TOGGLE_LOAD_TABLE_MODAL,
   GET_USER_TABLE_DATA_SUCCESS,
-  UNAUTH_USER
+  UNAUTH_USER,
+  LOGIN_SUCCESS
 } from '../actions/types';
 const orderBy = require('lodash.orderby');
 
@@ -26,12 +27,22 @@ const INITIAL_STATE = {
   tableId: '',
   showModal: false,
   selectOptionData: null,
-  lastTimeSaved: null,
+  lastTimeSaved: '',
   lastItemScanned: ''
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    /* hack to ensure redux persist doesn't load in a previous session */
+    case LOGIN_SUCCESS: {
+      return {
+        ...state,
+        lastItemScanned: '',
+        lastTimeSaved: '',
+        tableId: '',
+        products: []
+      };
+    }
     case POST_UPC:
       /* Adds a new product to the top of the array.
        * Also flips 'formatted' to false

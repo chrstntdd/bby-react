@@ -18,7 +18,7 @@ const BBY_INITIAL_STATE = {
   tableId: '',
   showModal: false,
   selectOptionData: null,
-  lastTimeSaved: null,
+  lastTimeSaved: '',
   lastItemScanned: ''
 };
 
@@ -329,10 +329,7 @@ describe('bby reducer', () => {
           showModal: false,
           selectOptionData: null,
           lastTimeSaved: null,
-          lastItemScanned: {
-            sku: '',
-            upc: ''
-          }
+          lastItemScanned: ''
         },
         {
           type: types.POST_UPC,
