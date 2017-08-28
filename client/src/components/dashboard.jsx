@@ -23,13 +23,14 @@ import './dashboard.scss';
 export class Dashboard extends React.Component {
   componentDidMount() {
     setTimeout(() => {
+      /* timeout to ensure JWT has loaded and will be available for fetching tables */
       this.props.getPreviousTableData();
-    }, 500);
+    }, 2000);
   }
   componentWillUpdate() {
-    /* Save table to DB ever 2 minutes ONLY if there is a table loaded*/
+    /* Save table to DB ever 5 minutes ONLY if there is a table loaded*/
     this.props.tableId &&
-      setInterval(() => this.props.syncToDatabase(), 120000);
+      setInterval(() => this.props.syncToDatabase(), 300000);
   }
 
   render() {
