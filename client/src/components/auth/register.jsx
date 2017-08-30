@@ -4,6 +4,8 @@ import { Field, reduxForm } from 'redux-form';
 import { Redirect, withRouter } from 'react-router-dom';
 import { registerUser } from '../../actions';
 import Input from './form-input';
+import LoadingIndicator from './loading';
+
 import './register.scss';
 
 const form = reduxForm({
@@ -74,17 +76,13 @@ export class Register extends React.Component {
     if (this.props.errorMessage) {
       return (
         <div className="error-message">
-          <p>
-            {this.props.errorMessage}
-          </p>
+          <p>{this.props.errorMessage}</p>
         </div>
       );
     } else if (this.props.message) {
       return (
         <div className="success-message">
-          <p>
-            {this.props.message}
-          </p>
+          <p>{this.props.message}</p>
         </div>
       );
     }
@@ -92,15 +90,25 @@ export class Register extends React.Component {
   render() {
     const { handleSubmit, valid } = this.props;
 
-    const formInputs = this.state.registerInputs.map((input, index) =>
+    const formInputs = this.state.registerInputs.map((input, index) => (
       <Input key={index} {...input} />
-    );
+    ));
     return (
       <section id="register-section">
-        <section id="register-card">
+        {this.renderAlert()}
+        <div
+          id="loading-container"
+          className={this.props.waiting ? 'show' : 'hide'}
+        >
+          <LoadingIndicator />
+          <p>Loading. Please wait.</p>
+        </div>
+        <section
+          id="register-card"
+          className={this.props.waiting ? 'hide' : 'show'}
+        >
           <h1>Register here</h1>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-            {this.renderAlert()}
             {formInputs}
             <button disabled={!valid} type="submit">
               Sign Up
@@ -113,6 +121,7 @@ export class Register extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  waiting: state.auth.waiting,
   errorMessage: state.auth.error,
   message: state.auth.message,
   authenticated: state.auth.authenticated
