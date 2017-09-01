@@ -28,7 +28,6 @@
     font-weight: 100;
     font-style: italic;
     text-align: center;
-    letter-spacing: 0.1rem;
     @media (min-width: $bp-xxsmall) {
       font-size: between(14px, 28px, $bp-xxsmall, $bp-xlarge);
     }
