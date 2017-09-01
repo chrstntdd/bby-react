@@ -23,9 +23,9 @@ describe('<Footer/>', () => {
   it('should render without crashing', () => {
     shallow(<Footer {...props} />);
   });
-  it('should render 3 items in a list', () => {
+  it('should render 4 items in a list', () => {
     const wrapper = shallow(<Footer {...props} />);
-    const listItems = wrapper.find('ul').props().children;
-    expect(listItems.length).toBe(3);
+    const listItems = wrapper.find('li');
+    expect(listItems.length).toBe(4);
   });
 });

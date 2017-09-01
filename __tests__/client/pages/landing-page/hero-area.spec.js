@@ -39,10 +39,12 @@ describe('<HeroArea/>', () => {
     const wrapper = shallow(<HeroArea />);
     expect(wrapper.children().node.props.className).toBe('button-container');
   });
-  it('should contain  a link to github', () => {
+  it('should contain the tagline', () => {
     const { enzymeWrapper } = setup();
-    const linkToGh = enzymeWrapper.find('h3 a');
-    expect(linkToGh.props().href).toBe('https://github.com/chrstntdd');
+    const tagline = enzymeWrapper.find('h2');
+    expect(tagline.text()).toBe(
+      'A streamlined system for efficiently and accurately managing retail inventory.'
+    );
   });
   it('should contain the title h1', () => {
     const { enzymeWrapper } = setup();

@@ -16,16 +16,16 @@ export default class LandingPage extends React.Component {
     this.state = {
       footerData: [
         {
-          name: 'Official Best Buy API Status',
-          link: 'https://developer.bestbuy.com/api-status'
-        },
-        {
-          name: 'Sign up',
+          name: 'Start here',
           link: '/sign-up'
         },
         {
           name: 'Sign in',
           link: '/sign-in'
+        },
+        {
+          name: 'Official Best Buy API Status',
+          link: 'https://developer.bestbuy.com/api-status'
         }
       ],
       cardData: [
