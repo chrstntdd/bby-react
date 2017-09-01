@@ -53,7 +53,7 @@ const mockProduct = {
   classId: 544,
   value: 29.99,
   totalValue: 29.99,
-  quantity: 1
+  quantity: 2
 };
 
 const prodArr = [
@@ -385,8 +385,8 @@ describe('bby reducer', () => {
           modelNumber: 'AVC67E',
           classId: 544,
           value: 29.99,
-          totalValue: 60,
-          quantity: 2
+          totalValue: 90,
+          quantity: 3
         }
       ],
       formatted: false,
@@ -427,8 +427,8 @@ describe('bby reducer', () => {
           modelNumber: 'AVC67E',
           classId: 544,
           value: 29.99,
-          totalValue: 0,
-          quantity: 0
+          totalValue: 30,
+          quantity: 1
         }
       ],
       formatted: false,

@@ -75,26 +75,29 @@ export class ProductTable extends React.PureComponent {
             filterable: false,
             /* used to toggle visibility on print */
             show: !printing,
-            Cell: props =>
+            Cell: props => (
               <button
                 className="remove-btn"
                 onClick={() => this.removeItem(props.row.upc)}
               >
-                {' '}REMOVE
+                {' '}
+                REMOVE
               </button>
+            )
           },
           {
-            Header: '-1',
+            Header: 'Decrement',
             filterable: false,
             /* used to toggle visibility on print */
             show: !printing,
-            Cell: props =>
+            Cell: props => (
               <button
                 className="decrement-btn"
                 onClick={() => this.decrementQuantity(props.row.upc)}
               >
                 -1
               </button>
+            )
           }
         ]
       }

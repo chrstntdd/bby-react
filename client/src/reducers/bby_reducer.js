@@ -77,7 +77,7 @@ export default function(state = INITIAL_STATE, action) {
             action.payload === product.upc
               ? {
                   ...product,
-                  quantity: product.quantity - 1,
+                  quantity: product.quantity > 1 ? product.quantity - 1 : 1,
                   totalValue: Math.round((product.quantity - 1) * product.value)
                 }
               : product
