@@ -88,7 +88,7 @@ export class Register extends React.Component {
     }
   }
   render() {
-    const { handleSubmit, valid } = this.props;
+    const { handleSubmit, valid, waiting } = this.props;
 
     const formInputs = this.state.registerInputs.map((input, index) => (
       <Input key={index} {...input} />
@@ -96,17 +96,11 @@ export class Register extends React.Component {
     return (
       <section id="register-section">
         {this.renderAlert()}
-        <div
-          id="loading-container"
-          className={this.props.waiting ? 'show' : 'hide'}
-        >
-          <LoadingIndicator />
-          <p>Loading. Please wait.</p>
-        </div>
-        <section
-          id="register-card"
-          className={this.props.waiting ? 'hide' : 'show'}
-        >
+        <LoadingIndicator
+          waiting={waiting}
+          message={'Setting things up real quick. Hang tight.'}
+        />
+        <section id="register-card" className={waiting ? 'hide' : 'show'}>
           <h1>Register here</h1>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
             {formInputs}

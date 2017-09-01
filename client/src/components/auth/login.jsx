@@ -37,29 +37,24 @@ export class Login extends React.Component {
     if (this.props.errorMessage) {
       return (
         <div className="error-message">
-          <p>
-            {this.props.errorMessage}
-          </p>
+          <p>{this.props.errorMessage}</p>
         </div>
       );
     }
   }
   render() {
-    const { handleSubmit, valid } = this.props;
+    const { handleSubmit, valid, waiting } = this.props;
 
-    const formInputs = this.state.loginInputs.map((input, index) =>
+    const formInputs = this.state.loginInputs.map((input, index) => (
       <Input key={index} {...input} />
-    );
+    ));
 
     const form = (
       <section id="login-wrapper">
-        <div
-          id="loading-container"
-          className={this.props.waiting ? 'show' : 'hide'}
-        >
-          <LoadingIndicator />
-          <p>Loading. Please wait.</p>
-        </div>
+        <LoadingIndicator
+          waiting={waiting}
+          message={'Signing you in now. Please wait.'}
+        />
         <div className="test-credentials">
           <p>
             <span>Employee Number</span>: a1
@@ -69,7 +64,7 @@ export class Login extends React.Component {
           </p>
         </div>
         {this.renderAlert()}
-        <div id="login-card" className={this.props.waiting ? 'hide' : 'show'}>
+        <div id="login-card" className={waiting ? 'hide' : 'show'}>
           <h1>Sign In</h1>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
             {formInputs}

@@ -10,11 +10,11 @@ import {
   HIDE_ACTIONS,
   CLEAR_TABLE,
   SET_NEW_TABLE_ID,
-  SYNCED_TABLE_TO_DB,
   LOAD_BLANK_TABLE,
   LOAD_SAVED_TABLE,
   TOGGLE_LOAD_TABLE_MODAL,
   GET_USER_TABLE_DATA_SUCCESS,
+  SYNC_TABLE_SUCCESS,
   UNAUTH_USER,
   LOGIN_SUCCESS
 } from '../actions/types';
@@ -115,7 +115,7 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         products: []
       };
-    case SYNCED_TABLE_TO_DB:
+    case SYNC_TABLE_SUCCESS:
       return {
         ...state,
         lastTimeSaved: action.payload

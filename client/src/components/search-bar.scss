@@ -4,6 +4,18 @@
   display: flex;
   justify-content: space-around;
   padding: 30px;
+  #last-time-saved {
+    width: 220px;
+    #loading-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      p {
+        margin-top: 1px;
+      }
+    }
+  }
   #upcInput {
     text-align: center;
     border: 2px solid #ccc;

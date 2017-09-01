@@ -13,7 +13,6 @@ import {
   HIDE_ACTIONS,
   SHOW_ACTIONS,
   CLEAR_TABLE,
-  SYNCED_TABLE_TO_DB,
   SET_NEW_TABLE_ID,
   LOAD_BLANK_TABLE,
   LOAD_SAVED_TABLE,
@@ -27,7 +26,10 @@ import {
   LOGIN_SUCCESS,
   REGISTER_FAILURE,
   REGISTER_REQUEST,
-  REGISTER_SUCCESS
+  REGISTER_SUCCESS,
+  SYNC_TABLE_REQUEST,
+  SYNC_TABLE_SUCCESS,
+  SYNC_TABLE_FAILURE
 } from './types';
 const _find = require('lodash.find');
 
@@ -114,6 +116,9 @@ export const clearTable = () => dispatch => {
 
 export const syncToDatabase = () => async (dispatch, getState) => {
   try {
+    dispatch({
+      type: SYNC_TABLE_REQUEST
+    });
     const state = getState();
     const userId = state.auth.userProfile.id;
     const jwt = state.auth.jwt;
@@ -128,12 +133,15 @@ export const syncToDatabase = () => async (dispatch, getState) => {
       }
     );
 
-    await dispatch({
-      type: SYNCED_TABLE_TO_DB,
+    dispatch({
+      type: SYNC_TABLE_SUCCESS,
       payload: new Date().toLocaleTimeString()
     });
   } catch (error) {
-    console.error(error);
+    dispatch({
+      type: SYNC_TABLE_FAILURE,
+      payload: error
+    });
   }
 };
 

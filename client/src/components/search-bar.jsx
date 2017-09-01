@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { getProductDetails } from '../actions';
+import LoadingIndicator from './auth/loading';
 
 import './search-bar.scss';
 
@@ -27,14 +28,22 @@ export class SearchBar extends React.Component {
   };
 
   render() {
-    const { tableId, handleSubmit } = this.props;
+    const {
+      tableId,
+      handleSubmit,
+      waiting,
+      lastTimeSaved,
+      lastItemScanned
+    } = this.props;
 
     return (
       <section id="search-section">
         <div id="last-time-saved">
-          <p>
-            Last saved at: {this.props.lastTimeSaved}
-          </p>
+          {waiting ? (
+            <LoadingIndicator waiting={waiting} message={'Saving...'} />
+          ) : (
+            <p>Last saved at: {lastTimeSaved}</p>
+          )}
         </div>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
@@ -53,9 +62,7 @@ export class SearchBar extends React.Component {
         </form>
         <div id="last-item-scanned">
           <p>Last item scanned</p>
-          <p className="upc">
-            UPC: {this.props.lastItemScanned}
-          </p>
+          <p className="upc">UPC: {lastItemScanned}</p>
         </div>
       </section>
     );
@@ -66,7 +73,8 @@ const mapStateToProps = state => ({
   products: state.table.products,
   tableId: state.table.tableId,
   lastTimeSaved: state.table.lastTimeSaved,
-  lastItemScanned: state.table.lastItemScanned
+  lastItemScanned: state.table.lastItemScanned,
+  waiting: state.auth.waiting
 });
 
 export default withRouter(

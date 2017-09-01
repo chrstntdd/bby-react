@@ -485,7 +485,7 @@ describe('table actions', () => {
   });
 
   describe('syncToDatabase', () => {
-    it('should dispatch SYNCED_TABLE_TO_DB', async () => {
+    it('should dispatch SYNC_TABLE_SUCCESS', async () => {
       const mock = new MockAdapter(axios);
       const store = mockStore(initialState);
       const response = store.getActions();
@@ -502,11 +502,16 @@ describe('table actions', () => {
 
       await store.dispatch(actions.syncToDatabase());
 
-      expect(response.length).toEqual(1);
-      expect(response).toContainEqual({
-        type: types.SYNCED_TABLE_TO_DB,
-        payload: new Date().toLocaleTimeString()
-      });
+      expect(response.length).toEqual(2);
+      expect(response).toEqual([
+        {
+          type: types.SYNC_TABLE_REQUEST
+        },
+        {
+          type: types.SYNC_TABLE_SUCCESS,
+          payload: new Date().toLocaleTimeString()
+        }
+      ]);
     });
   });
 

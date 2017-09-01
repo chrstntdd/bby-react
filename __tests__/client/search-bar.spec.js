@@ -28,6 +28,9 @@ const setup = tableId => {
         }
       ],
       lastItemScanned: '123456789963'
+    },
+    auth: {
+      waiting: false
     }
   };
   const context = createRouterContext();

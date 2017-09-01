@@ -26,7 +26,10 @@ export const SideBar = props => {
         <button
           id="saveButton"
           disabled={!props.tableId}
-          onClick={_debounce(() => props.syncToDatabase(), 5000)}
+          onClick={_debounce(() => props.syncToDatabase(), 5000, {
+            maxWait: 100,
+            leading: true
+          })}
         >
           <img src={databaseSync} alt="" />
           <p>Save</p>

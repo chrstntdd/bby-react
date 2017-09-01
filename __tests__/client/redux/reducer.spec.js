@@ -302,7 +302,8 @@ describe('auth reducer', () => {
           error: '',
           message: '',
           content: '',
-          authenticated: false
+          authenticated: false,
+          waiting: true
         },
         {
           type: types.REGISTER_FAILURE,
@@ -315,7 +316,8 @@ describe('auth reducer', () => {
       error: errorMessage,
       message: '',
       content: '',
-      authenticated: false
+      authenticated: false,
+      waiting: false
     });
   });
 });
@@ -585,7 +587,7 @@ describe('bby reducer', () => {
       selectOptionData: null
     });
   });
-  it('should handle SYNCED_TABLE_TO_DB', () => {
+  it('should handle SYNC_TABLE_SUCCESS', () => {
     expect(
       bby_reducer(
         {
@@ -594,10 +596,12 @@ describe('bby reducer', () => {
           printing: false,
           tableId: '',
           showModal: false,
-          selectOptionData: null
+          selectOptionData: null,
+          lastTimeSaved: null
         },
         {
-          type: types.SYNCED_TABLE_TO_DB
+          type: types.SYNC_TABLE_SUCCESS,
+          payload: 'now'
         }
       )
     ).toEqual({
@@ -606,7 +610,8 @@ describe('bby reducer', () => {
       printing: false,
       tableId: '',
       showModal: false,
-      selectOptionData: null
+      selectOptionData: null,
+      lastTimeSaved: 'now'
     });
   });
   it('should handle SET_NEW_TABLE_ID', () => {

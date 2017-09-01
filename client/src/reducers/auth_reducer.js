@@ -10,7 +10,10 @@ import {
   LOGIN_SUCCESS,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
-  REGISTER_FAILURE
+  REGISTER_FAILURE,
+  SYNC_TABLE_REQUEST,
+  SYNC_TABLE_SUCCESS,
+  SYNC_TABLE_FAILURE
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -66,7 +69,14 @@ export default function(state = INITIAL_STATE, action) {
     case REGISTER_SUCCESS:
       return { ...state, message: action.payload, waiting: false };
     case REGISTER_FAILURE:
-      return { ...state, error: action.payload };
+      return { ...state, error: action.payload, waiting: false };
+    case SYNC_TABLE_SUCCESS:
+    case SYNC_TABLE_FAILURE:
+      return {
+        ...state,
+        waiting: false
+      };
+    case SYNC_TABLE_REQUEST:
     case LOGIN_REQUEST:
     case REGISTER_REQUEST:
       return { ...state, waiting: true };
