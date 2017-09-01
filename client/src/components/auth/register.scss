@@ -2,6 +2,7 @@
 @import '../../rwd-helpers.scss';
 
 @mixin FlashMessage($COLOR) {
+  z-index: 999999999999;
   animation: fadeIn 1.5s, slideUp 1.5s;
   z-index: 9999;
   @keyframes fadeIn {
