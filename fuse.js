@@ -34,8 +34,8 @@ let isProduction = false;
 
 Sparky.task('build', () => {
   const fuse = FuseBox.init({
-    homeDir: 'client/src',
-    output: 'client/dist/static/$name.js',
+    homeDir: './src',
+    output: './dist/static/$name.js',
     log: true,
     hash: isProduction,
     sourceMaps: !isProduction,
@@ -57,7 +57,7 @@ Sparky.task('build', () => {
       SVGPlugin(),
       BabelPlugin(),
       WebIndexPlugin({
-        template: 'client/src/index.html',
+        template: './src/index.html',
         title: 'Quantified | By Christian Todd',
         path: '/static/'
       }),
@@ -74,7 +74,7 @@ Sparky.task('build', () => {
   // IF NOT IN PRODUCTION
   // CONFIG DEV SERVER
   fuse.dev({ root: false }, server => {
-    const dist = path.join(__dirname, 'client/dist');
+    const dist = path.join(__dirname, './dist');
     const app = server.httpServer.app;
     app.use('/static/', express.static(path.join(dist, 'static')));
     app.get('*', (req, res) => {
@@ -99,10 +99,10 @@ Sparky.task('build', () => {
 
 // COPY FILES TO BUILD FOLDER
 Sparky.task('copy-redirect', () =>
-  Sparky.src('./netlify/**', { base: './config' }).dest('./client/dist')
+  Sparky.src('./netlify/**', { base: './config' }).dest('./dist')
 );
 Sparky.task('copy-favicons', () =>
-  Sparky.src('./favicons', { base: './config' }).dest('./client/dist/static')
+  Sparky.src('./favicons', { base: './config' }).dest('./dist/static')
 );
 
 // YARN START
@@ -116,5 +116,5 @@ Sparky.task(
 );
 
 // TASKS FOR BUILD
-Sparky.task('clean', () => Sparky.src('client/dist/*').clean('client/dist/'));
+Sparky.task('clean', () => Sparky.src('./dist/*').clean('./dist/'));
 Sparky.task('set-production-env', () => (isProduction = true));
