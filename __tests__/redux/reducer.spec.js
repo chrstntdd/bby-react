@@ -614,56 +614,7 @@ describe('bby reducer', () => {
       lastTimeSaved: 'now'
     });
   });
-  it('should handle SET_NEW_TABLE_ID', () => {
-    const uniqueId = '123asdjfks';
-    expect(
-      bby_reducer(
-        {
-          products: [],
-          formatted: false,
-          printing: false,
-          tableId: '',
-          showModal: false,
-          selectOptionData: null
-        },
-        {
-          type: types.SET_NEW_TABLE_ID,
-          payload: uniqueId
-        }
-      )
-    ).toEqual({
-      products: [],
-      formatted: false,
-      printing: false,
-      tableId: uniqueId,
-      showModal: false,
-      selectOptionData: null
-    });
-  });
-  it('should handle LOAD_BLANK_TABLE', () => {
-    expect(
-      bby_reducer(
-        {
-          products: prodArr,
-          formatted: false,
-          printing: false,
-          tableId: '',
-          showModal: false,
-          selectOptionData: null
-        },
-        {
-          type: types.LOAD_BLANK_TABLE
-        }
-      )
-    ).toEqual({
-      products: [],
-      formatted: false,
-      printing: false,
-      tableId: '',
-      showModal: false,
-      selectOptionData: null
-    });
-  });
+
   it('should handle LOAD_SAVED_TABLE', () => {
     expect(
       bby_reducer(

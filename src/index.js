@@ -9,6 +9,7 @@ import Main from './components/main';
 import { LOGIN_SUCCESS } from './actions/types';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { autoRehydrate, persistStore } from 'redux-persist';
+import { loadTable } from './actions/index.js';
 
 // ADD IN REDUX DEBUGGER
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -20,10 +21,8 @@ const store = createStore(
   composeEnhancers(applyMiddleware(reduxThunk), autoRehydrate())
 );
 
-// BEGIN PERSISTING STATE
-/* TODO: BREAK OUT REDUCERS INTO SEPARATE CONCERNS SO THAT STATE CAN BE PERSISTED CONDITIONALLY */
-persistStore(store, () => {
-  console.log('rehydration complete!');
+persistStore(store, {}, () => {
+  console.log('rehydrated, fam');
 });
 
 import './index.scss';

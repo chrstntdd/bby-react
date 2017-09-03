@@ -120,16 +120,6 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         lastTimeSaved: action.payload
       };
-    case SET_NEW_TABLE_ID:
-      return {
-        ...state,
-        tableId: action.payload
-      };
-    case LOAD_BLANK_TABLE:
-      return {
-        ...state,
-        products: []
-      };
     case LOAD_SAVED_TABLE:
       return {
         ...state,

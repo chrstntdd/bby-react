@@ -11,7 +11,7 @@ import TableModal from './table-modal';
 
 import {
   syncToDatabase,
-  getPreviousTableData,
+  loadTable,
   formatTable,
   printTable,
   clearTable,
@@ -21,19 +21,9 @@ import {
 import './dashboard.scss';
 
 export class Dashboard extends React.Component {
-  componentDidMount() {
-    setTimeout(() => {
-      /* timeout to ensure JWT has loaded and will be available for fetching tables */
-      this.props.getPreviousTableData();
-    }, 2000);
-  }
-  componentWillUpdate() {
-    /* Save table to DB ever 5 minutes ONLY if there is a table loaded*/
-    this.props.tableId &&
-      setInterval(() => this.props.syncToDatabase(), 300000);
-  }
-
   render() {
+    /* Autosave! (every 5 minutes) */
+    setInterval(() => this.props.syncToDatabase(), 300000);
     let { showModal, userProfile } = this.props;
 
     let modal;
@@ -66,18 +56,16 @@ export class Dashboard extends React.Component {
 const mapStateToProps = state => ({
   content: state.auth.content,
   userProfile: state.auth.userProfile,
-  showModal: state.table.showModal,
-  tableId: state.table.tableId
+  showModal: state.table.showModal
 });
 
 export default withRouter(
   connect(mapStateToProps, {
     syncToDatabase,
-    getPreviousTableData,
+    loadTable,
     formatTable,
     printTable,
     clearTable,
-    syncToDatabase,
     toggleShowTableModal
   })(Dashboard)
 );

@@ -70,17 +70,6 @@ describe('SMART <ConnectedSearchBar/>', () => {
     const { enzymeWrapper } = setup();
     expect(enzymeWrapper).not.toBe(null);
   });
-  it('should be disabled if there is no set tableID', () => {
-    const { enzymeWrapper, props } = setup('');
-    const input = enzymeWrapper.find('input');
-    expect(input.props().disabled).toBe(true);
-  });
-  it('should NOT be disabled if there is a set tableID', () => {
-    const { enzymeWrapper, props } = setup('1234');
-
-    const input = enzymeWrapper.find('input');
-    expect(input.props().disabled).toBe(false);
-  });
   it('should render the most most recently scanned item container', () => {
     const { enzymeWrapper, props, initialState } = setup('1234');
     const lastItemScannedContainer = enzymeWrapper.find('#last-item-scanned');

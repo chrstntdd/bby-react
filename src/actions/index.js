@@ -123,20 +123,26 @@ export const syncToDatabase = () => async (dispatch, getState) => {
     const userId = state.auth.userProfile.id;
     const jwt = state.auth.jwt;
     const products = state.table.products;
-    const tableId = state.table.tableId;
 
-    const response = await axios.put(
-      `${API_URL}/tables/${userId}/${tableId}`,
-      { products: products },
-      {
-        headers: { Authorization: jwt }
-      }
-    );
-
-    dispatch({
-      type: SYNC_TABLE_SUCCESS,
-      payload: new Date().toLocaleTimeString()
-    });
+    /* Only call to save the table if there is data to save */
+    if (products.length > 0) {
+      const response = await axios.put(
+        `${API_URL}/users/${userId}/table`,
+        { currentTableState: products },
+        {
+          headers: { Authorization: jwt }
+        }
+      );
+      dispatch({
+        type: SYNC_TABLE_SUCCESS,
+        payload: new Date().toLocaleTimeString()
+      });
+    } else {
+      dispatch({
+        type: SYNC_TABLE_FAILURE,
+        payload: 'There must be products in the table in order to save it.'
+      });
+    }
   } catch (error) {
     dispatch({
       type: SYNC_TABLE_FAILURE,
@@ -145,72 +151,14 @@ export const syncToDatabase = () => async (dispatch, getState) => {
   }
 };
 
-/* Creates a new table for the user, then loads that table state into the view */
-export const createNewTable = () => async (dispatch, getState) => {
-  try {
-    const state = getState();
-    const userId = state.auth.userProfile.id;
-    const jwt = state.auth.jwt;
-
-    const response = await axios.post(`${API_URL}/tables/${userId}`, {
-      headers: { Authorization: jwt }
-    });
-
-    await dispatch({ type: SET_NEW_TABLE_ID, payload: response.data._id });
-    await dispatch({ type: LOAD_BLANK_TABLE });
-    await dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-/* Makes request for all past tables, 
- * retrieving the date and the unique id of the table.
- */
-export const getPreviousTableData = () => async (dispatch, getState) => {
-  try {
-    const state = getState();
-    const userId = state.auth.userProfile.id;
-    const jwt = state.auth.jwt;
-
-    const response = await axios.get(`${API_URL}/tables/${userId}`, {
-      headers: { Authorization: jwt }
-    });
-    const tableData = response.data.map(tableInstance => {
-      const tableId = tableInstance._id;
-
-      /* parse date to JS date object*/
-      const parsedDate = new Date(tableInstance.createdOn);
-
-      /* Simpler alternative needed for IE11 */
-      const formattedDate = `${parsedDate.toDateString()}-${parsedDate.toLocaleTimeString()}`;
-
-      return {
-        tableId,
-        formattedDate
-      };
-    });
-
-    await dispatch({ type: GET_USER_TABLE_DATA_SUCCESS, payload: tableData });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 /* loads existing table from user's collection of past tables */
-export const loadTable = tableId => async (dispatch, getState) => {
+export const loadTable = (user, jwt) => async dispatch => {
   try {
-    const state = getState();
-    const userId = state.auth.userProfile.id;
-    const jwt = state.auth.jwt;
-
-    const response = await axios.get(`${API_URL}/tables/${userId}/${tableId}`, {
+    const response = await axios.get(`${API_URL}/users/${user.id}/table`, {
       headers: { Authorization: jwt }
     });
 
     await dispatch({ type: LOAD_SAVED_TABLE, payload: response.data.products });
-    await dispatch({ type: SET_NEW_TABLE_ID, payload: tableId });
-    await dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
   } catch (error) {
     console.error(error);
   }
@@ -230,13 +178,17 @@ export const loginUser = ({ employeeNumber, password }) => async dispatch => {
       password
     });
 
-    await dispatch({
+    const { user, token } = response.data;
+
+    dispatch({
       type: LOGIN_SUCCESS,
       payload: {
-        user: response.data.user,
-        jwt: response.data.token
+        user: user,
+        jwt: token
       }
     });
+
+    dispatch(loadTable(user, token));
   } catch (err) {
     let errorResponse = Object.keys(err.response.data)[0];
 

@@ -207,6 +207,8 @@ var _reactRouterDom = require('react-router-dom');
 
 var _reduxPersist = require('redux-persist');
 
+var _index3 = require('./actions/index.js');
+
 require('./index.scss');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -217,10 +219,8 @@ var composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || _redux.com
 // CONFIGURE STORE TO PERSIST STATE AND USE REDUX DEV TOOLS
 var store = (0, _redux.createStore)(_index2.default, undefined, composeEnhancers((0, _redux.applyMiddleware)(_reduxThunk2.default), (0, _reduxPersist.autoRehydrate)()));
 
-// BEGIN PERSISTING STATE
-/* TODO: BREAK OUT REDUCERS INTO SEPARATE CONCERNS SO THAT STATE CAN BE PERSISTED CONDITIONALLY */
-(0, _reduxPersist.persistStore)(store, function () {
-  console.log('rehydration complete!');
+(0, _reduxPersist.persistStore)(store, {}, function () {
+  console.log('rehydrated, fam');
 });
 
 _reactDom2.default.render(_react2.default.createElement(
@@ -488,14 +488,6 @@ exports.default = function () {
     case _types.SYNC_TABLE_SUCCESS:
       return _extends({}, state, {
         lastTimeSaved: action.payload
-      });
-    case _types.SET_NEW_TABLE_ID:
-      return _extends({}, state, {
-        tableId: action.payload
-      });
-    case _types.LOAD_BLANK_TABLE:
-      return _extends({}, state, {
-        products: []
       });
     case _types.LOAD_SAVED_TABLE:
       return _extends({}, state, {
@@ -813,7 +805,7 @@ ___scope___.file("actions/index.js", function(exports, require, module, __filena
 'use strict';
 
 exports.__esModule = true;
-exports.confirmEmail = exports.resetPassword = exports.getForgotPasswordToken = exports.logoutUser = exports.registerUser = exports.loginUser = exports.toggleShowTableModal = exports.loadTable = exports.getPreviousTableData = exports.createNewTable = exports.syncToDatabase = exports.clearTable = exports.printTable = exports.showActions = exports.hideActions = exports.formatTable = exports.removeItemFromTable = exports.decrementProductQuantity = exports.getProductDetails = undefined;
+exports.confirmEmail = exports.resetPassword = exports.getForgotPasswordToken = exports.logoutUser = exports.registerUser = exports.loginUser = exports.toggleShowTableModal = exports.loadTable = exports.syncToDatabase = exports.clearTable = exports.printTable = exports.showActions = exports.hideActions = exports.formatTable = exports.removeItemFromTable = exports.decrementProductQuantity = exports.getProductDetails = undefined;
 
 require('core-js/modules/es6.typed.array-buffer');
 
@@ -1014,7 +1006,7 @@ var timeout = function timeout(ms) {
 
 var getProductDetails = exports.getProductDetails = function getProductDetails(upc) {
   return function () {
-    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(dispatch, getState) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch, getState) {
       var state, jwt, products, response;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
@@ -1101,7 +1093,7 @@ var formatTable = exports.formatTable = function formatTable() {
 
 var hideActions = exports.hideActions = function hideActions() {
   return function () {
-    var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(dispatch) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(dispatch) {
       return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -1128,7 +1120,7 @@ var hideActions = exports.hideActions = function hideActions() {
 
 var showActions = exports.showActions = function showActions() {
   return function () {
-    var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(dispatch) {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(dispatch) {
       return regeneratorRuntime.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -1155,7 +1147,7 @@ var showActions = exports.showActions = function showActions() {
 
 var printTable = exports.printTable = function printTable() {
   return function () {
-    var _ref4 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(dispatch) {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(dispatch) {
       return regeneratorRuntime.wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
@@ -1213,8 +1205,8 @@ var clearTable = exports.clearTable = function clearTable() {
 
 var syncToDatabase = exports.syncToDatabase = function syncToDatabase() {
   return function () {
-    var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(dispatch, getState) {
-      var state, userId, jwt, products, tableId, response;
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(dispatch, getState) {
+      var state, userId, jwt, products, response;
       return regeneratorRuntime.wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
@@ -1228,25 +1220,41 @@ var syncToDatabase = exports.syncToDatabase = function syncToDatabase() {
               userId = state.auth.userProfile.id;
               jwt = state.auth.jwt;
               products = state.table.products;
-              tableId = state.table.tableId;
+
+              /* Only call to save the table if there is data to save */
+
+              if (!(products.length > 0)) {
+                _context5.next = 13;
+                break;
+              }
+
               _context5.next = 9;
-              return _axios2.default.put(API_URL + '/tables/' + userId + '/' + tableId, { products: products }, {
+              return _axios2.default.put(API_URL + '/users/' + userId + '/table', { currentTableState: products }, {
                 headers: { Authorization: jwt }
               });
 
             case 9:
               response = _context5.sent;
 
-
               dispatch({
                 type: _types.SYNC_TABLE_SUCCESS,
                 payload: new Date().toLocaleTimeString()
               });
-              _context5.next = 16;
+              _context5.next = 14;
               break;
 
             case 13:
-              _context5.prev = 13;
+              dispatch({
+                type: _types.SYNC_TABLE_FAILURE,
+                payload: 'There must be products in the table in order to save it.'
+              });
+
+            case 14:
+              _context5.next = 19;
+              break;
+
+            case 16:
+              _context5.prev = 16;
               _context5.t0 = _context5['catch'](0);
 
               dispatch({
@@ -1254,12 +1262,12 @@ var syncToDatabase = exports.syncToDatabase = function syncToDatabase() {
                 payload: _context5.t0
               });
 
-            case 16:
+            case 19:
             case 'end':
               return _context5.stop();
           }
         }
-      }, _callee5, undefined, [[0, 13]]);
+      }, _callee5, undefined, [[0, 16]]);
     }));
 
     return function (_x6, _x7) {
@@ -1268,175 +1276,46 @@ var syncToDatabase = exports.syncToDatabase = function syncToDatabase() {
   }();
 };
 
-/* Creates a new table for the user, then loads that table state into the view */
-var createNewTable = exports.createNewTable = function createNewTable() {
+/* loads existing table from user's collection of past tables */
+var loadTable = exports.loadTable = function loadTable(user, jwt) {
   return function () {
-    var _ref6 = _asyncToGenerator(regeneratorRuntime.mark(function _callee6(dispatch, getState) {
-      var state, userId, jwt, response;
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(dispatch) {
+      var response;
       return regeneratorRuntime.wrap(function _callee6$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
               _context6.prev = 0;
-              state = getState();
-              userId = state.auth.userProfile.id;
-              jwt = state.auth.jwt;
-              _context6.next = 6;
-              return _axios2.default.post(API_URL + '/tables/' + userId, {
+              _context6.next = 3;
+              return _axios2.default.get(API_URL + '/users/' + user.id + '/table', {
                 headers: { Authorization: jwt }
               });
 
-            case 6:
+            case 3:
               response = _context6.sent;
-              _context6.next = 9;
-              return dispatch({ type: _types.SET_NEW_TABLE_ID, payload: response.data._id });
+              _context6.next = 6;
+              return dispatch({ type: _types.LOAD_SAVED_TABLE, payload: response.data.products });
 
-            case 9:
+            case 6:
               _context6.next = 11;
-              return dispatch({ type: _types.LOAD_BLANK_TABLE });
-
-            case 11:
-              _context6.next = 13;
-              return dispatch({ type: _types.TOGGLE_LOAD_TABLE_MODAL });
-
-            case 13:
-              _context6.next = 18;
               break;
 
-            case 15:
-              _context6.prev = 15;
+            case 8:
+              _context6.prev = 8;
               _context6.t0 = _context6['catch'](0);
 
               console.error(_context6.t0);
 
-            case 18:
+            case 11:
             case 'end':
               return _context6.stop();
           }
         }
-      }, _callee6, undefined, [[0, 15]]);
+      }, _callee6, undefined, [[0, 8]]);
     }));
 
-    return function (_x8, _x9) {
+    return function (_x8) {
       return _ref6.apply(this, arguments);
-    };
-  }();
-};
-
-/* Makes request for all past tables, 
- * retrieving the date and the unique id of the table.
- */
-var getPreviousTableData = exports.getPreviousTableData = function getPreviousTableData() {
-  return function () {
-    var _ref7 = _asyncToGenerator(regeneratorRuntime.mark(function _callee7(dispatch, getState) {
-      var state, userId, jwt, response, tableData;
-      return regeneratorRuntime.wrap(function _callee7$(_context7) {
-        while (1) {
-          switch (_context7.prev = _context7.next) {
-            case 0:
-              _context7.prev = 0;
-              state = getState();
-              userId = state.auth.userProfile.id;
-              jwt = state.auth.jwt;
-              _context7.next = 6;
-              return _axios2.default.get(API_URL + '/tables/' + userId, {
-                headers: { Authorization: jwt }
-              });
-
-            case 6:
-              response = _context7.sent;
-              tableData = response.data.map(function (tableInstance) {
-                var tableId = tableInstance._id;
-
-                /* parse date to JS date object*/
-                var parsedDate = new Date(tableInstance.createdOn);
-
-                /* Simpler alternative needed for IE11 */
-                var formattedDate = parsedDate.toDateString() + '-' + parsedDate.toLocaleTimeString();
-
-                return {
-                  tableId: tableId,
-                  formattedDate: formattedDate
-                };
-              });
-              _context7.next = 10;
-              return dispatch({ type: _types.GET_USER_TABLE_DATA_SUCCESS, payload: tableData });
-
-            case 10:
-              _context7.next = 15;
-              break;
-
-            case 12:
-              _context7.prev = 12;
-              _context7.t0 = _context7['catch'](0);
-
-              console.error(_context7.t0);
-
-            case 15:
-            case 'end':
-              return _context7.stop();
-          }
-        }
-      }, _callee7, undefined, [[0, 12]]);
-    }));
-
-    return function (_x10, _x11) {
-      return _ref7.apply(this, arguments);
-    };
-  }();
-};
-
-/* loads existing table from user's collection of past tables */
-var loadTable = exports.loadTable = function loadTable(tableId) {
-  return function () {
-    var _ref8 = _asyncToGenerator(regeneratorRuntime.mark(function _callee8(dispatch, getState) {
-      var state, userId, jwt, response;
-      return regeneratorRuntime.wrap(function _callee8$(_context8) {
-        while (1) {
-          switch (_context8.prev = _context8.next) {
-            case 0:
-              _context8.prev = 0;
-              state = getState();
-              userId = state.auth.userProfile.id;
-              jwt = state.auth.jwt;
-              _context8.next = 6;
-              return _axios2.default.get(API_URL + '/tables/' + userId + '/' + tableId, {
-                headers: { Authorization: jwt }
-              });
-
-            case 6:
-              response = _context8.sent;
-              _context8.next = 9;
-              return dispatch({ type: _types.LOAD_SAVED_TABLE, payload: response.data.products });
-
-            case 9:
-              _context8.next = 11;
-              return dispatch({ type: _types.SET_NEW_TABLE_ID, payload: tableId });
-
-            case 11:
-              _context8.next = 13;
-              return dispatch({ type: _types.TOGGLE_LOAD_TABLE_MODAL });
-
-            case 13:
-              _context8.next = 18;
-              break;
-
-            case 15:
-              _context8.prev = 15;
-              _context8.t0 = _context8['catch'](0);
-
-              console.error(_context8.t0);
-
-            case 18:
-            case 'end':
-              return _context8.stop();
-          }
-        }
-      }, _callee8, undefined, [[0, 15]]);
-    }));
-
-    return function (_x12, _x13) {
-      return _ref8.apply(this, arguments);
     };
   }();
 };
@@ -1448,173 +1327,176 @@ var toggleShowTableModal = exports.toggleShowTableModal = function toggleShowTab
 };
 
 /* takes in props from login form */
-var loginUser = exports.loginUser = function loginUser(_ref9) {
-  var employeeNumber = _ref9.employeeNumber,
-      password = _ref9.password;
+var loginUser = exports.loginUser = function loginUser(_ref7) {
+  var employeeNumber = _ref7.employeeNumber,
+      password = _ref7.password;
   return function () {
-    var _ref10 = _asyncToGenerator(regeneratorRuntime.mark(function _callee9(dispatch) {
-      var response, errorResponse, validationErrors;
-      return regeneratorRuntime.wrap(function _callee9$(_context9) {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(dispatch) {
+      var response, _response$data, user, token, errorResponse, validationErrors;
+
+      return regeneratorRuntime.wrap(function _callee7$(_context7) {
         while (1) {
-          switch (_context9.prev = _context9.next) {
+          switch (_context7.prev = _context7.next) {
             case 0:
-              _context9.prev = 0;
-              _context9.next = 3;
+              _context7.prev = 0;
+              _context7.next = 3;
               return dispatch({ type: _types.LOGIN_REQUEST });
 
             case 3:
-              _context9.next = 5;
+              _context7.next = 5;
               return _axios2.default.post(API_URL + '/users/sign-in', {
                 email: employeeNumber.trim() + '@bestbuy.com',
                 password: password
               });
 
             case 5:
-              response = _context9.sent;
-              _context9.next = 8;
-              return dispatch({
+              response = _context7.sent;
+              _response$data = response.data, user = _response$data.user, token = _response$data.token;
+
+
+              dispatch({
                 type: _types.LOGIN_SUCCESS,
                 payload: {
-                  user: response.data.user,
-                  jwt: response.data.token
+                  user: user,
+                  jwt: token
                 }
               });
 
-            case 8:
-              _context9.next = 53;
+              dispatch(loadTable(user, token));
+              _context7.next = 54;
               break;
 
-            case 10:
-              _context9.prev = 10;
-              _context9.t0 = _context9['catch'](0);
-              errorResponse = Object.keys(_context9.t0.response.data)[0];
-              _context9.t1 = errorResponse;
-              _context9.next = _context9.t1 === 'validationErrors' ? 16 : _context9.t1 === 'emailMessage' ? 25 : _context9.t1 === 'verifyMessage' ? 32 : _context9.t1 === 'passwordMessage' ? 39 : 46;
+            case 11:
+              _context7.prev = 11;
+              _context7.t0 = _context7['catch'](0);
+              errorResponse = Object.keys(_context7.t0.response.data)[0];
+              _context7.t1 = errorResponse;
+              _context7.next = _context7.t1 === 'validationErrors' ? 17 : _context7.t1 === 'emailMessage' ? 26 : _context7.t1 === 'verifyMessage' ? 33 : _context7.t1 === 'passwordMessage' ? 40 : 47;
               break;
 
-            case 16:
+            case 17:
               validationErrors = [];
 
-              _context9.t0.response.data.validationErrors.forEach(function (error) {
+              _context7.t0.response.data.validationErrors.forEach(function (error) {
                 validationErrors.push(error.msg);
               });
-              _context9.next = 20;
+              _context7.next = 21;
               return dispatch({ type: _types.LOGIN_FAILURE, payload: validationErrors });
 
-            case 20:
-              _context9.next = 22;
+            case 21:
+              _context7.next = 23;
               return timeout(8000);
 
-            case 22:
-              _context9.next = 24;
+            case 23:
+              _context7.next = 25;
               return dispatch({ type: _types.CLEAR_FLASH_MESSAGE });
-
-            case 24:
-              return _context9.abrupt('break', 53);
 
             case 25:
-              _context9.next = 27;
+              return _context7.abrupt('break', 54);
+
+            case 26:
+              _context7.next = 28;
               return dispatch({
                 type: _types.LOGIN_FAILURE,
-                payload: _context9.t0.response.data.emailMessage
+                payload: _context7.t0.response.data.emailMessage
               });
 
-            case 27:
-              _context9.next = 29;
+            case 28:
+              _context7.next = 30;
               return timeout(8000);
 
-            case 29:
-              _context9.next = 31;
+            case 30:
+              _context7.next = 32;
               return dispatch({ type: _types.CLEAR_FLASH_MESSAGE });
-
-            case 31:
-              return _context9.abrupt('break', 53);
 
             case 32:
-              _context9.next = 34;
+              return _context7.abrupt('break', 54);
+
+            case 33:
+              _context7.next = 35;
               return dispatch({
                 type: _types.NOT_VERIFIED_LOGIN_ERROR,
-                payload: _context9.t0.response.data.verifyMessage
+                payload: _context7.t0.response.data.verifyMessage
               });
 
-            case 34:
-              _context9.next = 36;
+            case 35:
+              _context7.next = 37;
               return timeout(8000);
 
-            case 36:
-              _context9.next = 38;
+            case 37:
+              _context7.next = 39;
               return dispatch({ type: _types.CLEAR_FLASH_MESSAGE });
-
-            case 38:
-              return _context9.abrupt('break', 53);
 
             case 39:
-              _context9.next = 41;
+              return _context7.abrupt('break', 54);
+
+            case 40:
+              _context7.next = 42;
               return dispatch({
                 type: _types.LOGIN_FAILURE,
-                payload: _context9.t0.response.data.passwordMessage
+                payload: _context7.t0.response.data.passwordMessage
               });
 
-            case 41:
-              _context9.next = 43;
+            case 42:
+              _context7.next = 44;
               return timeout(8000);
 
-            case 43:
-              _context9.next = 45;
+            case 44:
+              _context7.next = 46;
               return dispatch({ type: _types.CLEAR_FLASH_MESSAGE });
 
-            case 45:
-              return _context9.abrupt('break', 53);
-
             case 46:
-              _context9.next = 48;
+              return _context7.abrupt('break', 54);
+
+            case 47:
+              _context7.next = 49;
               return dispatch({
                 type: _types.LOGIN_FAILURE,
                 payload: 'IT ALL BLEW UP'
               });
 
-            case 48:
-              _context9.next = 50;
+            case 49:
+              _context7.next = 51;
               return timeout(8000);
 
-            case 50:
-              _context9.next = 52;
+            case 51:
+              _context7.next = 53;
               return dispatch({ type: _types.CLEAR_FLASH_MESSAGE });
 
-            case 52:
-              return _context9.abrupt('break', 53);
-
             case 53:
+              return _context7.abrupt('break', 54);
+
+            case 54:
             case 'end':
-              return _context9.stop();
+              return _context7.stop();
           }
         }
-      }, _callee9, undefined, [[0, 10]]);
+      }, _callee7, undefined, [[0, 11]]);
     }));
 
-    return function (_x14) {
-      return _ref10.apply(this, arguments);
+    return function (_x9) {
+      return _ref8.apply(this, arguments);
     };
   }();
 };
 
-var registerUser = exports.registerUser = function registerUser(_ref11) {
-  var firstName = _ref11.firstName,
-      lastName = _ref11.lastName,
-      password = _ref11.password,
-      employeeNumber = _ref11.employeeNumber,
-      storeNumber = _ref11.storeNumber;
+var registerUser = exports.registerUser = function registerUser(_ref9) {
+  var firstName = _ref9.firstName,
+      lastName = _ref9.lastName,
+      password = _ref9.password,
+      employeeNumber = _ref9.employeeNumber,
+      storeNumber = _ref9.storeNumber;
   return function () {
-    var _ref12 = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(dispatch) {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(dispatch) {
       var errorResponse;
-      return regeneratorRuntime.wrap(function _callee10$(_context10) {
+      return regeneratorRuntime.wrap(function _callee8$(_context8) {
         while (1) {
-          switch (_context10.prev = _context10.next) {
+          switch (_context8.prev = _context8.next) {
             case 0:
-              _context10.prev = 0;
+              _context8.prev = 0;
 
               dispatch({ type: _types.REGISTER_REQUEST });
-              _context10.next = 4;
+              _context8.next = 4;
               return _axios2.default.post(API_URL + '/users', {
                 firstName: firstName,
                 lastName: lastName,
@@ -1629,68 +1511,68 @@ var registerUser = exports.registerUser = function registerUser(_ref11) {
                 type: _types.REGISTER_SUCCESS,
                 payload: 'Registered successfully, now check your work email to verify your account'
               });
-              _context10.next = 7;
+              _context8.next = 7;
               return timeout(8000);
 
             case 7:
               dispatch({ type: _types.CLEAR_FLASH_MESSAGE });
-              _context10.next = 31;
+              _context8.next = 31;
               break;
 
             case 10:
-              _context10.prev = 10;
-              _context10.t0 = _context10['catch'](0);
-              errorResponse = Object.keys(_context10.t0.response.data)[0];
-              _context10.t1 = errorResponse;
-              _context10.next = _context10.t1 === 'message' ? 16 : _context10.t1 === 'messages' ? 21 : 26;
+              _context8.prev = 10;
+              _context8.t0 = _context8['catch'](0);
+              errorResponse = Object.keys(_context8.t0.response.data)[0];
+              _context8.t1 = errorResponse;
+              _context8.next = _context8.t1 === 'message' ? 16 : _context8.t1 === 'messages' ? 21 : 26;
               break;
 
             case 16:
               dispatch({
                 type: _types.REGISTER_FAILURE,
-                payload: _context10.t0.response.data.message
+                payload: _context8.t0.response.data.message
               });
-              _context10.next = 19;
+              _context8.next = 19;
               return timeout(8000);
 
             case 19:
               dispatch({ type: _types.CLEAR_FLASH_MESSAGE });
-              return _context10.abrupt('break', 31);
+              return _context8.abrupt('break', 31);
 
             case 21:
               dispatch({
                 type: _types.REGISTER_FAILURE,
-                payload: _context10.t0.response.data.messages[0].msg
+                payload: _context8.t0.response.data.messages[0].msg
               });
-              _context10.next = 24;
+              _context8.next = 24;
               return timeout(8000);
 
             case 24:
               dispatch({ type: _types.CLEAR_FLASH_MESSAGE });
-              return _context10.abrupt('break', 31);
+              return _context8.abrupt('break', 31);
 
             case 26:
               dispatch({
                 type: _types.REGISTER_FAILURE,
                 payload: 'IT ALL BLEW UP'
               });
-              _context10.next = 29;
+              _context8.next = 29;
               return timeout(8000);
 
             case 29:
               dispatch({ type: _types.CLEAR_FLASH_MESSAGE });
-              return _context10.abrupt('break', 31);
+              return _context8.abrupt('break', 31);
 
             case 31:
             case 'end':
-              return _context10.stop();
+              return _context8.stop();
           }
         }
-      }, _callee10, undefined, [[0, 10]]);
+      }, _callee8, undefined, [[0, 10]]);
     }));
 
-    return function (_x15) {
-      return _ref12.apply(this, arguments);
+    return function (_x10) {
+      return _ref10.apply(this, arguments);
     };
   }();
 };
@@ -1701,10 +1583,101 @@ var logoutUser = exports.logoutUser = function logoutUser(error) {
   };
 };
 
-var getForgotPasswordToken = exports.getForgotPasswordToken = function getForgotPasswordToken(_ref13) {
-  var email = _ref13.email;
+var getForgotPasswordToken = exports.getForgotPasswordToken = function getForgotPasswordToken(_ref11) {
+  var email = _ref11.email;
   return function () {
-    var _ref14 = _asyncToGenerator(regeneratorRuntime.mark(function _callee11(dispatch) {
+    var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(dispatch) {
+      var response;
+      return regeneratorRuntime.wrap(function _callee9$(_context9) {
+        while (1) {
+          switch (_context9.prev = _context9.next) {
+            case 0:
+              _context9.prev = 0;
+              _context9.next = 3;
+              return _axios2.default.post(API_URL + '/users/forgot-password', {
+                email: email
+              });
+
+            case 3:
+              response = _context9.sent;
+              _context9.next = 6;
+              return dispatch({
+                type: _types.FORGOT_PASSWORD_REQUEST,
+                payload: response.data.message
+              });
+
+            case 6:
+              _context9.next = 11;
+              break;
+
+            case 8:
+              _context9.prev = 8;
+              _context9.t0 = _context9['catch'](0);
+
+              console.error(_context9.t0);
+
+            case 11:
+            case 'end':
+              return _context9.stop();
+          }
+        }
+      }, _callee9, undefined, [[0, 8]]);
+    }));
+
+    return function (_x11) {
+      return _ref12.apply(this, arguments);
+    };
+  }();
+};
+
+var resetPassword = exports.resetPassword = function resetPassword(token, _ref13) {
+  var password = _ref13.password;
+  return function () {
+    var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(dispatch) {
+      var response;
+      return regeneratorRuntime.wrap(function _callee10$(_context10) {
+        while (1) {
+          switch (_context10.prev = _context10.next) {
+            case 0:
+              _context10.prev = 0;
+              _context10.next = 3;
+              return _axios2.default.post(API_URL + '/users/reset-password/' + token, { password: password });
+
+            case 3:
+              response = _context10.sent;
+              _context10.next = 6;
+              return dispatch({
+                type: _types.RESET_PASSWORD_REQUEST,
+                payload: response.data.message
+              });
+
+            case 6:
+              _context10.next = 11;
+              break;
+
+            case 8:
+              _context10.prev = 8;
+              _context10.t0 = _context10['catch'](0);
+
+              console.error(_context10.t0);
+
+            case 11:
+            case 'end':
+              return _context10.stop();
+          }
+        }
+      }, _callee10, undefined, [[0, 8]]);
+    }));
+
+    return function (_x12) {
+      return _ref14.apply(this, arguments);
+    };
+  }();
+};
+
+var confirmEmail = exports.confirmEmail = function confirmEmail(token) {
+  return function () {
+    var _ref15 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(dispatch) {
       var response;
       return regeneratorRuntime.wrap(function _callee11$(_context11) {
         while (1) {
@@ -1712,16 +1685,17 @@ var getForgotPasswordToken = exports.getForgotPasswordToken = function getForgot
             case 0:
               _context11.prev = 0;
               _context11.next = 3;
-              return _axios2.default.post(API_URL + '/users/forgot-password', {
-                email: email
-              });
+              return _axios2.default.post(API_URL + '/users/verify-email/' + token);
 
             case 3:
               response = _context11.sent;
               _context11.next = 6;
               return dispatch({
-                type: _types.FORGOT_PASSWORD_REQUEST,
-                payload: response.data.message
+                type: _types.LOGIN_SUCCESS,
+                payload: {
+                  user: response.data.user,
+                  jwt: response.data.jwt
+                }
               });
 
             case 6:
@@ -1742,100 +1716,8 @@ var getForgotPasswordToken = exports.getForgotPasswordToken = function getForgot
       }, _callee11, undefined, [[0, 8]]);
     }));
 
-    return function (_x16) {
-      return _ref14.apply(this, arguments);
-    };
-  }();
-};
-
-var resetPassword = exports.resetPassword = function resetPassword(token, _ref15) {
-  var password = _ref15.password;
-  return function () {
-    var _ref16 = _asyncToGenerator(regeneratorRuntime.mark(function _callee12(dispatch) {
-      var response;
-      return regeneratorRuntime.wrap(function _callee12$(_context12) {
-        while (1) {
-          switch (_context12.prev = _context12.next) {
-            case 0:
-              _context12.prev = 0;
-              _context12.next = 3;
-              return _axios2.default.post(API_URL + '/users/reset-password/' + token, { password: password });
-
-            case 3:
-              response = _context12.sent;
-              _context12.next = 6;
-              return dispatch({
-                type: _types.RESET_PASSWORD_REQUEST,
-                payload: response.data.message
-              });
-
-            case 6:
-              _context12.next = 11;
-              break;
-
-            case 8:
-              _context12.prev = 8;
-              _context12.t0 = _context12['catch'](0);
-
-              console.error(_context12.t0);
-
-            case 11:
-            case 'end':
-              return _context12.stop();
-          }
-        }
-      }, _callee12, undefined, [[0, 8]]);
-    }));
-
-    return function (_x17) {
-      return _ref16.apply(this, arguments);
-    };
-  }();
-};
-
-var confirmEmail = exports.confirmEmail = function confirmEmail(token) {
-  return function () {
-    var _ref17 = _asyncToGenerator(regeneratorRuntime.mark(function _callee13(dispatch) {
-      var response;
-      return regeneratorRuntime.wrap(function _callee13$(_context13) {
-        while (1) {
-          switch (_context13.prev = _context13.next) {
-            case 0:
-              _context13.prev = 0;
-              _context13.next = 3;
-              return _axios2.default.post(API_URL + '/users/verify-email/' + token);
-
-            case 3:
-              response = _context13.sent;
-              _context13.next = 6;
-              return dispatch({
-                type: _types.LOGIN_SUCCESS,
-                payload: {
-                  user: response.data.user,
-                  jwt: response.data.jwt
-                }
-              });
-
-            case 6:
-              _context13.next = 11;
-              break;
-
-            case 8:
-              _context13.prev = 8;
-              _context13.t0 = _context13['catch'](0);
-
-              console.error(_context13.t0);
-
-            case 11:
-            case 'end':
-              return _context13.stop();
-          }
-        }
-      }, _callee13, undefined, [[0, 8]]);
-    }));
-
-    return function (_x18) {
-      return _ref17.apply(this, arguments);
+    return function (_x13) {
+      return _ref15.apply(this, arguments);
     };
   }();
 };
@@ -3052,8 +2934,6 @@ ___scope___.file("components/dashboard.jsx", function(exports, require, module, 
 exports.__esModule = true;
 exports.Dashboard = undefined;
 
-var _connect;
-
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -3106,25 +2986,13 @@ var Dashboard = exports.Dashboard = function (_React$Component) {
     return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
   }
 
-  Dashboard.prototype.componentDidMount = function componentDidMount() {
+  Dashboard.prototype.render = function render() {
     var _this2 = this;
 
-    setTimeout(function () {
-      /* timeout to ensure JWT has loaded and will be available for fetching tables */
-      _this2.props.getPreviousTableData();
-    }, 2000);
-  };
-
-  Dashboard.prototype.componentWillUpdate = function componentWillUpdate() {
-    var _this3 = this;
-
-    /* Save table to DB ever 5 minutes ONLY if there is a table loaded*/
-    this.props.tableId && setInterval(function () {
-      return _this3.props.syncToDatabase();
+    /* Autosave! (every 5 minutes) */
+    setInterval(function () {
+      return _this2.props.syncToDatabase();
     }, 300000);
-  };
-
-  Dashboard.prototype.render = function render() {
     var _props = this.props,
         showModal = _props.showModal,
         userProfile = _props.userProfile;
@@ -3167,18 +3035,18 @@ var mapStateToProps = function mapStateToProps(state) {
   return {
     content: state.auth.content,
     userProfile: state.auth.userProfile,
-    showModal: state.table.showModal,
-    tableId: state.table.tableId
+    showModal: state.table.showModal
   };
 };
 
-exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, (_connect = {
+exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, {
   syncToDatabase: _index.syncToDatabase,
-  getPreviousTableData: _index.getPreviousTableData,
+  loadTable: _index.loadTable,
   formatTable: _index.formatTable,
   printTable: _index.printTable,
-  clearTable: _index.clearTable
-}, _connect['syncToDatabase'] = _index.syncToDatabase, _connect.toggleShowTableModal = _index.toggleShowTableModal, _connect))(Dashboard));
+  clearTable: _index.clearTable,
+  toggleShowTableModal: _index.toggleShowTableModal
+})(Dashboard));
 });
 ___scope___.file("components/search-bar.jsx", function(exports, require, module, __filename, __dirname){
 
@@ -3243,6 +3111,7 @@ var SearchBar = exports.SearchBar = function (_React$Component) {
         getProductDetails({ upc: inputValue.toString() });
       } else if (isNaN(Number(inputValue))) {
         /* If the input is not a number  */
+        console.log(inputValue);
         setTimeout(function () {
           return dispatch({ type: _types.INVALID_UPC });
         }, 10);
@@ -3255,7 +3124,6 @@ var SearchBar = exports.SearchBar = function (_React$Component) {
     var _this2 = this;
 
     var _props = this.props,
-        tableId = _props.tableId,
         handleSubmit = _props.handleSubmit,
         waiting = _props.waiting,
         lastTimeSaved = _props.lastTimeSaved,
@@ -3291,8 +3159,6 @@ var SearchBar = exports.SearchBar = function (_React$Component) {
             component: 'input',
             placeholder: 'UPC',
             type: 'number'
-            /* disable input if there is no current table loaded */
-            , disabled: tableId ? false : true
           })
         )
       ),
@@ -3561,25 +3427,8 @@ var SideBar = exports.SideBar = function SideBar(props) {
       { className: 'btn-container' },
       _react2.default.createElement(
         'button',
-        { id: 'manageButton', onClick: function onClick() {
-            return props.toggleShowTableModal();
-          } },
-        _react2.default.createElement('img', { src: _noun_1082747_cc2.default, alt: '' }),
-        _react2.default.createElement(
-          'p',
-          null,
-          'Manage'
-        )
-      )
-    ),
-    _react2.default.createElement(
-      'div',
-      { className: 'btn-container' },
-      _react2.default.createElement(
-        'button',
         {
           id: 'saveButton',
-          disabled: !props.tableId,
           onClick: _debounce(function () {
             return props.syncToDatabase();
           }, 5000, {
@@ -3755,10 +3604,6 @@ var _reactRedux = require('react-redux');
 
 var _reactRouterDom = require('react-router-dom');
 
-var _selectTable = require('./select-table');
-
-var _selectTable2 = _interopRequireDefault(_selectTable);
-
 require('./table-modal.scss');
 
 var _noun_1074124_cc = require('../static/noun_1074124_cc.svg');
@@ -3783,17 +3628,6 @@ var TableModal = exports.TableModal = function (_React$Component) {
   }
 
   TableModal.prototype.render = function render() {
-    var selectComponent = _react2.default.createElement(
-      'div',
-      { className: 'selectWrapper' },
-      _react2.default.createElement(
-        'h3',
-        null,
-        'Load a saved table'
-      ),
-      _react2.default.createElement(_selectTable2.default, { userTables: this.props.selectOptionData })
-    );
-
     return _react2.default.createElement(
       'div',
       { className: 'global-modal' },
@@ -3830,7 +3664,7 @@ var TableModal = exports.TableModal = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'content-right' },
-            this.props.selectOptionData.length > 0 ? selectComponent : _react2.default.createElement(
+            _react2.default.createElement(
               'h3',
               null,
               'Start off by creating a new table.'
@@ -3853,115 +3687,8 @@ var mapStateToProps = function mapStateToProps(state) {
 
 exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, {
   toggleShowTableModal: _actions.toggleShowTableModal,
-  createNewTable: _actions.createNewTable,
-  getPreviousTableData: _actions.getPreviousTableData
+  createNewTable: _actions.createNewTable
 })(TableModal));
-});
-___scope___.file("components/select-table.jsx", function(exports, require, module, __filename, __dirname){
-
-'use strict';
-
-exports.__esModule = true;
-exports.SelectTable = undefined;
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRedux = require('react-redux');
-
-var _actions = require('../actions');
-
-var _reactRouterDom = require('react-router-dom');
-
-require('./select-table.scss');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/* receive all table instances, referenced by Id, displayed by date. Load on select */
-
-var SelectTable = exports.SelectTable = function (_React$Component) {
-  _inherits(SelectTable, _React$Component);
-
-  function SelectTable() {
-    _classCallCheck(this, SelectTable);
-
-    return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
-  }
-
-  SelectTable.prototype.handleSelectTableToLoad = function handleSelectTableToLoad(e, userTables) {
-    /* filter through the userTables in props, 
-     * to match the formatted date with the correct tableId 
-     */
-
-    var tableIdToLoad = void 0;
-    for (var i = 0; i < userTables.length; i++) {
-      if (userTables[i].formattedDate === (e.target || e.srcElement).value) {
-        tableIdToLoad = userTables[i].tableId;
-      }
-    }
-
-    this.props.loadTable(tableIdToLoad);
-  };
-
-  SelectTable.prototype.render = function render(props) {
-    var _this2 = this;
-
-    var _props = this.props,
-        userTables = _props.userTables,
-        loadedTable = _props.loadedTable;
-
-
-    return _react2.default.createElement(
-      'select',
-      {
-        name: 'select',
-        id: 'select',
-        onChange: function onChange(e) {
-          return _this2.handleSelectTableToLoad(e, userTables);
-        }
-      },
-      _react2.default.createElement(
-        'option',
-        { disabled: true, selected: true, value: true },
-        ' ',
-        '-- Select a table --',
-        ' '
-      ),
-      userTables.map(function (tableData, index) {
-        return _react2.default.createElement(
-          'option',
-          { key: index, value: tableData._id },
-          tableData.formattedDate
-        );
-      })
-    );
-  };
-
-  return SelectTable;
-}(_react2.default.Component);
-
-var mapStateToProps = function mapStateToProps(state) {
-  return {
-    userTables: state.table.selectOptionData,
-    loadedTable: state.table.loadedTable
-  };
-};
-
-exports.default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(mapStateToProps, {
-  loadTable: _actions.loadTable
-})(SelectTable));
-});
-___scope___.file("components/select-table.scss", function(exports, require, module, __filename, __dirname){
-
-
-require("fuse-box-css")("components/select-table.scss", "select{-webkit-appearance:none;-moz-appearance:none;appearance:none;display:block;width:100%;max-width:320px;height:50px;float:right;margin:5px 0px;font-size:16px;line-height:1.75;color:#333;background-color:#ffffff;background-image:none;border:1px solid #cccccc;-ms-word-break:normal;word-break:normal;-moz-text-align-last:center;text-align-last:center}select:focus{outline-color:#003b64}select option{text-align:center;margin:5%}")
 });
 ___scope___.file("components/table-modal.scss", function(exports, require, module, __filename, __dirname){
 
@@ -4048,6 +3775,7 @@ ___scope___.file("index.scss", function(exports, require, module, __filename, __
 require("fuse-box-css")("index.scss", "html *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}*,*::after,*::before{box-sizing:border-box}:root{font-size:10px}@media (min-width: 768px){:root{font-size:calc(-.27425px + 1.33779vw)}}@media (min-width: 1366px){:root{font-size:18px}}html,body{height:100%;font-family:Helvetica}body{background-color:#282c34;overflow-x:hidden}")
 });
 });
+FuseBox.target = "browser"
 
 FuseBox.import("default/index.js");
 FuseBox.main("default/index.js");

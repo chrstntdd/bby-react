@@ -85,7 +85,7 @@ describe('DUMB <SideBar/>', () => {
     const { props } = setup();
     const wrapper = shallow(<SideBar {...props} />);
     const buttons = wrapper.find('button');
-    expect(buttons.length).toBe(5);
+    expect(buttons.length).toBe(4);
   });
 });
 
@@ -94,16 +94,7 @@ describe('SMART <ConnectedSideBar/>', () => {
     const { enzymeWrapper, props } = setup();
     expect(enzymeWrapper).not.toBe(null);
   });
-  describe('MANAGE button', () => {
-    it('should dispatch handleShowModal', () => {
-      const { enzymeWrapper, props } = setup();
 
-      const button = enzymeWrapper.find('#manageButton');
-      button.simulate('click');
-
-      expect(props.toggleShowTableModal).toHaveBeenCalled();
-    });
-  });
   describe('SAVE button', () => {
     it.skip('should dispatch syncToDatabase', async () => {
       /* TODO. figure out how to test the async debounce function */

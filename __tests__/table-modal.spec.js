@@ -77,11 +77,6 @@ describe('DUMB <TableModal/>', () => {
   it('should render without crashing', () => {
     expect(wrapper.length).toEqual(1);
   });
-  it('should pass props to SelectTable', () => {
-    expect(
-      wrapper.find('.selectWrapper').props().children[1].props.userTables
-    ).toEqual(selectOptionData);
-  });
 });
 
 describe('SMART <ConnectedTableModal/>', () => {

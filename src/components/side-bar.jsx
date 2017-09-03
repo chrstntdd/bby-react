@@ -15,17 +15,8 @@ export const SideBar = props => {
   return (
     <aside id="side-bar">
       <div className="btn-container">
-        <button id="manageButton" onClick={() => props.toggleShowTableModal()}>
-          <img src={manage} alt="" />
-          <p>Manage</p>
-        </button>
-      </div>
-      <div className="btn-container">
-        {/* button is disabled until a tableId is set.
-          * also the button can't be spammed :) */}
         <button
           id="saveButton"
-          disabled={!props.tableId}
           onClick={_debounce(() => props.syncToDatabase(), 5000, {
             maxWait: 100,
             leading: true

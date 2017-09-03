@@ -22,6 +22,7 @@ export class SearchBar extends React.Component {
       getProductDetails({ upc: inputValue.toString() });
     } else if (isNaN(Number(inputValue))) {
       /* If the input is not a number  */
+      console.log(inputValue);
       setTimeout(() => dispatch({ type: INVALID_UPC }), 10);
       alert(`Looks like you didn't quite scan the UPC. Try again please.`);
     }
@@ -29,7 +30,6 @@ export class SearchBar extends React.Component {
 
   render() {
     const {
-      tableId,
       handleSubmit,
       waiting,
       lastTimeSaved,
@@ -55,8 +55,6 @@ export class SearchBar extends React.Component {
               component="input"
               placeholder="UPC"
               type="number"
-              /* disable input if there is no current table loaded */
-              disabled={tableId ? false : true}
             />
           </div>
         </form>

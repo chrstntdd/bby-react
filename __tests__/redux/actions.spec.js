@@ -492,11 +492,10 @@ describe('table actions', () => {
       const state = store.getState();
       const userId = state.auth.userProfile.id;
       const products = state.table.products;
-      const tableId = state.table.tableId;
 
       mock
-        .onPut(`${API_URL}/tables/${userId}/${tableId}`, {
-          products: products
+        .onPut(`${API_URL}/users/${userId}/table`, {
+          currentTableState: products
         })
         .reply(201);
 
@@ -515,58 +514,8 @@ describe('table actions', () => {
     });
   });
 
-  describe('createNewTable', () => {
-    it('should dispatch SET_NEW_TABLE_ID, LOAD_BLANK_TABLE, and TOGGLE_LOAD_TABLE_MODAL', async () => {
-      const mock = new MockAdapter(axios);
-      const store = mockStore(initialState);
-      const state = store.getState();
-      const userId = state.auth.userProfile.id;
-
-      mock.onPost(`${API_URL}/tables/${userId}`).reply(200, { _id: '1234' });
-
-      await store.dispatch(actions.createNewTable());
-
-      const response = store.getActions();
-      expect(response.length).toEqual(3);
-      expect(response).toEqual([
-        { type: types.SET_NEW_TABLE_ID, payload: '1234' },
-        { type: types.LOAD_BLANK_TABLE },
-        { type: types.TOGGLE_LOAD_TABLE_MODAL }
-      ]);
-    });
-  });
-
-  describe('getPreviousTableData', () => {
-    it('should dispatch GET_USER_TABLE_SUCCESS', async () => {
-      const mock = new MockAdapter(axios);
-      const store = mockStore(initialState);
-      const state = store.getState();
-      const userId = state.auth.userProfile.id;
-      const mockTableData = [
-        {
-          tableId: '599da4290e07e617f988d707',
-          formattedDate: 'Wed Aug 23 2017-11:50:01 AM'
-        }
-      ];
-
-      mock.onGet(`${API_URL}/tables/${userId}`).reply(200, mockTableData);
-
-      await store.dispatch(actions.getPreviousTableData());
-      const response = store.getActions();
-
-      /* stubbing out proper response due to parsing errors */
-      expect(response.length).toEqual(1);
-      expect(response).toEqual([
-        {
-          type: 'GET_USER_TABLE_DATA_SUCCESS',
-          payload: [{ formattedDate: 'Invalid Date-Invalid Date' }]
-        }
-      ]);
-    });
-  });
-
   describe('loadTable', () => {
-    it('should dispatch LOAD_SAVED_TABLE, SET_NEW_TABLE_ID, and TOGGLE_LOAD_TABLE_MODAL', async () => {
+    it('should dispatch LOAD_SAVED_TABLE', async () => {
       const mock = new MockAdapter(axios);
       const store = mockStore(initialState);
       const mockProductsArr = [
@@ -599,31 +548,20 @@ describe('table actions', () => {
         }
       ];
       const state = store.getState();
-      const userId = state.auth.userProfile.id;
-      const tableId = '599da4290e07e617f988d707';
-      const mockTableData = [
-        {
-          tableId: '599da4290e07e617f988d707',
-          formattedDate: 'Wed Aug 23 2017-11:50:01 AM'
-        }
-      ];
+      const user = state.auth.userProfile;
 
       mock
-        .onGet(`${API_URL}/tables/${userId}/${tableId}`)
+        .onGet(`${API_URL}/users/${user.id}/table`)
         .reply(200, { products: mockProductsArr });
 
-      await store.dispatch(actions.loadTable(tableId));
+      await store.dispatch(actions.loadTable(user, 'JWT asdfasdf'));
       const response = store.getActions();
 
-      expect(response.length).toEqual(3);
-      expect(response).toContainEqual(
-        {
-          type: types.LOAD_SAVED_TABLE,
-          payload: mockProductsArr
-        },
-        { type: types.SET_NEW_TABLE_ID, payload: tableId },
-        { type: types.TOGGLE_LOAD_TABLE_MODAL }
-      );
+      expect(response.length).toEqual(1);
+      expect(response).toContainEqual({
+        type: types.LOAD_SAVED_TABLE,
+        payload: mockProductsArr
+      });
     });
   });
   describe('toggleShowTableModal', () => {
