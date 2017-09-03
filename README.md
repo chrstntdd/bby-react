@@ -9,6 +9,7 @@
 + [Technology](#front-end-technology)
 + [API Documentation](#api-documentation)
 + [Icon Credit](#icon-credit)
++ [Future Plans](#future-plans)
 
 
 
@@ -109,3 +110,14 @@ POST
 + [Handshake Icon](https://thenounproject.com/search/?q=handshake&i=1007187)
 + [Lock Icon](https://thenounproject.com/search/?q=Lock%20check&i=821171)
 + [Rocket Icon](https://thenounproject.com/search/?q=Rocket%20ship&i=658468)
+
+## Future Plans
++ Shrink application footprint
+  + Swap in Preact for React
+  + Remove duplicate/dead code
+  + Code split along routes
+  + Use CSSModules
++ Incorporate Web Workers
++ Polish UI
++ Improve tests
++ Incorporate some Elm 🤔
