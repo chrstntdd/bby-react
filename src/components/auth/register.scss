@@ -64,6 +64,21 @@
 }
 
 #register-section {
+  #loading-container {
+    left: 48%;
+    top: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    p {
+      color: white;
+      font-size: 16px;
+      text-align: center;
+    }
+  }
   &:focus {
     outline: none;
   }
@@ -102,20 +117,26 @@
       color: white;
     }
     form {
-      display: flex;
-      flex-flow: row wrap;
-      justify-content: space-around;
+      @supports (display: grid) {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(33%, 1fr));
+      }
       height: 100%;
-      position: relative;
-      @media (min-width: $bp-xxsmall) {
-        padding: between(30px, 50px, $bp-xxsmall, $bp-xlarge);
+      padding: 2em;
+      .input-wrapper {
+        width: 90%;
+        margin: 0 auto;
+        align-self: center;
       }
       button {
-        margin-top: 2rem;
+        justify-self: center;
+        align-self: center;
+        grid-column: auto / span 2;
         border: 2px solid lightgrey;
         text-transform: uppercase;
-        height: 50px;
-        width: 260px;
+        width: 10rem;
+        height: 3rem;
         font-size: 1.2rem;
         border-radius: 3px;
         color: lightgrey;
