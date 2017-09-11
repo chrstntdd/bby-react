@@ -5,16 +5,17 @@ import './form-input.scss';
 
 const required = value => (value ? undefined : 'Required');
 
-const renderField = (field, props) =>
+const renderField = (field, props) => (
   <input
     {...field.input}
     autoComplete="off"
     type={field.type}
     className={field.input.value === '' ? '' : 'has-content'}
-  />;
+  />
+);
 
-const Input = props =>
-  <div className="input-wrapper">
+const Input = props => (
+  <div id={props.name} className="input-wrapper">
     <Field
       name={props.name || 'input'}
       component={renderField}
@@ -25,6 +26,7 @@ const Input = props =>
       {props.label}
     </label>
     <span className="focus-border" />
-  </div>;
+  </div>
+);
 
 export default Input;
