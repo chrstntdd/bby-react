@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import { resetPassword } from '../../actions/index';
+import LoadingIndicator from './loading';
 
 import Input from './form-input';
 import './form-input.scss';
@@ -67,30 +68,29 @@ export class ResetPassword extends React.Component {
   renderAlert() {
     if (this.props.errorMessage) {
       return (
-        <div>
-          <strong>OOPS!</strong>
-          {this.props.errorMessage}
+        <div className="error-message">
+          <p>{this.props.errorMessage}</p>
         </div>
       );
     } else if (this.props.message) {
       return (
-        <div>
-          <strong>Success!</strong>
-          {this.props.message}
+        <div className="success-message">
+          <p>{this.props.message}</p>
         </div>
       );
     }
   }
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, waiting } = this.props;
 
-    const formInputs = this.state.inputs.map((input, index) =>
+    const formInputs = this.state.inputs.map((input, index) => (
       <Input key={index} {...input} />
-    );
+    ));
 
     return (
       <section id="reset-password-wrapper">
-        <div id="reset-password-card">
+        <LoadingIndicator waiting={waiting} message={'One moment please.'} />
+        <div id="reset-password-card" className={waiting ? 'hide' : 'show'}>
           <h1>Reset Password</h1>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
             {this.renderAlert()}
@@ -104,8 +104,9 @@ export class ResetPassword extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  waiting: state.auth.waiting,
   errorMessage: state.auth.error,
-  message: state.auth.resetMessage
+  message: state.auth.message
 });
 
 export default withRouter(

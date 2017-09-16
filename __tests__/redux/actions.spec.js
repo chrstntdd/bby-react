@@ -283,46 +283,72 @@ describe('auth actions', () => {
   });
 
   describe('getForgotPasswordToken', () => {
-    it('should dispatch FORGOT_PASSWORD_REQUEST', async () => {
-      const mock = new MockAdapter(axios);
-      const email = 'a1@bestbuy.com';
-      const store = mockStore(initialState);
+    it(
+      'should dispatch FORGOT_PASSWORD_REQUEST',
+      async () => {
+        const mock = new MockAdapter(axios);
+        const employeeNumber = 'a1';
+        const store = mockStore(initialState);
 
-      mock
-        .onPost(`${API_URL}/users/forgot-password`, { email })
-        .reply(200, { resetToken: 'a token', message: 'thanks' });
+        mock
+          .onPost(`${API_URL}/users/forgot-password`, { employeeNumber })
+          .reply(200, { resetToken: 'a token', message: 'thanks' });
 
-      await store.dispatch(actions.getForgotPasswordToken({ email }));
+        await store.dispatch(
+          actions.getForgotPasswordToken({ employeeNumber })
+        );
 
-      const response = store.getActions();
-      expect(response.length).toEqual(1);
-      expect(response).toContainEqual({
-        type: types.FORGOT_PASSWORD_REQUEST,
-        payload: 'thanks'
-      });
-    });
+        const response = store.getActions();
+        expect(response.length).toEqual(3);
+        expect(response).toContainEqual(
+          {
+            type: types.FORGOT_PASSWORD_REQUEST
+          },
+          {
+            type: types.FORGOT_PASSWORD_SUCCESS,
+            payload: 'thanks'
+          },
+          {
+            type: types.CLEAR_FLASH_MESSAGE
+          }
+        );
+      },
+      10000
+    );
   });
 
   describe('resetPassword', () => {
-    it('should dispatch RESET_PASSWORD_REQUEST', async () => {
-      const mock = new MockAdapter(axios);
-      const store = mockStore(initialState);
-      const password = 'fakeNews';
-      const token = 'asdfjfks';
+    it(
+      'should dispatch RESET_PASSWORD_REQUEST',
+      async () => {
+        const mock = new MockAdapter(axios);
+        const store = mockStore(initialState);
+        const password = 'fakeNews';
+        const token = 'asdfjfks';
 
-      mock
-        .onPost(`${API_URL}/users/reset-password/${token}`, { password })
-        .reply(200, { message: 'your password has been changed' });
+        mock
+          .onPost(`${API_URL}/users/reset-password/${token}`, { password })
+          .reply(200, { message: 'your password has been changed' });
 
-      await store.dispatch(actions.resetPassword(token, { password }));
-      const response = store.getActions();
+        await store.dispatch(actions.resetPassword(token, { password }));
+        const response = store.getActions();
 
-      expect(response.length).toEqual(1);
-      expect(response).toContainEqual({
-        type: types.RESET_PASSWORD_REQUEST,
-        payload: 'your password has been changed'
-      });
-    });
+        expect(response.length).toEqual(3);
+        expect(response).toContainEqual(
+          {
+            type: types.RESET_PASSWORD_REQUEST
+          },
+          {
+            type: types.RESET_PASSWORD_SUCCESS,
+            payload: 'your password has been changed'
+          },
+          {
+            type: types.CLEAR_FLASH_MESSAGE
+          }
+        );
+      },
+      10000
+    );
   });
 
   describe('confirmEmail', () => {

@@ -214,7 +214,6 @@ describe('auth reducer', () => {
     });
   });
   it('should handle FORGOT_PASSWORD_REQUEST', () => {
-    const responseMessage = 'GO CHECK YOUR EMAIL';
     expect(
       auth_reducer(
         {
@@ -223,24 +222,24 @@ describe('auth reducer', () => {
           error: '',
           message: '',
           content: '',
-          authenticated: false
+          authenticated: false,
+          waiting: false
         },
         {
-          type: types.FORGOT_PASSWORD_REQUEST,
-          payload: responseMessage
+          type: types.FORGOT_PASSWORD_REQUEST
         }
       )
     ).toEqual({
       userProfile: null,
       jwt: null,
       error: '',
-      message: responseMessage,
+      message: '',
       content: '',
-      authenticated: false
+      authenticated: false,
+      waiting: true
     });
   });
   it('should handle RESET_PASSWORD_REQUEST', () => {
-    const responseMessage = 'YOU JUST MADE A REQUEST TO RESET YOUR PASSWORD';
     expect(
       auth_reducer(
         {
@@ -249,20 +248,21 @@ describe('auth reducer', () => {
           error: '',
           message: '',
           content: '',
-          authenticated: false
+          authenticated: false,
+          waiting: false
         },
         {
-          type: types.RESET_PASSWORD_REQUEST,
-          payload: responseMessage
+          type: types.RESET_PASSWORD_REQUEST
         }
       )
     ).toEqual({
       userProfile: null,
       jwt: null,
       error: '',
-      message: responseMessage,
+      message: '',
       content: '',
-      authenticated: false
+      authenticated: false,
+      waiting: true
     });
   });
   it('should handle REGISTER_SUCCESS', () => {

@@ -4,7 +4,11 @@ import { browserHistory } from 'react-router';
 import {
   UNAUTH_USER,
   FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_FAILURE,
   RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILURE,
   POST_UPC,
   INCREMENT_PRODUCT_QUANTITY,
   DECREMENT_PRODUCT_QUANTITY,
@@ -307,33 +311,51 @@ export const logoutUser = error => dispatch => {
   dispatch({ type: UNAUTH_USER, payload: error || '' });
 };
 
-export const getForgotPasswordToken = ({ email }) => async dispatch => {
+export const getForgotPasswordToken = ({
+  employeeNumber
+}) => async dispatch => {
   try {
+    dispatch({ type: FORGOT_PASSWORD_REQUEST });
     const response = await axios.post(`${API_URL}/users/forgot-password`, {
-      email
+      employeeNumber
     });
-    await dispatch({
-      type: FORGOT_PASSWORD_REQUEST,
+    dispatch({
+      type: FORGOT_PASSWORD_SUCCESS,
       payload: response.data.message
     });
+    await timeout(8000);
+    dispatch({ type: CLEAR_FLASH_MESSAGE });
   } catch (error) {
-    console.error(error);
+    dispatch({
+      type: FORGOT_PASSWORD_FAILURE,
+      payload: error.response.data.error
+    });
+    await timeout(8000);
+    dispatch({ type: CLEAR_FLASH_MESSAGE });
   }
 };
 
 export const resetPassword = (token, { password }) => async dispatch => {
   try {
+    dispatch({ type: RESET_PASSWORD_REQUEST });
     const response = await axios.post(
       `${API_URL}/users/reset-password/${token}`,
       { password }
     );
 
-    await dispatch({
-      type: RESET_PASSWORD_REQUEST,
+    dispatch({
+      type: RESET_PASSWORD_SUCCESS,
       payload: response.data.message
     });
+    await timeout(8000);
+    dispatch({ type: CLEAR_FLASH_MESSAGE });
   } catch (error) {
-    console.error(error);
+    dispatch({
+      type: RESET_PASSWORD_FAILURE,
+      payload: error.response.data.error
+    });
+    await timeout(8000);
+    dispatch({ type: CLEAR_FLASH_MESSAGE });
   }
 };
 

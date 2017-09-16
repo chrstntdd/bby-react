@@ -1,7 +1,11 @@
 import {
   UNAUTH_USER,
   FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_FAILURE,
   RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILURE,
   REGISTER_ERROR,
   NOT_VERIFIED_LOGIN_ERROR,
   CLEAR_FLASH_MESSAGE,
@@ -63,9 +67,17 @@ export default function(state = INITIAL_STATE, action) {
       };
     }
     case FORGOT_PASSWORD_REQUEST:
-      return { ...state, message: action.payload };
+      return { ...state, waiting: true };
+    case FORGOT_PASSWORD_SUCCESS:
+      return { ...state, message: action.payload, waiting: false };
+    case FORGOT_PASSWORD_FAILURE:
+      return { ...state, error: action.payload, waiting: false };
     case RESET_PASSWORD_REQUEST:
-      return { ...state, message: action.payload };
+      return { ...state, waiting: true };
+    case RESET_PASSWORD_SUCCESS:
+      return { ...state, message: action.payload, waiting: false };
+    case RESET_PASSWORD_FAILURE:
+      return { ...state, error: action.payload, waiting: false };
     case REGISTER_SUCCESS:
       return { ...state, message: action.payload, waiting: false };
     case REGISTER_FAILURE:

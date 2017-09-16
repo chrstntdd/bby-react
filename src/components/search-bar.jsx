@@ -51,6 +51,7 @@ export class SearchBar extends React.Component {
               id="upcInput"
               onChange={e => this.handleChange(e)}
               autoComplete="false"
+              autoFocus="true"
               name="upc"
               component="input"
               placeholder="UPC"
