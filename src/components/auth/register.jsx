@@ -54,7 +54,7 @@ export class Register extends React.Component {
         {
           name: 'employeeNumber',
           type: 'text',
-          label: 'Employee Number'
+          label: 'Employee Number (eg: a1234567)'
         },
         {
           name: 'password',
