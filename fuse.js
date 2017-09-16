@@ -25,7 +25,8 @@ const POSTCSS_PLUGINS = [
       'Safari >= 7',
       'Explorer 11',
       'last 4 Edge versions'
-    ]
+    ],
+    grid: true
   })
 ];
 
