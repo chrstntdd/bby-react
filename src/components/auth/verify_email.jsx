@@ -1,14 +1,18 @@
+import './verify_email.scss';
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { confirmEmail } from '../../actions/index';
 
-import './verify_email.scss';
+import { confirmEmail } from '../../actions/index';
 
 export class VerifyEmail extends React.Component {
   componentDidMount() {
-    const verifyEmailToken = this.props.match.params.verifyToken;
-    this.props.confirmEmail(verifyEmailToken);
+    const search = this.props.location.search;
+    const params = new URLSearchParams(search);
+    const token = params.get('token');
+    this.props.confirmEmail(token);
+    console.log('should have worked');
   }
 
   redirectToDash() {

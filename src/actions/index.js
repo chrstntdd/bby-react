@@ -1,41 +1,40 @@
 import 'babel-polyfill';
+
 import axios from 'axios';
-import { browserHistory } from 'react-router';
+
 import {
-  UNAUTH_USER,
+  CLEAR_FLASH_MESSAGE,
+  CLEAR_TABLE,
+  DECREMENT_PRODUCT_QUANTITY,
+  FORGOT_PASSWORD_FAILURE,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
-  FORGOT_PASSWORD_FAILURE,
-  RESET_PASSWORD_REQUEST,
-  RESET_PASSWORD_SUCCESS,
-  RESET_PASSWORD_FAILURE,
-  POST_UPC,
-  INCREMENT_PRODUCT_QUANTITY,
-  DECREMENT_PRODUCT_QUANTITY,
-  REMOVE_PRODUCT_FROM_TABLE,
   FORMAT_TABLE,
   HIDE_ACTIONS,
-  SHOW_ACTIONS,
-  CLEAR_TABLE,
-  SET_NEW_TABLE_ID,
-  LOAD_BLANK_TABLE,
-  LOAD_SAVED_TABLE,
-  TOGGLE_LOAD_TABLE_MODAL,
-  GET_USER_TABLE_DATA_SUCCESS,
-  NOT_VERIFIED_LOGIN_ERROR,
+  INCREMENT_PRODUCT_QUANTITY,
   INVALID_UPC,
-  CLEAR_FLASH_MESSAGE,
+  LOAD_SAVED_TABLE,
   LOGIN_FAILURE,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  NOT_VERIFIED_LOGIN_ERROR,
+  POST_UPC,
   REGISTER_FAILURE,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
+  REMOVE_PRODUCT_FROM_TABLE,
+  RESET_PASSWORD_FAILURE,
+  RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
+  SHOW_ACTIONS,
+  SHUFFLE_TABLE,
+  SYNC_TABLE_FAILURE,
   SYNC_TABLE_REQUEST,
   SYNC_TABLE_SUCCESS,
-  SYNC_TABLE_FAILURE,
-  SHUFFLE_TABLE
+  TOGGLE_LOAD_TABLE_MODAL,
+  UNAUTH_USER,
 } from './types';
+
 const _find = require('lodash.find');
 
 let API_URL;
@@ -207,48 +206,48 @@ export const loginUser = ({ employeeNumber, password }) => async dispatch => {
         err.response.data.validationErrors.forEach(error => {
           validationErrors.push(error.msg);
         });
-        await dispatch({ type: LOGIN_FAILURE, payload: validationErrors });
+        dispatch({ type: LOGIN_FAILURE, payload: validationErrors });
         await timeout(8000);
-        await dispatch({ type: CLEAR_FLASH_MESSAGE });
+        dispatch({ type: CLEAR_FLASH_MESSAGE });
 
         break;
 
       case 'emailMessage':
-        await dispatch({
+        dispatch({
           type: LOGIN_FAILURE,
           payload: err.response.data.emailMessage
         });
         await timeout(8000);
-        await dispatch({ type: CLEAR_FLASH_MESSAGE });
+        dispatch({ type: CLEAR_FLASH_MESSAGE });
 
         break;
 
       case 'verifyMessage':
-        await dispatch({
+        dispatch({
           type: NOT_VERIFIED_LOGIN_ERROR,
           payload: err.response.data.verifyMessage
         });
         await timeout(8000);
-        await dispatch({ type: CLEAR_FLASH_MESSAGE });
+        dispatch({ type: CLEAR_FLASH_MESSAGE });
 
         break;
 
       case 'passwordMessage':
-        await dispatch({
+        dispatch({
           type: LOGIN_FAILURE,
           payload: err.response.data.passwordMessage
         });
         await timeout(8000);
-        await dispatch({ type: CLEAR_FLASH_MESSAGE });
+        dispatch({ type: CLEAR_FLASH_MESSAGE });
         break;
 
       default:
-        await dispatch({
+        dispatch({
           type: LOGIN_FAILURE,
           payload: 'IT ALL BLEW UP'
         });
         await timeout(8000);
-        await dispatch({ type: CLEAR_FLASH_MESSAGE });
+        dispatch({ type: CLEAR_FLASH_MESSAGE });
 
         break;
     }
@@ -366,7 +365,9 @@ export const resetPassword = (token, { password }) => async dispatch => {
 
 export const confirmEmail = token => async dispatch => {
   try {
-    const response = await axios.post(`${API_URL}/users/verify-email/${token}`);
+    const response = await axios.post(
+      `${API_URL}/users/verify-email?token=${token}`
+    );
     await dispatch({
       type: LOGIN_SUCCESS,
       payload: {

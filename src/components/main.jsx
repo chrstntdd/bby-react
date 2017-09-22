@@ -1,23 +1,16 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
-// - AUTHENTICATION COMPONENTS
-import Register from './auth/register';
+import LandingPage from '../components/pages/landing-page/landing-page';
+import ForgotPassword from './auth/forgot_password';
 import Login from './auth/login';
 import Logout from './auth/logout';
-import ForgotPassword from './auth/forgot_password';
+import Register from './auth/register';
+import RequireAuth from './auth/require_auth';
 import ResetPassword from './auth/reset_password';
 import VerifyEmail from './auth/verify_email';
-
-// - PAGES
-import NotFoundPage from './pages/not-found';
-import LandingPage from '../components/pages/landing-page/landing-page';
-
-// - MISC
 import Dashboard from './dashboard';
-
-// - HIGHER ORDER COMPONENTS (DECORATORS)
-import RequireAuth from './auth/require_auth';
+import NotFoundPage from './pages/not-found';
 
 const Main = () => (
   <main>
@@ -33,7 +26,7 @@ const Main = () => (
         path="/reset-password/:resetToken"
         component={ResetPassword}
       />
-      <Route path="/verify-email/:verifyToken" component={VerifyEmail} />
+      <Route path="/verify-email" component={VerifyEmail} />
       <Route component={NotFoundPage} />
     </Switch>
   </main>

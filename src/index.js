@@ -1,15 +1,17 @@
+import './index.scss';
 import 'babel-polyfill';
+import 'url-search-params-polyfill';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
-import reduxThunk from 'redux-thunk';
-import reducers from './reducers/index';
-import Main from './components/main';
-import { LOGIN_SUCCESS } from './actions/types';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { applyMiddleware, compose, createStore } from 'redux';
 import { autoRehydrate, persistStore } from 'redux-persist';
-import { loadTable } from './actions/index.js';
+import reduxThunk from 'redux-thunk';
+
+import Main from './components/main';
+import reducers from './reducers/index';
 
 // ADD IN REDUX DEBUGGER
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -22,10 +24,8 @@ const store = createStore(
 );
 
 persistStore(store, {}, () => {
-  console.log('rehydrated, fam');
+  console.log('Rehydrated.');
 });
-
-import './index.scss';
 
 ReactDOM.render(
   <Provider store={store}>
