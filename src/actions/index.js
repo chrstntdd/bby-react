@@ -33,7 +33,8 @@ import {
   REGISTER_SUCCESS,
   SYNC_TABLE_REQUEST,
   SYNC_TABLE_SUCCESS,
-  SYNC_TABLE_FAILURE
+  SYNC_TABLE_FAILURE,
+  SHUFFLE_TABLE
 } from './types';
 const _find = require('lodash.find');
 
@@ -96,6 +97,10 @@ export const hideActions = () => async dispatch => {
 export const showActions = () => async dispatch => {
   await timeout(1000);
   dispatch({ type: SHOW_ACTIONS });
+};
+
+export const shuffleTable = () => dispatch => {
+  dispatch({ type: SHUFFLE_TABLE });
 };
 
 export const printTable = () => async dispatch => {
@@ -164,7 +169,7 @@ export const loadTable = (user, jwt) => async dispatch => {
 
     await dispatch({ type: LOAD_SAVED_TABLE, payload: response.data.products });
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 };
 

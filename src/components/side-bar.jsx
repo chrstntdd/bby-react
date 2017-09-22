@@ -8,10 +8,13 @@ import redoButton from '../static/noun_1031802_cc.svg';
 import clearIcon from '../static/noun_926276_cc.svg';
 import databaseSync from '../static/noun_932928_cc.svg';
 import manage from '../static/noun_1082747_cc.svg';
+import shuffle from '../static/shuffle.svg';
 
 import './side-bar.scss';
 
 export const SideBar = props => {
+  let userRole;
+  props.userData ? (userRole = props.userData.role) : (userRole = 'Member');
   return (
     <aside id="side-bar">
       <div className="btn-container">
@@ -22,25 +25,37 @@ export const SideBar = props => {
             leading: true
           })}
         >
-          <img src={databaseSync} alt="" />
+          <img src={databaseSync} alt="Save Table" />
           <p>Save</p>
         </button>
       </div>
       <div className="btn-container">
         <button id="formatButton" onClick={() => props.formatTable()}>
-          <img src={formatIcon} alt="" />
+          <img src={formatIcon} alt="Format Table" />
           <p>Format</p>
         </button>
       </div>
       <div className="btn-container">
         <button id="printButton" onClick={() => props.printTable()}>
-          <img src={printIcon} alt="" />
+          <img src={printIcon} alt="Print Table" />
           <p>Print</p>
         </button>
       </div>
+      {userRole == 'Admin' && (
+        <div className="btn-container">
+          <button id="shuffleTableButton" onClick={() => props.shuffleTable()}>
+            <img src={shuffle} alt="Shuffle Table" />
+            <p>Shuffle</p>
+          </button>
+        </div>
+      )}
       <div className="btn-container">
-        <button id="clearTableButton" onClick={() => props.clearTable()}>
-          <img id="clear-icon" src={clearIcon} alt="" />
+        <button
+          id="clearTableButton"
+          disabled={userRole == 'Admin'}
+          onClick={() => props.clearTable()}
+        >
+          <img id="clear-icon" src={clearIcon} alt="Clear Table" />
           <p>Clear</p>
         </button>
       </div>

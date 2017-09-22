@@ -19,7 +19,7 @@ import Dashboard from './dashboard';
 // - HIGHER ORDER COMPONENTS (DECORATORS)
 import RequireAuth from './auth/require_auth';
 
-const Main = () =>
+const Main = () => (
   <main>
     <Switch>
       <Route exact path="/" component={LandingPage} />
@@ -33,9 +33,10 @@ const Main = () =>
         path="/reset-password/:resetToken"
         component={ResetPassword}
       />
-      <Route path="/confirm-email/:verifyToken" component={VerifyEmail} />
+      <Route path="/verify-email/:verifyToken" component={VerifyEmail} />
       <Route component={NotFoundPage} />
     </Switch>
-  </main>;
+  </main>
+);
 
 export default Main;

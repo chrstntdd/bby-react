@@ -16,9 +16,11 @@ import {
   GET_USER_TABLE_DATA_SUCCESS,
   SYNC_TABLE_SUCCESS,
   UNAUTH_USER,
-  LOGIN_SUCCESS
+  LOGIN_SUCCESS,
+  SHUFFLE_TABLE
 } from '../actions/types';
 const orderBy = require('lodash.orderby');
+const shuffle = require('lodash.shuffle');
 
 const INITIAL_STATE = {
   products: [],
@@ -99,6 +101,13 @@ export default function(state = INITIAL_STATE, action) {
           ['asc', 'asc', 'asc']
         ),
         formatted: true
+      };
+
+    case SHUFFLE_TABLE:
+      return {
+        ...state,
+        products: shuffle(state.products),
+        formatted: false
       };
     case SHOW_ACTIONS:
       return {

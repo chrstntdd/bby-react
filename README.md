@@ -110,6 +110,7 @@ POST
 + [Handshake Icon](https://thenounproject.com/search/?q=handshake&i=1007187)
 + [Lock Icon](https://thenounproject.com/search/?q=Lock%20check&i=821171)
 + [Rocket Icon](https://thenounproject.com/search/?q=Rocket%20ship&i=658468)
++ [Shuffle Icon](https://thenounproject.com/search/?q=shuffle&i=1104277)
 
 ## Future Plans
 + Shrink application footprint
