@@ -53,7 +53,10 @@ Sparky.task('build', () => {
         CSSResourcePlugin({
           inline: true
         }),
-        CSSPlugin()
+        CSSPlugin({
+          group: 'bundle.css',
+          outFile: `./dist/static/bundle.css`
+        })
       ],
       SVGPlugin(),
       BabelPlugin(),

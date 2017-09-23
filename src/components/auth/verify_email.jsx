@@ -1,4 +1,5 @@
 import './verify_email.scss';
+import 'url-search-params-polyfill';
 
 import React from 'react';
 import { connect } from 'react-redux';

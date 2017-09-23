@@ -1,12 +1,14 @@
 import 'babel-polyfill';
+
+import * as axios from 'axios';
 import React from 'react';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+
 import * as actions from '../../src/actions/index';
 import * as types from '../../src/actions/types';
-const MockAdapter = require('axios-mock-adapter');
-import * as axios from 'axios';
 
+const MockAdapter = require('axios-mock-adapter');
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
@@ -358,7 +360,7 @@ describe('auth actions', () => {
       const token = 'asdfjfks';
 
       mock
-        .onPost(`${API_URL}/users/verify-email/${token}`)
+        .onPost(`${API_URL}/users/verify-email?token=${token}`)
         .reply(200, { jwt: 'jwt token', user: 'user' });
 
       await store.dispatch(actions.confirmEmail(token));
