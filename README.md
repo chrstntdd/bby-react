@@ -16,8 +16,8 @@
 ## About
 This is the front end for [bby-react-api](https://github.com/chrstntdd/bby-react-api).
 
-All together these two repositories make up [Quantified](https://developer-madeline-27128.netlify.com/).
-Quantified is a complete rewrite/overhaul of [this](https://github.com/chrstntdd/bby-app) prototype application. Quantified is a utility to help reduce shrink and improve accuracy in a retail setting where human error when reading UPCs, SKUs, or model numbers can occur and have costly consequences. Quantified lets users (Employees) organize product data into a filterable and print-ready table by scanning the a UPC barcode to add it to the table. Additionally, the table can (and should) be formatted/ordered before printing to make viewing all the data more comprehensible. New to this project is the ability to save and load tables instead of having the table and all the data exist only for the duration of the browser session. 
+All together these two repositories make up [Quantified](https://quantified.netlify.com/).
+Quantified is a complete rewrite/overhaul of [this](https://github.com/chrstntdd/bby-app) prototype application. Quantified is a utility to help reduce shrink and improve accuracy in a retail setting where human error when reading UPCs, SKUs, or model numbers can occur and have costly consequences. Quantified lets users (Employees) organize product data into a filterable and print-ready table by scanning the a UPC bar code to add it to the table. Additionally, the table can (and should) be formatted/ordered before printing to make viewing all the data more comprehensible. New to this project is the ability to save and load tables instead of having the table and all the data exist only for the duration of the browser session. 
 
 
 ## Screenshots
