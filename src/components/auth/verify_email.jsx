@@ -13,7 +13,6 @@ export class VerifyEmail extends React.Component {
     const params = new URLSearchParams(search);
     const token = params.get('token');
     this.props.confirmEmail(token);
-    console.log('should have worked');
   }
 
   redirectToDash() {

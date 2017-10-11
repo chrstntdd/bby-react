@@ -22,9 +22,7 @@ describe('<FormInput/>', () => {
   });
   it('should render the label based on props', () => {
     const wrapper = shallow(<FormInput {...props} />);
-    const label = wrapper.props().children[1];
-    expect(label.props.className).toEqual('register-label');
-    expect(label.props.htmlFor).toEqual(props.name);
-    expect(label.props.children).toEqual(props.label);
+    const label = wrapper.props();
+    expect(label.label).toEqual(props.label);
   });
 });

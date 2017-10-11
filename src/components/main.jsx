@@ -21,11 +21,7 @@ const Main = () => (
       <Route exact path="/dashboard" component={RequireAuth(Dashboard)} />
       <Route exact path="/logout" component={Logout} />
       <Route exact path="/forgot-password" component={ForgotPassword} />
-      <Route
-        exact
-        path="/reset-password/:resetToken"
-        component={ResetPassword}
-      />
+      <Route exact path="/reset-password/" component={ResetPassword} />
       <Route path="/verify-email" component={VerifyEmail} />
       <Route component={NotFoundPage} />
     </Switch>

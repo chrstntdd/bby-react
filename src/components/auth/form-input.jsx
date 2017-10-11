@@ -5,28 +5,35 @@ import './form-input.scss';
 
 const required = value => (value ? undefined : 'Required');
 
-const renderField = (field, props) => (
-  <input
-    {...field.input}
-    autoComplete="off"
-    type={field.type}
-    className={field.input.value === '' ? '' : 'has-content'}
-  />
-);
-
-const Input = props => (
-  <div id={props.name} className="input-wrapper">
-    <Field
-      name={props.name || 'input'}
-      component={renderField}
-      type={props.type}
-      validate={required}
+const renderField = ({
+  input,
+  label,
+  type,
+  meta: { touched, error, warning }
+}) => (
+  <div id={input.name} className="input-wrapper">
+    {touched && (error && <span className="errorSpan">{error}</span>)}
+    <input
+      {...input}
+      autoComplete="off"
+      type={type}
+      className={input.value === '' ? '' : 'has-content'}
     />
-    <label className="register-label" htmlFor={props.name}>
-      {props.label}
+    <label className="register-label" htmlFor={input.name}>
+      {label}
     </label>
     <span className="focus-border" />
   </div>
+);
+
+const Input = ({ name, type, label }) => (
+  <Field
+    name={name || 'input'}
+    component={renderField}
+    type={type}
+    validate={required}
+    label={label}
+  />
 );
 
 export default Input;

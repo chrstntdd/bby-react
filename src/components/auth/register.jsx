@@ -8,11 +8,6 @@ import LoadingIndicator from './loading';
 
 import './register.scss';
 
-const form = reduxForm({
-  form: 'register',
-  validate
-});
-
 const validate = formProps => {
   const errors = {};
 
@@ -119,6 +114,11 @@ const mapStateToProps = state => ({
   errorMessage: state.auth.error,
   message: state.auth.message,
   authenticated: state.auth.authenticated
+});
+
+const form = reduxForm({
+  form: 'register',
+  validate
 });
 
 export default withRouter(

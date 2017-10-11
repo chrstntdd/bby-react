@@ -329,7 +329,7 @@ describe('auth actions', () => {
         const token = 'asdfjfks';
 
         mock
-          .onPost(`${API_URL}/users/reset-password/${token}`, { password })
+          .onPost(`${API_URL}/users/reset-password?token=${token}`, { password })
           .reply(200, { message: 'your password has been changed' });
 
         await store.dispatch(actions.resetPassword(token, { password }));

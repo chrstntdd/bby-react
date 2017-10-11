@@ -32,7 +32,7 @@ import {
   SYNC_TABLE_REQUEST,
   SYNC_TABLE_SUCCESS,
   TOGGLE_LOAD_TABLE_MODAL,
-  UNAUTH_USER,
+  UNAUTH_USER
 } from './types';
 
 const _find = require('lodash.find');
@@ -183,20 +183,13 @@ export const loginUser = ({ employeeNumber, password }) => async dispatch => {
 
     const response = await axios.post(`${API_URL}/users/sign-in`, {
       email: `${employeeNumber.trim()}@bestbuy.com`,
-      password
+      password: password.trim()
     });
 
-    const { user, token } = response.data;
+    const { user, jwt } = response.data;
 
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: {
-        user: user,
-        jwt: token
-      }
-    });
-
-    dispatch(loadTable(user, token));
+    dispatch({ type: LOGIN_SUCCESS, payload: { user, jwt } });
+    dispatch(loadTable(user, jwt));
   } catch (err) {
     let errorResponse = Object.keys(err.response.data)[0];
 
@@ -244,7 +237,7 @@ export const loginUser = ({ employeeNumber, password }) => async dispatch => {
       default:
         dispatch({
           type: LOGIN_FAILURE,
-          payload: 'IT ALL BLEW UP'
+          payload: 'An unknown error occurred.'
         });
         await timeout(8000);
         dispatch({ type: CLEAR_FLASH_MESSAGE });
@@ -274,7 +267,7 @@ export const registerUser = ({
     dispatch({
       type: REGISTER_SUCCESS,
       payload:
-        'Registered successfully, now check your work email to verify your account'
+        'Registered successfully, please check your work email to verify your account'
     });
     await timeout(8000);
     dispatch({ type: CLEAR_FLASH_MESSAGE });
@@ -302,7 +295,7 @@ export const registerUser = ({
       default:
         dispatch({
           type: REGISTER_FAILURE,
-          payload: 'IT ALL BLEW UP'
+          payload: 'An unknown error occurred.'
         });
         await timeout(8000);
         dispatch({ type: CLEAR_FLASH_MESSAGE });
@@ -339,11 +332,11 @@ export const getForgotPasswordToken = ({
   }
 };
 
-export const resetPassword = (token, { password }) => async dispatch => {
+export const resetPassword = (resetToken, { password }) => async dispatch => {
   try {
     dispatch({ type: RESET_PASSWORD_REQUEST });
     const response = await axios.post(
-      `${API_URL}/users/reset-password/${token}`,
+      `${API_URL}/users/reset-password?token=${resetToken}`,
       { password }
     );
 
@@ -368,13 +361,8 @@ export const confirmEmail = token => async dispatch => {
     const response = await axios.post(
       `${API_URL}/users/verify-email?token=${token}`
     );
-    await dispatch({
-      type: LOGIN_SUCCESS,
-      payload: {
-        user: response.data.user,
-        jwt: response.data.jwt
-      }
-    });
+    const { user, jwt } = response.data;
+    dispatch({ type: LOGIN_SUCCESS, payload: { user, jwt } });
   } catch (error) {
     console.error(error);
   }

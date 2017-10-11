@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import { resetPassword } from '../../actions/index';
 import LoadingIndicator from './loading';
+import 'url-search-params-polyfill';
+
 
 import Input from './form-input';
 import './form-input.scss';
@@ -62,7 +64,10 @@ export class ResetPassword extends React.Component {
     }
   }
   handleFormSubmit({ password }, formProps) {
-    const resetToken = this.props.match.params.resetToken;
+    const search = this.props.location.search;
+    const params = new URLSearchParams(search);
+    const resetToken = params.get('token');
+    console.log(resetToken);
     this.props.resetPassword(resetToken, { password });
   }
   renderAlert() {

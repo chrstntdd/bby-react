@@ -12,10 +12,10 @@
   :focus {
     outline: none;
   }
-  .input-control {
-    background-color: transparent;
-    color: transparent;
-    z-index: -2;
+  .errorSpan {
+    position: absolute;
+    top: 35px;
+    color: darken(#ec6d75, 10%);
   }
   input {
     line-height: 2px;
