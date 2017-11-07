@@ -77,28 +77,31 @@ Sparky.task('build', () => {
 
   // IF NOT IN PRODUCTION
   // CONFIG DEV SERVER
-  fuse.dev({ root: false }, server => {
-    const dist = path.join(__dirname, './dist');
-    const app = server.httpServer.app;
-    app.use('/static/', express.static(path.join(dist, 'static')));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(dist, 'static/index.html'));
+
+  if (isProduction === false) {
+    fuse.dev({ root: false }, server => {
+      const dist = path.join(__dirname, './dist');
+      const app = server.httpServer.app;
+      app.use('/static/', express.static(path.join(dist, 'static')));
+      app.get('*', (req, res) => {
+        res.sendFile(path.join(dist, 'static/index.html'));
+      });
     });
-  });
+  } else {
+    // EXTRACT VENDOR DEPENDENCIES
+    const vendor = fuse.bundle('vendor').instructions('~ index.js');
+    if (!isProduction) {
+      vendor.watch();
+    }
 
-  // EXTRACT VENDOR DEPENDENCIES
-  const vendor = fuse.bundle('vendor').instructions('~ index.js');
-  if (!isProduction) {
-    vendor.watch();
+    // MAIN BUNDLE
+    const app = fuse.bundle('app').instructions('!> [index.js]');
+    if (!isProduction) {
+      app.watch();
+    }
+
+    return fuse.run();
   }
-
-  // MAIN BUNDLE
-  const app = fuse.bundle('app').instructions('!> [index.js]');
-  if (!isProduction) {
-    app.watch();
-  }
-
-  return fuse.run();
 });
 
 // COPY FILES TO BUILD FOLDER
@@ -116,7 +119,9 @@ Sparky.task('default', ['clean', 'build'], () => {});
 Sparky.task(
   'dist',
   ['clean', 'set-production-env', 'build', 'copy-redirect', 'copy-favicons'],
-  () => {}
+  () => {
+    console.log('READY FOR PROD');
+  }
 );
 
 // TASKS FOR BUILD

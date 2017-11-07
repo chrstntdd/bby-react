@@ -6,7 +6,6 @@ import { resetPassword } from '../../actions/index';
 import LoadingIndicator from './loading';
 import 'url-search-params-polyfill';
 
-
 import Input from './form-input';
 import './form-input.scss';
 
@@ -53,22 +52,13 @@ export class ResetPassword extends React.Component {
       ]
     };
   }
-  componentWillMount() {
-    if (this.props.authenticated) {
-      this.props.history.push('/dashboard');
-    }
-  }
-  componentWillUpdate(nextProps) {
-    if (nextProps.authenticated) {
-      this.props.history.push('/dashboard');
-    }
-  }
-  handleFormSubmit({ password }, formProps) {
+
+  async handleFormSubmit({ password }, formProps) {
     const search = this.props.location.search;
     const params = new URLSearchParams(search);
     const resetToken = params.get('token');
-    console.log(resetToken);
-    this.props.resetPassword(resetToken, { password });
+    await this.props.resetPassword(resetToken, { password });
+    this.props.history.push('/dashboard');
   }
   renderAlert() {
     if (this.props.errorMessage) {

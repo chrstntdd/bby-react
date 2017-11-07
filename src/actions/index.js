@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-
+import { browserHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import {
