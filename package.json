@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "Christian Todd <christiantodd27@icloud.com>",
-  "license": "MIT",
+  "license": "GNU GPLv3",
   "dependencies": {
     "axios": "^0.16.2",
     "babel-polyfill": "^6.23.0",
