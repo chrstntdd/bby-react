@@ -14,19 +14,19 @@ const {
 } = require('fuse-box');
 const path = require('path');
 const express = require('express');
-const autoprefixer = require('autoprefixer');
 
 const POSTCSS_PLUGINS = [
-  require('postcss-flexibility'),
-  autoprefixer({
-    browsers: [
-      'Chrome >= 52',
-      'FireFox >= 44',
-      'Safari >= 7',
-      'Explorer 11',
-      'last 4 Edge versions'
-    ],
-    grid: true
+  require('cssnano')({
+    autoprefixer: {
+      browsers: [
+        'Chrome >= 52',
+        'FireFox >= 44',
+        'Safari >= 7',
+        'Explorer 11',
+        'last 4 Edge versions'
+      ],
+      add: true
+    }
   })
 ];
 
@@ -40,7 +40,7 @@ Sparky.task('build', () => {
     log: true,
     hash: isProduction,
     sourceMaps: !isProduction,
-    target: 'browser',
+    target: 'browser@es5',
     experimentalFeatures: true,
     cache: !isProduction,
     plugins: [
@@ -109,7 +109,7 @@ Sparky.task('copy-redirect', () =>
   Sparky.src('./netlify/**', { base: './config' }).dest('./dist')
 );
 Sparky.task('copy-favicons', () =>
-  Sparky.src('./favicons', { base: './config' }).dest('./dist/static')
+  Sparky.src('./favicons/**', { base: './config' }).dest('./dist/static')
 );
 
 // YARN START
