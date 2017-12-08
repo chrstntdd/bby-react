@@ -14,19 +14,19 @@ const {
 } = require('fuse-box');
 const path = require('path');
 const express = require('express');
+const autoprefixer = require('autoprefixer');
 
 const POSTCSS_PLUGINS = [
-  require('cssnano')({
-    autoprefixer: {
-      browsers: [
-        'Chrome >= 52',
-        'FireFox >= 44',
-        'Safari >= 7',
-        'Explorer 11',
-        'last 4 Edge versions'
-      ],
-      add: true
-    }
+  require('postcss-flexibility'),
+  autoprefixer({
+    browsers: [
+      'Chrome >= 52',
+      'FireFox >= 44',
+      'Safari >= 7',
+      'Explorer 11',
+      'last 4 Edge versions'
+    ],
+    grid: true
   })
 ];
 
@@ -87,21 +87,20 @@ Sparky.task('build', () => {
         res.sendFile(path.join(dist, 'static/index.html'));
       });
     });
-  } else {
-    // EXTRACT VENDOR DEPENDENCIES
-    const vendor = fuse.bundle('vendor').instructions('~ index.js');
-    if (!isProduction) {
-      vendor.watch();
-    }
-
-    // MAIN BUNDLE
-    const app = fuse.bundle('app').instructions('!> [index.js]');
-    if (!isProduction) {
-      app.watch();
-    }
-
-    return fuse.run();
   }
+  // EXTRACT VENDOR DEPENDENCIES
+  const vendor = fuse.bundle('vendor').instructions('~ index.js');
+  if (!isProduction) {
+    vendor.watch();
+  }
+
+  // MAIN BUNDLE
+  const app = fuse.bundle('app').instructions('!> [index.js]');
+  if (!isProduction) {
+    app.watch();
+  }
+
+  return fuse.run();
 });
 
 // COPY FILES TO BUILD FOLDER
