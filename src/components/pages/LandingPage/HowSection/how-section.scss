@@ -1,0 +1,25 @@
+@import '$homeDir/styles/rwd-helpers.scss';
+@import '$homeDir/styles/colors.scss';
+
+#how-section {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  .card-container {
+    background-color: $BESTBUY_BLUE;
+    @media (min-width: $bp-xxsmall) {
+      height: 100vh;
+      width: 100vw;
+      flex-wrap: wrap;
+    }
+    margin: auto;
+    height: 50vh;
+    width: 70vw;
+    display: flex;
+    justify-content: space-around;
+  }
+}

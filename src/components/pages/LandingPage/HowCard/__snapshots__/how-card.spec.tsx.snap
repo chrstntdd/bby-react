@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<HowCard/> should render without crashing 1`] = `
+<div
+  className="how-card"
+>
+  <img
+    alt="undefined icon"
+  />
+  <h3 />
+  <h5 />
+</div>
+`;
