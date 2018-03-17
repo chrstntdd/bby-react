@@ -3,10 +3,9 @@ client/dist*
 .vscode
 bby-wireframe.xd
 .netlify
+coverage/
 
 # Node Modules
-client/node_modules  
-server/node_modules  
 node_modules/
 
 # dotenv environment variables file
