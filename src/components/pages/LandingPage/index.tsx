@@ -3,7 +3,7 @@ import * as React from 'react';
 import HeroArea from './HeroArea';
 import HowSection from './HowSection';
 import AboutSection from './AboutSection';
-import Footer from './footer';
+import Footer from './Footer';
 
 const simple = 'images/atom.svg';
 const reliable = 'images/handshake.svg';
