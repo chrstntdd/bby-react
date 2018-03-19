@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { resetPassword } from '../../../state/actions';
 import LoadingIndicator from '../Loading';
 import 'url-search-params-polyfill';
@@ -78,9 +78,7 @@ export class ResetPassword extends React.Component {
   render() {
     const { handleSubmit, waiting } = this.props;
 
-    const formInputs = this.state.inputs.map((input, index) => (
-      <Input key={index} {...input} />
-    ));
+    const formInputs = this.state.inputs.map((input, index) => <Input key={index} {...input} />);
 
     return (
       <section id="reset-password-wrapper">
@@ -104,6 +102,4 @@ const mapStateToProps = state => ({
   message: state.auth.message
 });
 
-export default withRouter(
-  connect(mapStateToProps, { resetPassword })(form(ResetPassword))
-);
+export default withRouter(connect(mapStateToProps, { resetPassword })(form(ResetPassword)));

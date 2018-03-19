@@ -5,12 +5,7 @@ import './form-input.scss';
 
 const required = value => (value ? undefined : 'Required');
 
-const renderField = ({
-  input,
-  label,
-  type,
-  meta: { touched, error, warning }
-}) => (
+const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
   <div id={input.name} className="input-wrapper">
     {touched && (error && <span className="errorSpan">{error}</span>)}
     <input

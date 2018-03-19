@@ -18,7 +18,7 @@ exports[`<DashboardHeader/> should render without crashing 1`] = `
     <button>
       <img
         alt=""
-        src="test-file-stub"
+        src="images/logout.svg"
       />
       <p>
         Sign out

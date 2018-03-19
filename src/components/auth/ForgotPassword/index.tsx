@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { getForgotPasswordToken } from '../../../state/actions';
 import LoadingIndicator from '../Loading';
+
 import './forgot_password.scss';
 import './form-input.scss';
 
@@ -47,9 +48,7 @@ export class ForgotPassword extends React.Component {
   render() {
     const { handleSubmit, valid, waiting } = this.props;
 
-    const formInputs = this.state.inputs.map((input, index) => (
-      <Input key={index} {...input} />
-    ));
+    const formInputs = this.state.inputs.map((input, index) => <Input key={index} {...input} />);
 
     return (
       <section id="forgot-password-wrapper">

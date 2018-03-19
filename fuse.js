@@ -14,6 +14,7 @@ const Purgecss = require('purgecss');
 const { unlinkSync, writeFileSync } = require('fs');
 const { src, task, exec, context } = require('fuse-box/sparky');
 const { join } = require('path');
+const { info } = console;
 const express = require('express');
 const autoprefixer = require('autoprefixer');
 
@@ -44,6 +45,7 @@ context(
         sourceMaps: !this.isProduction,
         target: 'browser@es5',
         cache: true,
+        allowSyntheticDefaultImports: true,
         plugins: [
           [SassPlugin({ importer: true }), PostCSSPlugin(POSTCSS_PLUGINS), CSSPlugin()],
           SVGPlugin(),
@@ -54,7 +56,6 @@ context(
           }),
           this.isProduction &&
             QuantumPlugin({
-              removeExportsInterop: false,
               bakeApiIntoBundle: 'app',
               uglify: true,
               treeshake: true,
@@ -98,17 +99,15 @@ task('prod-build', async context => {
 });
 
 // COPY FILES TO BUILD FOLDER
-task('copy-redirect', () => Sparky.src('./**', { base: './config/netlify' }).dest('./dist'));
+task('copy-redirect', () => src('./**', { base: './config/netlify' }).dest('./dist'));
 
-task('copy-favicons', () =>
-  Sparky.src('./favicons/**', { base: './config' }).dest('./dist/static')
-);
+task('copy-favicons', () => src('./favicons/**', { base: './config' }).dest('./dist/static'));
 
 task('copy-images', () =>
-  Sparky.src('./**', { base: './src/public/images' }).dest('./dist/static/images')
+  src('./**', { base: './src/public/images' }).dest('./dist/static/images')
 );
 
-task('clean', () => Sparky.src('./dist/*').clean('./dist/'));
+task('clean', () => src('./dist/*').clean('./dist/'));
 
 /* CUSTOM BUILD TASKS */
 task('purge', () => {
@@ -123,7 +122,7 @@ task('purge', () => {
 
   writeFileSync(result.file, result.css, 'UTF-8');
 
-  console.info('💎  THE CSS HAS BEEN PURGED 💎');
+  info('💎  THE CSS HAS BEEN PURGED 💎');
 });
 
 /* PARALLEL EXECUTING BUILD TASKS */
@@ -131,9 +130,9 @@ task('copy-files', ['&copy-images', '&copy-redirect', 'copy-favicons']);
 
 /* MAIN BUILD TASK CHAINS  */
 task('dev', ['clean', 'dev-build', 'copy-images'], () => {
-  console.info('GET TO WORK');
+  info('GET TO WORK');
 });
 
 task('prod', ['clean', 'prod-build', 'copy-files', 'purge'], () => {
-  console.info('READY FOR PROD');
+  info('READY FOR PROD');
 });

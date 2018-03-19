@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
-import * as logoutIcon from '../../public/images/logout.svg';
+const logoutIcon = 'images/logout.svg';
 
 import './dashboard-header.scss';
 

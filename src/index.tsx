@@ -1,7 +1,7 @@
 import './styles/index.scss';
 
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { applyMiddleware, compose, createStore } from 'redux';
@@ -25,7 +25,7 @@ persistStore(store, {}, () => {
   console.log('Rehydrated.');
 });
 
-ReactDOM.render(
+render(
   <Provider store={store}>
     <Router>
       <App />

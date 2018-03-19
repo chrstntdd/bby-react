@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
-import { Redirect, withRouter } from 'react-router-dom';
+import { reduxForm } from 'redux-form';
+import { withRouter } from 'react-router-dom';
 import { registerUser } from '../../../state/actions';
 import Input from '../FormInput';
 import LoadingIndicator from '../Loading';
@@ -91,10 +91,7 @@ export class Register extends React.Component {
     return (
       <section id="register-section">
         {this.renderAlert()}
-        <LoadingIndicator
-          waiting={waiting}
-          message={'Setting things up real quick. Hang tight.'}
-        />
+        <LoadingIndicator waiting={waiting} message={'Setting things up real quick. Hang tight.'} />
         <section id="register-card" className={waiting ? 'hide' : 'show'}>
           <h1>Register here</h1>
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
@@ -121,6 +118,4 @@ const form = reduxForm({
   validate
 });
 
-export default withRouter(
-  connect(mapStateToProps, { registerUser })(form(Register))
-);
+export default withRouter(connect(mapStateToProps, { registerUser })(form(Register)));

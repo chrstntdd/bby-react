@@ -50,10 +50,7 @@ export class Login extends React.Component {
 
     const form = (
       <section id="login-wrapper">
-        <LoadingIndicator
-          waiting={waiting}
-          message={'Signing you in now. Please wait.'}
-        />
+        <LoadingIndicator waiting={waiting} message={'Signing you in now. Please wait.'} />
         <div className="test-credentials">
           <p>
             <span>Employee Number</span>: a1

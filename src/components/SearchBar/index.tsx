@@ -29,12 +29,7 @@ export class SearchBar extends React.Component {
   };
 
   render() {
-    const {
-      handleSubmit,
-      waiting,
-      lastTimeSaved,
-      lastItemScanned
-    } = this.props;
+    const { handleSubmit, waiting, lastTimeSaved, lastItemScanned } = this.props;
 
     return (
       <section id="search-section">

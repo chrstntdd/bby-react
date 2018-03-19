@@ -1,18 +1,36 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "src/*": ["src/*"]
+      "@src/*": ["src/*"]
     },
-    "lib": ["es7", "dom"],
-    "sourceMap": true,
+    "outDir": "dist/",
+    "allowSyntheticDefaultImports": true,
     "allowJs": true,
-    "module": "commonjs",
+    "checkJs": true,
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "noEmitHelpers": true,
     "jsx": "react",
+    "lib": ["dom", "es7"],
     "target": "es5",
-    "types": ["react", "react-dom", "react-router", "react-router-dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "strict": true,
+    "pretty": true,
+    "removeComments": true,
+    "sourceMap": true,
     "typeRoots": ["./node_modules/@types"]
   },
-  "include": ["src/*.ts", "src/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "src/**/*.spec.*"]
 }

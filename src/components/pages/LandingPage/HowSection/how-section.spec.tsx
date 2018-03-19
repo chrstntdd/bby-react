@@ -29,6 +29,8 @@ describe('<HowSection/>', () => {
         }
       ]
     };
-    shallow(<HowSection {...props} />);
+    const wrapper = shallow(<HowSection {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 });

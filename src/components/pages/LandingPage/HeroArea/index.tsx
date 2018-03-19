@@ -17,10 +17,7 @@ const HeroArea = () => (
     <div className="hero-img" />
     <div className="hero-content">
       <h1>Quantified</h1>
-      <h2>
-        A streamlined system for efficiently and accurately managing retail
-        inventory.
-      </h2>
+      <h2>A streamlined system for efficiently and accurately managing retail inventory.</h2>
     </div>
   </section>
 );

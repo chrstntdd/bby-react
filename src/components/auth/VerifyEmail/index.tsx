@@ -34,6 +34,4 @@ const mapStateToProps = state => ({
   //
 });
 
-export default withRouter(
-  connect(mapStateToProps, { confirmEmail })(VerifyEmail)
-);
+export default withRouter(connect(mapStateToProps, { confirmEmail })(VerifyEmail));

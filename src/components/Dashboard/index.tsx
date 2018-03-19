@@ -36,7 +36,7 @@ interface IUserProfile {
 }
 
 interface Props {
-  products?: any[];
+  products: any[];
   syncToDatabase: Function;
   printTable: Function;
   formatTable: Function;
@@ -55,7 +55,7 @@ export class Dashboard extends React.PureComponent<Props> {
     shuffleTable: noop
   };
 
-  public intervalId: number = null;
+  public intervalId: number | null = null;
 
   public componentWillMount() {
     /* Autosave! (every 5 minutes) Only if there is data in the table. */
@@ -69,8 +69,8 @@ export class Dashboard extends React.PureComponent<Props> {
 
   public componentWillUnmount() {
     if (this.intervalId) {
-      this.intervalId = null;
       window.clearInterval(this.intervalId);
+      this.intervalId = null;
     }
   }
 

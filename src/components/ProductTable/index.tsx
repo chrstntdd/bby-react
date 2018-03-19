@@ -2,11 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
-import {
-  decrementProductQuantity,
-  removeItemFromTable,
-  printTable
-} from '../../state/actions';
+import { decrementProductQuantity, removeItemFromTable, printTable } from '../../state/actions';
 
 import './product-table.scss';
 
@@ -76,10 +72,7 @@ export class ProductTable extends React.PureComponent {
             /* used to toggle visibility on print */
             show: !printing,
             Cell: props => (
-              <button
-                className="remove-btn"
-                onClick={() => this.removeItem(props.row.upc)}
-              >
+              <button className="remove-btn" onClick={() => this.removeItem(props.row.upc)}>
                 {' '}
                 REMOVE
               </button>
