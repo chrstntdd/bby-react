@@ -10,6 +10,8 @@ const {
   CSSResourcePlugin,
   Sparky
 } = require('fuse-box');
+const Purgecss = require('purgecss');
+const { unlinkSync, writeFileSync } = require('fs');
 const { src, task, exec, context } = require('fuse-box/sparky');
 const { join } = require('path');
 const express = require('express');
@@ -39,20 +41,11 @@ context(
       return FuseBox.init({
         homeDir: './src',
         output: `${outDir}/static/$name.js`,
-        log: true,
-        hash: this.isProduction,
         sourceMaps: !this.isProduction,
         target: 'browser@es5',
         cache: true,
         plugins: [
-          [
-            SassPlugin({ importer: true }),
-            PostCSSPlugin(POSTCSS_PLUGINS),
-            CSSResourcePlugin({
-              inline: true
-            }),
-            CSSPlugin()
-          ],
+          [SassPlugin({ importer: true }), PostCSSPlugin(POSTCSS_PLUGINS), CSSPlugin()],
           SVGPlugin(),
           WebIndexPlugin({
             template: TEMPLATE,
@@ -77,11 +70,11 @@ context(
 task('dev-build', async context => {
   const fuse = context.build();
 
-  fuse.dev({ root: false }, server => {
+  fuse.dev(server => {
     const app = server.httpServer.app;
     app.use(express.static(CLIENT_OUT));
     app.get('*', (req, res) => {
-      res.sendFile(join(CLIENT_OUT, 'index.html'));
+      res.sendFile(TEMPLATE);
     });
   });
 
@@ -105,21 +98,42 @@ task('prod-build', async context => {
 });
 
 // COPY FILES TO BUILD FOLDER
-task('copy-redirect', () =>
-  Sparky.src('./netlify/**', { base: './config' }).dest('./dist')
-);
+task('copy-redirect', () => Sparky.src('./**', { base: './config/netlify' }).dest('./dist'));
 
 task('copy-favicons', () =>
   Sparky.src('./favicons/**', { base: './config' }).dest('./dist/static')
 );
 
+task('copy-images', () =>
+  Sparky.src('./**', { base: './src/public/images' }).dest('./dist/static/images')
+);
+
 task('clean', () => Sparky.src('./dist/*').clean('./dist/'));
 
+/* CUSTOM BUILD TASKS */
+task('purge', () => {
+  const purged = new Purgecss({
+    content: ['src/**/*.tsx', 'src/**/*.html'],
+    css: [`${CLIENT_OUT}/styles.css`]
+  });
+
+  const [result] = purged.purge();
+
+  unlinkSync(`${CLIENT_OUT}/styles.css`);
+
+  writeFileSync(result.file, result.css, 'UTF-8');
+
+  console.info('💎  THE CSS HAS BEEN PURGED 💎');
+});
+
+/* PARALLEL EXECUTING BUILD TASKS */
+task('copy-files', ['&copy-images', '&copy-redirect', 'copy-favicons']);
+
 /* MAIN BUILD TASK CHAINS  */
-task('dev', ['clean', 'dev-build'], () => {
+task('dev', ['clean', 'dev-build', 'copy-images'], () => {
   console.info('GET TO WORK');
 });
 
-task('prod', ['clean', 'prod-build', 'copy-redirect', 'copy-favicons'], () => {
+task('prod', ['clean', 'prod-build', 'copy-files', 'purge'], () => {
   console.info('READY FOR PROD');
 });
