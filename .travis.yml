@@ -1,9 +1,7 @@
 language: node_js
-node_js: node
+node_js: 
+  - "node"
 dist: trusty
-cache:
-  directories:
-    - node_modules
 install: 
   - npm i -g npm@5.7.1
   - npm ci
