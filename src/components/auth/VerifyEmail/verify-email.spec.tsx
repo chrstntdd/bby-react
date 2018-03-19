@@ -5,6 +5,8 @@ import VerifyEmail from './';
 
 describe('<VerifyEmail/>', () => {
   it('should render without crashing', () => {
-    shallow(<VerifyEmail />);
+    const wrapper = shallow(<VerifyEmail />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 });

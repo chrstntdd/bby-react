@@ -5,6 +5,8 @@ import ProductTable from './';
 
 describe('<ProductTable/>', () => {
   it('should render without crashing', () => {
-    shallow(<ProductTable />);
+    const wrapper = shallow(<ProductTable />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 });

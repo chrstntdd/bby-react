@@ -8,6 +8,8 @@ import ProductTable from '../ProductTable';
 import SideBar from '../SideBar';
 import DashboardHeader from '../DashboardHeader';
 
+import { noop } from '../../util';
+
 import {
   syncToDatabase,
   loadTable,
@@ -18,21 +20,61 @@ import {
 } from '../../state/actions';
 
 import './dashboard.scss';
-let intervalId;
 
-export class Dashboard extends React.Component {
-  shouldComponentUpdate() {
-    return false;
-  }
-  componentWillUnmount() {
-    clearInterval(intervalId);
-  }
-  render() {
+interface IUserProfile {
+  email: string;
+  password: string;
+  profile: {
+    firstName: string;
+    lastName: string;
+  };
+  employeeNumber: string;
+  storeNumber: string;
+  role: 'Member' | 'Client' | 'Owner' | 'Admin';
+  isVerified: boolean;
+  tableData: any[];
+}
+
+interface Props {
+  products?: any[];
+  syncToDatabase: Function;
+  printTable: Function;
+  formatTable: Function;
+  clearTable: Function;
+  shuffleTable: Function;
+  userProfile?: IUserProfile;
+}
+
+export class Dashboard extends React.PureComponent<Props> {
+  public static defaultProps: Partial<Props> = {
+    products: [],
+    syncToDatabase: noop,
+    printTable: noop,
+    formatTable: noop,
+    clearTable: noop,
+    shuffleTable: noop
+  };
+
+  public intervalId: number = null;
+
+  public componentWillMount() {
     /* Autosave! (every 5 minutes) Only if there is data in the table. */
-    if (this.props.products) {
-      intervalId = setInterval(() => this.props.syncToDatabase(), 300000);
-    }
 
+    if (this.props.products.length > 0) {
+      this.intervalId = window.setInterval(() => this.props.syncToDatabase(), 300000);
+    } else {
+      this.intervalId = null;
+    }
+  }
+
+  public componentWillUnmount() {
+    if (this.intervalId) {
+      this.intervalId = null;
+      window.clearInterval(this.intervalId);
+    }
+  }
+
+  public render() {
     let { userProfile } = this.props;
 
     return (
@@ -40,7 +82,6 @@ export class Dashboard extends React.Component {
         <DashboardHeader userData={userProfile} />
         <div id="main-content-area">
           <SideBar
-            tableId={this.props.tableId}
             syncToDatabase={this.props.syncToDatabase}
             formatTable={this.props.formatTable}
             printTable={this.props.printTable}
@@ -58,6 +99,7 @@ export class Dashboard extends React.Component {
   }
 }
 
+/* istanbul ignore next */
 const mapStateToProps = state => ({
   content: state.auth.content,
   userProfile: state.auth.userProfile,

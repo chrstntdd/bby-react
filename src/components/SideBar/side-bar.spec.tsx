@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow, mount } from 'enzyme';
-import configureStore from 'redux-mock-store';
+import * as configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { MemoryRouter as Router } from 'react-router-dom';
@@ -9,6 +9,8 @@ import createRouterContext from 'react-router-test-context';
 import { toggleShowTableModal } from '../../state/actions';
 
 import ConnectedSideBar, { SideBar } from './';
+
+jest.useFakeTimers();
 
 const initialState = {
   auth: {
@@ -76,6 +78,8 @@ describe('DUMB <SideBar/>', () => {
   it('should render without crashing', () => {
     const { props } = setup();
     const wrapper = shallow(<SideBar {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
   it('should render all buttons', () => {
     const { props } = setup();
@@ -92,18 +96,14 @@ describe('SMART <ConnectedSideBar/>', () => {
   });
 
   describe('SAVE button', () => {
-    it.skip('should dispatch syncToDatabase', async () => {
-      /* TODO. figure out how to test the async debounce function */
-      try {
-        const { enzymeWrapper, props } = setup();
+    it('should dispatch syncToDatabase', () => {
+      const { enzymeWrapper, props } = setup();
 
-        const button = enzymeWrapper.find('#saveButton');
-        button.simulate('click');
-        await timeout(6000);
-        expect(props.syncToDatabase).toHaveBeenCalled();
-      } catch (error) {
-        console.log(error);
-      }
+      const button = enzymeWrapper.find('#saveButton');
+      button.simulate('click');
+
+      jest.runOnlyPendingTimers();
+      expect(props.syncToDatabase).toHaveBeenCalled();
     });
   });
   describe('FORMAT button', () => {

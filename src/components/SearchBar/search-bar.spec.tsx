@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow, mount } from 'enzyme';
-import configureStore from 'redux-mock-store';
+import * as configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { MemoryRouter as Router } from 'react-router-dom';
 import createRouterContext from 'react-router-test-context';
@@ -58,7 +58,9 @@ describe('DUMB <SearchBar/>', () => {
     const props = {
       lastItemScanned: '123456789632'
     };
-    shallow(<SearchBar {...props} />);
+    const wrapper = shallow(<SearchBar {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 });
 
@@ -75,8 +77,6 @@ describe('SMART <ConnectedSearchBar/>', () => {
   it("should render the most most recently scanned item's UPC", () => {
     const { enzymeWrapper, props, initialState } = setup('1234');
     const lastItemScannedUPC = enzymeWrapper.find('#last-item-scanned .upc');
-    expect(lastItemScannedUPC.text()).toEqual(
-      `UPC: ${initialState.table.lastItemScanned}`
-    );
+    expect(lastItemScannedUPC.text()).toEqual(`UPC: ${initialState.table.lastItemScanned}`);
   });
 });

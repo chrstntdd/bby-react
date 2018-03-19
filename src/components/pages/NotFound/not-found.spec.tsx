@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { MemoryRouter as Router } from 'react-router-dom';
 import createRouterContext from 'react-router-test-context';
 
@@ -22,7 +22,7 @@ describe('<NotFound/>', () => {
       const props = {
         history: []
       };
-      const instance = shallow(
+      const instance = mount(
         <Router context={context}>
           <NotFound {...props} />
         </Router>

@@ -33,10 +33,4 @@ describe('<HowCard/>', () => {
 
     expect(wrapper).toMatchSnapshot();
   });
-  it('should have an image, h3, and h5', () => {
-    const wrapper = shallow(<HowCard {...props} />);
-    const expectedTags = ['img', 'h3', 'h5'];
-    const renderedTags = wrapper.children().nodes.map(tag => tag.type);
-    expect(expectedTags).toEqual(renderedTags);
-  });
 });

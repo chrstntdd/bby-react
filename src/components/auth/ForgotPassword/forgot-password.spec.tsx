@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow, mount } from 'enzyme';
-import configureStore from 'redux-mock-store';
+import * as configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { MemoryRouter as Router } from 'react-router-dom';
 import createRouterContext from 'react-router-test-context';

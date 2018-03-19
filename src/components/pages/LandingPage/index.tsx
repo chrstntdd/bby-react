@@ -5,10 +5,10 @@ import HowSection from './HowSection';
 import AboutSection from './AboutSection';
 import Footer from './footer';
 
-import simple from '../../../public/images/atom.svg';
-import reliable from '../../../public/images/handshake.svg';
-import secure from '../../../public/images/padlock.svg';
-import fast from '../../../public/images/rocket.svg';
+const simple = 'images/atom.svg';
+const reliable = 'images/handshake.svg';
+const secure = 'images/padlock.svg';
+const fast = 'images/rocket.svg';
 
 export default class LandingPage extends React.Component {
   constructor(props) {

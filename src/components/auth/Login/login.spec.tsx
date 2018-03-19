@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow, mount } from 'enzyme';
-import configureStore from 'redux-mock-store';
+import * as configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { MemoryRouter as Router } from 'react-router-dom';
 import createRouterContext from 'react-router-test-context';
@@ -10,7 +10,7 @@ import ConnectedLogin, { Login } from './';
 
 import { Provider } from 'react-redux';
 
-const setup = tableId => {
+const setup = () => {
   const mockStore = configureStore();
   const initialState = {
     auth: {
@@ -62,7 +62,9 @@ describe('DUMB <Login/>', () => {
     const props = {
       handleSubmit: jest.fn()
     };
-    shallow(<Login {...props} />);
+    const wrapper = shallow(<Login {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 });
 
@@ -74,19 +76,10 @@ describe('SMART <ConnectedLogin/>', () => {
 
   it('should render two inputs', () => {
     const { enzymeWrapper, props } = setup();
-    const inputs = enzymeWrapper.find('Input');
+
+    const inputs = enzymeWrapper.find('input');
 
     expect(inputs.length).toEqual(2);
-  });
-  it('should render the inputs based on props', () => {
-    const { enzymeWrapper, props } = setup();
-    const employeeNumInput = enzymeWrapper.find({ name: 'employeeNumber' });
-    const passwordInput = enzymeWrapper.find({ name: 'password' });
-
-    expect(employeeNumInput.props().name).toBe(props.loginInputs[0].name);
-    expect(employeeNumInput.props().type).toBe(props.loginInputs[0].type);
-    expect(passwordInput.props().name).toBe(props.loginInputs[1].name);
-    expect(passwordInput.props().type).toBe(props.loginInputs[1].type);
   });
 
   it('should dispatch handleSubmit when the form is submitted', () => {

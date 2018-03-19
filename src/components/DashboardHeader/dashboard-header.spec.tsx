@@ -13,7 +13,9 @@ describe('<DashboardHeader/>', () => {
     }
   };
   it('should render without crashing', () => {
-    shallow(<DashboardHeader {...props} />);
+    const wrapper = shallow(<DashboardHeader {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
   it("should render a greeting with the user's first and last name", () => {
     const wrapper = shallow(<DashboardHeader {...props} />);
@@ -21,9 +23,7 @@ describe('<DashboardHeader/>', () => {
       .find('h2')
       .props()
       .children.join('');
-    expect(greeting).toBe(
-      `Hello, ${props.userData.firstName} ${props.userData.lastName}`
-    );
+    expect(greeting).toBe(`Hello, ${props.userData.firstName} ${props.userData.lastName}`);
   });
   describe('the Logout button', () => {
     it('should render a Logout button', () => {

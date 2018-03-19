@@ -167,7 +167,7 @@ export const loadTable = (user, jwt) => async dispatch => {
 
     await dispatch({ type: LOAD_SAVED_TABLE, payload: response.data.products });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };
 
@@ -265,8 +265,7 @@ export const registerUser = ({
 
     dispatch({
       type: REGISTER_SUCCESS,
-      payload:
-        'Registered successfully, please check your work email to verify your account'
+      payload: 'Registered successfully, please check your work email to verify your account'
     });
     await timeout(8000);
     dispatch({ type: CLEAR_FLASH_MESSAGE });
@@ -307,9 +306,7 @@ export const logoutUser = error => dispatch => {
   dispatch({ type: UNAUTH_USER, payload: error || '' });
 };
 
-export const getForgotPasswordToken = ({
-  employeeNumber
-}) => async dispatch => {
+export const getForgotPasswordToken = ({ employeeNumber }) => async dispatch => {
   try {
     dispatch({ type: FORGOT_PASSWORD_REQUEST });
     const response = await axios.post(`${API_URL}/users/forgot-password`, {
@@ -334,10 +331,9 @@ export const getForgotPasswordToken = ({
 export const resetPassword = (resetToken, { password }) => async dispatch => {
   try {
     dispatch({ type: RESET_PASSWORD_REQUEST });
-    const response = await axios.post(
-      `${API_URL}/users/reset-password?token=${resetToken}`,
-      { password }
-    );
+    const response = await axios.post(`${API_URL}/users/reset-password?token=${resetToken}`, {
+      password
+    });
 
     dispatch({
       type: RESET_PASSWORD_SUCCESS,
@@ -357,9 +353,7 @@ export const resetPassword = (resetToken, { password }) => async dispatch => {
 
 export const confirmEmail = token => async dispatch => {
   try {
-    const response = await axios.post(
-      `${API_URL}/users/verify-email?token=${token}`
-    );
+    const response = await axios.post(`${API_URL}/users/verify-email?token=${token}`);
     const { user, jwt } = response.data;
     dispatch({ type: LOGIN_SUCCESS, payload: { user, jwt } });
   } catch (error) {

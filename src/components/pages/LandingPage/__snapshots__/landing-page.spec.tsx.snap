@@ -10,22 +10,22 @@ exports[`<LandingPage/> should render without crashing 1`] = `
       Array [
         Object {
           "desc": "...but powerful",
-          "img": undefined,
+          "img": "images/atom.svg",
           "name": "simple",
         },
         Object {
           "desc": "There when you need it",
-          "img": undefined,
+          "img": "images/handshake.svg",
           "name": "reliable",
         },
         Object {
           "desc": "Without compromises",
-          "img": undefined,
+          "img": "images/padlock.svg",
           "name": "safe",
         },
         Object {
           "desc": "Designed with speed in mind",
-          "img": undefined,
+          "img": "images/rocket.svg",
           "name": "fast",
         },
       ]

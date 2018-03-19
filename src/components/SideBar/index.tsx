@@ -1,14 +1,11 @@
 import * as React from 'react';
 const _debounce = require('lodash.debounce');
 
-import printIcon from '../static/noun_772280_cc.svg';
-import formatIcon from '../static/noun_796398_cc.svg';
-import undoButton from '../static/noun_1031806_cc.svg';
-import redoButton from '../static/noun_1031802_cc.svg';
-import clearIcon from '../static/noun_926276_cc.svg';
-import databaseSync from '../static/noun_932928_cc.svg';
-import manage from '../static/noun_1082747_cc.svg';
-import shuffle from '../static/shuffle.svg';
+const printIcon = '/images/printer.svg';
+const formatIcon = '/images/broom.svg';
+const clearIcon = '/images/x.svg';
+const databaseSync = '/images/database.svg';
+const shuffle = '/images/shuffle.svg';
 
 import './side-bar.scss';
 

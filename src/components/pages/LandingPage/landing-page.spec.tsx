@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme';
 import renderer from 'react-test-renderer';
 import { MemoryRouter as Router } from 'react-router-dom';
 import createRouterContext from 'react-router-test-context';
-import configureStore from 'redux-mock-store';
+import * as configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 

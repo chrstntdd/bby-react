@@ -1,6 +1,6 @@
 import * as axios from 'axios';
 import * as React from 'react';
-import configureMockStore from 'redux-mock-store';
+import * as configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import * as actions from './';
@@ -8,7 +8,7 @@ import * as types from './types';
 
 const MockAdapter = require('axios-mock-adapter');
 const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
+const mockStore = configureStore(middlewares);
 
 const mockProduct = {
   name: 'Sony - AS410AP Sport In-Ear Headphones - Gray',
@@ -169,13 +169,7 @@ describe('auth actions', () => {
           employeeNumber: 'a1',
           storeNumber: 420
         };
-        const {
-          firstName,
-          lastName,
-          password,
-          employeeNumber,
-          storeNumber
-        } = mockEmployee;
+        const { firstName, lastName, password, employeeNumber, storeNumber } = mockEmployee;
 
         mock
           .onPost(`${API_URL}/users`, {
@@ -231,13 +225,7 @@ describe('auth actions', () => {
           employeeNumber: 'a1',
           storeNumber: 'what'
         };
-        const {
-          firstName,
-          lastName,
-          password,
-          employeeNumber,
-          storeNumber
-        } = mockEmployee;
+        const { firstName, lastName, password, employeeNumber, storeNumber } = mockEmployee;
 
         mock
           .onPost(`${API_URL}/users`, {
@@ -294,9 +282,7 @@ describe('auth actions', () => {
           .onPost(`${API_URL}/users/forgot-password`, { employeeNumber })
           .reply(200, { resetToken: 'a token', message: 'thanks' });
 
-        await store.dispatch(
-          actions.getForgotPasswordToken({ employeeNumber })
-        );
+        await store.dispatch(actions.getForgotPasswordToken({ employeeNumber }));
 
         const response = store.getActions();
         expect(response.length).toEqual(3);
@@ -380,39 +366,31 @@ describe('table actions', () => {
     it('should get back a POST_UPC response from a valid post upc', () => {
       const mock = new MockAdapter(axios);
 
-      mock
-        .onPost(`${API_URL}/best-buy/upc`, { upc: '027242900653' })
-        .reply(200, mockProduct);
+      mock.onPost(`${API_URL}/best-buy/upc`, { upc: '027242900653' }).reply(200, mockProduct);
       const store = mockStore(initialState);
-      return store
-        .dispatch(actions.getProductDetails({ upc: '027242900653' }))
-        .then(() => {
-          const expectedActions = store.getActions();
-          expect(expectedActions.length).toEqual(1);
-          expect(expectedActions).toContainEqual({
-            type: types.POST_UPC,
-            payload: mockProduct
-          });
+      return store.dispatch(actions.getProductDetails({ upc: '027242900653' })).then(() => {
+        const expectedActions = store.getActions();
+        expect(expectedActions.length).toEqual(1);
+        expect(expectedActions).toContainEqual({
+          type: types.POST_UPC,
+          payload: mockProduct
         });
+      });
     });
     it('should get back an INVALID_UPC response from an invalid upc', () => {
       const mock = new MockAdapter(axios);
 
-      mock
-        .onPost(`${API_URL}/best-buy/upc`, { upc: '027242900653' })
-        .reply(400, {
-          message: 'UPC not recognized. Please try your search again'
-        });
+      mock.onPost(`${API_URL}/best-buy/upc`, { upc: '027242900653' }).reply(400, {
+        message: 'UPC not recognized. Please try your search again'
+      });
       const store = mockStore(initialState);
-      return store
-        .dispatch(actions.getProductDetails({ upc: 'abc' }))
-        .then(() => {
-          const expectedActions = store.getActions();
-          expect(expectedActions.length).toEqual(1);
-          expect(expectedActions).toContainEqual({
-            type: types.INVALID_UPC
-          });
+      return store.dispatch(actions.getProductDetails({ upc: 'abc' })).then(() => {
+        const expectedActions = store.getActions();
+        expect(expectedActions.length).toEqual(1);
+        expect(expectedActions).toContainEqual({
+          type: types.INVALID_UPC
         });
+      });
     });
 
     it("should dispatch an INCREMENT_PRODUCT_QUANTITY when the upc isn't unique to state.table.products", async () => {
@@ -578,9 +556,7 @@ describe('table actions', () => {
       const state = store.getState();
       const user = state.auth.userProfile;
 
-      mock
-        .onGet(`${API_URL}/users/${user.id}/table`)
-        .reply(200, { products: mockProductsArr });
+      mock.onGet(`${API_URL}/users/${user.id}/table`).reply(200, { products: mockProductsArr });
 
       await store.dispatch(actions.loadTable(user, 'JWT asdfasdf'));
       const response = store.getActions();
