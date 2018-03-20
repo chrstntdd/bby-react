@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import AboutSection from './';
+import LandingPage from './';
 
-describe('<AboutSection/>', () => {
+describe('<LandingPage/>', () => {
   it('should render without crashing', () => {
-    const wrapper = shallow(<AboutSection />);
+    const wrapper = shallow(<LandingPage />);
 
     expect(wrapper).toMatchSnapshot();
   });

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import LandingPage from '../components/pages/LandingPage';
+import LandingPage from './LandingPage';
 import ForgotPassword from './auth/ForgotPassword';
 import Login from './auth/Login';
 import Logout from './auth/Logout';
@@ -10,7 +10,7 @@ import RequireAuth from './auth/RequireAuth';
 import ResetPassword from './auth/ResetPassword';
 import VerifyEmail from './auth/VerifyEmail';
 import Dashboard from './Dashboard';
-import NotFoundPage from './pages/NotFound';
+import NotFoundPage from './NotFound';
 
 export default class App extends React.Component {
   render() {
