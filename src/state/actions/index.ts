@@ -36,16 +36,20 @@ import {
 
 const _find = require('lodash.find');
 
-let API_URL;
+let API_URL: string;
 process.env.NODE_ENV === 'production'
   ? (API_URL = 'https://aqueous-headland-43492.herokuapp.com/api/v1')
   : (API_URL = 'http://localhost:3000/api/v1');
 
 const CLIENT_ROOT_URL = 'http://localhost:4444';
 
-let timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
+let timeout = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const getProductDetails = upc => async (dispatch, getState) => {
+interface UPC {
+  upc: string;
+}
+
+export const getProductDetails = (upc: UPC) => async (dispatch, getState) => {
   const state = getState();
   const jwt = state.auth.jwt;
   const products = state.table.products;
@@ -103,10 +107,10 @@ export const shuffleTable = () => dispatch => {
 
 export const printTable = () => async dispatch => {
   try {
-    await dispatch(hideActions(dispatch));
+    dispatch(hideActions()(dispatch));
     await timeout(100);
-    await window.print();
-    await dispatch(showActions(dispatch));
+    window.print();
+    dispatch(showActions()(dispatch));
   } catch (error) {
     console.log(error);
   }
@@ -178,7 +182,7 @@ export const toggleShowTableModal = () => dispatch => {
 /* takes in props from login form */
 export const loginUser = ({ employeeNumber, password }) => async dispatch => {
   try {
-    await dispatch({ type: LOGIN_REQUEST });
+    dispatch({ type: LOGIN_REQUEST });
 
     const response = await axios.post(`${API_URL}/users/sign-in`, {
       email: `${employeeNumber.trim()}@bestbuy.com`,

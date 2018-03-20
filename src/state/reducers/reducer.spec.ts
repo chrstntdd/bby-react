@@ -1,6 +1,6 @@
-import auth_reducer from './auth-reducer.ts';
-import bby_reducer from './bby-reducer.ts';
-import * as types from '../actions/types.ts';
+import auth_reducer from './auth-reducer';
+import bby_reducer from './bby-reducer';
+import * as types from '../actions/types';
 
 const AUTH_INITIAL_STATE = {
   userProfile: null,

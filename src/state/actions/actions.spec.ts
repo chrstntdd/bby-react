@@ -1,10 +1,13 @@
 import * as axios from 'axios';
+import axiosMock from 'axios';
 import * as React from 'react';
 import * as configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import * as actions from './';
 import * as types from './types';
+
+jest.useFakeTimers();
 
 const MockAdapter = require('axios-mock-adapter');
 const middlewares = [thunk];
@@ -96,7 +99,7 @@ describe('auth actions', () => {
           password
         })
         .reply(200, {
-          token: 'stub',
+          jwt: 'stub',
           user: 'yeh'
         });
 
@@ -105,295 +108,339 @@ describe('auth actions', () => {
       const response = store.getActions();
 
       expect(response.length).toEqual(2);
-      expect(response).toContainEqual(
-        {
-          type: types.LOGIN_REQUEST
-        },
+      expect(response).toEqual([
+        { type: types.LOGIN_REQUEST },
         {
           type: types.LOGIN_SUCCESS,
           payload: {
-            token: 'stub',
+            jwt: 'stub',
             user: 'yeh'
           }
         }
-      );
+      ]);
     });
-    it(
-      'should dispatch LOGIN_FAILURE if there was a problem',
-      async () => {
-        const mock = new MockAdapter(axios);
-        const employeeNumber = 'a1075394';
-        const password = '<>';
+    it('should dispatch LOGIN_FAILURE if there was a problem', async done => {
+      axiosMock.post = jest.fn();
+      axiosMock.post.mockImplementationOnce(() =>
+        Promise.reject({
+          response: {
+            data: {
+              otherError: {}
+            }
+          }
+        })
+      );
 
-        mock
-          .onPost(`${API_URL}/users/sign-in`, {
+      const employeeNumber = 'a1075394';
+      const password = '<>';
+      const store = mockStore(initialState);
+
+      try {
+        setImmediate(() => {
+          store.dispatch(actions.loginUser({ employeeNumber, password }));
+          const response = store.getActions();
+
+          /* SINCE THIS CHAIN OF EVENTS HAS PROMISE BASED TIMEOUTS,
+             WE RUN THE TIMERS OUT BY WRAPPING IN setImmediate.
+             
+             IT IS VERY IMPORTANT TO WRAP WITH A TRY CATCH. A FAILURE
+             WITHOUT THIS SAFEGUARD WILL CRASH JEST COMPLETELY
+          */
+          expect(response.length).toEqual(3);
+          expect(response).toEqual([
+            { type: types.LOGIN_REQUEST },
+            {
+              type: types.LOGIN_FAILURE,
+              payload: 'An unknown error occurred.'
+            },
+            { type: types.CLEAR_FLASH_MESSAGE }
+          ]);
+          expect(axiosMock.post).toHaveBeenCalledTimes(1);
+          expect(axiosMock.post).toHaveBeenCalledWith(`${API_URL}/users/sign-in`, {
             email: `${employeeNumber.trim()}@bestbuy.com`,
             password
-          })
-          .reply(400, {
-            error: 'error'
           });
-        const store = mockStore(initialState);
+        });
+      } catch (error) {
+        done.fail(error);
+      }
 
-        await store.dispatch(actions.loginUser({ employeeNumber, password }));
-        const response = store.getActions();
-
-        expect(response.length).toEqual(3);
-        expect(response).toContainEqual(
-          {
-            type: types.LOGIN_REQUEST
-          },
-          {
-            type: types.LOGIN_FAILURE,
-            payload: {
-              error: 'error'
-            }
-          },
-          {
-            type: types.CLEAR_FLASH_MESSAGE
-          }
-        );
-      },
-      10000 /* timeout to wait for all actions to be dispatched */
-    );
+      done();
+    });
   });
   describe('registerUser', () => {
-    it(
-      'should dispatch REGISTER_REQUEST and REGISTER_SUCCESS on valid credentials',
-      async () => {
-        const mock = new MockAdapter(axios);
-        const mockEmployee = {
-          firstName: 'Christian',
-          lastName: 'Todd',
-          password: 'dumbothicc',
-          employeeNumber: 'a1',
-          storeNumber: 420
-        };
-        const { firstName, lastName, password, employeeNumber, storeNumber } = mockEmployee;
+    it('should dispatch REGISTER_REQUEST and REGISTER_SUCCESS on valid credentials', async done => {
+      axiosMock.post = jest.fn();
+      axiosMock.post.mockImplementationOnce(() =>
+        Promise.resolve({
+          data: []
+        })
+      );
 
-        mock
-          .onPost(`${API_URL}/users`, {
-            firstName,
-            lastName,
-            password,
-            employeeNumber,
-            storeNumber
-          })
-          .reply(201, {
-            message: 'Your account has been created.'
-          });
+      const mockEmployee = {
+        firstName: 'Christian',
+        lastName: 'Todd',
+        password: 'dumbothicc',
+        employeeNumber: 'a1',
+        storeNumber: 420
+      };
 
-        const store = mockStore(initialState);
+      const store = mockStore(initialState);
 
-        await store.dispatch(
-          actions.registerUser({
-            firstName,
-            lastName,
-            password,
-            employeeNumber,
-            storeNumber
-          })
-        );
-        const response = store.getActions();
+      try {
+        setImmediate(() => {
+          store.dispatch(actions.registerUser(mockEmployee));
+          const response = store.getActions();
 
-        expect(response.length).toEqual(3);
-        expect(response).toContainEqual(
-          {
-            type: types.REGISTER_REQUEST
-          },
-          {
-            type: types.REGISTER_SUCCESS,
-            payload: {
-              message: 'your account has been created'
-            }
-          },
-          {
-            type: types.CLEAR_FLASH_MESSAGE
-          }
-        );
-      },
-      10000
-    );
-    it(
-      'should dispatch REGISTER_REQUEST and REGISTER_FAILURE on invalid credentials',
-      async () => {
-        const mock = new MockAdapter(axios);
-        const mockEmployee = {
-          firstName: 'Christian',
-          lastName: 'Todd',
-          password: '<>',
-          employeeNumber: 'a1',
-          storeNumber: 'what'
-        };
-        const { firstName, lastName, password, employeeNumber, storeNumber } = mockEmployee;
+          expect(response.length).toEqual(3);
+          expect(response).toEqual([
+            { type: types.REGISTER_REQUEST },
+            {
+              type: types.REGISTER_SUCCESS,
+              payload:
+                'Registered successfully, please check your work email to verify your account'
+            },
+            { type: types.CLEAR_FLASH_MESSAGE }
+          ]);
+          expect(axiosMock.post).toHaveBeenCalledTimes(1);
+          expect(axiosMock.post).toHaveBeenCalledWith(`${API_URL}/users`, mockEmployee);
+        });
+      } catch (error) {
+        done.fail(error);
+      }
 
-        mock
-          .onPost(`${API_URL}/users`, {
-            firstName,
-            lastName,
-            password,
-            employeeNumber,
-            storeNumber
-          })
-          .reply(400, {
-            messages: [{ msg: 'an error' }]
-          });
+      done();
+    });
+    it('should dispatch REGISTER_REQUEST and REGISTER_FAILURE on invalid credentials', async done => {
+      axiosMock.post = jest.fn();
+      axiosMock.post.mockImplementationOnce(() =>
+        Promise.resolve({
+          messages: [{ msg: 'an error' }]
+        })
+      );
+      const mockEmployee = {
+        firstName: 'Christian',
+        lastName: 'Todd',
+        password: '<>',
+        employeeNumber: 'a1',
+        storeNumber: 'what'
+      };
+      const store = mockStore(initialState);
 
-        const store = mockStore(initialState);
+      try {
+        setImmediate(() => {
+          store.dispatch(actions.registerUser(mockEmployee));
+          const response = store.getActions();
 
-        await store.dispatch(
-          actions.registerUser({
-            firstName,
-            lastName,
-            password,
-            employeeNumber,
-            storeNumber
-          })
-        );
-        const response = store.getActions();
+          expect(response.length).toEqual(3);
+          expect(response).toEqual([
+            { type: types.REGISTER_REQUEST },
+            {
+              type: types.REGISTER_FAILURE,
+              payload: 'an error'
+            },
+            { type: types.CLEAR_FLASH_MESSAGE }
+          ]);
+          expect(axiosMock.post).toHaveBeenCalledTimes(1);
+          expect(axiosMock.post).toHaveBeenCalledWith(`${API_URL}/users`, mockEmployee);
+        });
+      } catch (error) {
+        done.fail(error);
+      }
 
-        expect(response.length).toEqual(3);
-        expect(response).toContainEqual(
-          {
-            type: types.REGISTER_REQUEST
-          },
-          {
-            type: types.REGISTER_FAILURE,
-            payload: 'some error'
-          },
-          {
-            type: types.CLEAR_FLASH_MESSAGE
-          }
-        );
-      },
-      10000
-    );
+      done();
+    });
   });
 
   describe('getForgotPasswordToken', () => {
-    it(
-      'should dispatch FORGOT_PASSWORD_REQUEST',
-      async () => {
-        const mock = new MockAdapter(axios);
-        const employeeNumber = 'a1';
-        const store = mockStore(initialState);
-
-        mock
-          .onPost(`${API_URL}/users/forgot-password`, { employeeNumber })
-          .reply(200, { resetToken: 'a token', message: 'thanks' });
-
-        await store.dispatch(actions.getForgotPasswordToken({ employeeNumber }));
-
-        const response = store.getActions();
-        expect(response.length).toEqual(3);
-        expect(response).toContainEqual(
-          {
-            type: types.FORGOT_PASSWORD_REQUEST
-          },
-          {
-            type: types.FORGOT_PASSWORD_SUCCESS,
-            payload: 'thanks'
-          },
-          {
-            type: types.CLEAR_FLASH_MESSAGE
+    it('should dispatch FORGOT_PASSWORD_REQUEST', async done => {
+      axiosMock.post = jest.fn();
+      axiosMock.post.mockImplementationOnce(() =>
+        Promise.reject({
+          response: {
+            data: {
+              message: 'as'
+            }
           }
-        );
-      },
-      10000
-    );
+        })
+      );
+
+      const employeeNumber = 'a1';
+      const store = mockStore(initialState);
+
+      store.dispatch(actions.getForgotPasswordToken({ employeeNumber }));
+
+      try {
+        setImmediate(() => {
+          const response = store.getActions();
+          expect(response.length).toEqual(3);
+          expect(response).toEqual([
+            {
+              type: types.FORGOT_PASSWORD_REQUEST
+            },
+            {
+              type: types.FORGOT_PASSWORD_SUCCESS,
+              payload: 'thanks'
+            },
+            {
+              type: types.CLEAR_FLASH_MESSAGE
+            }
+          ]);
+        });
+      } catch (error) {
+        done.fail(error);
+      }
+
+      expect(axiosMock.post).toHaveBeenCalledTimes(1);
+      expect(axiosMock.post).toHaveBeenCalledWith(`${API_URL}/users/forgot-password`, {
+        employeeNumber
+      });
+      done();
+    });
   });
 
   describe('resetPassword', () => {
-    it(
-      'should dispatch RESET_PASSWORD_REQUEST',
-      async () => {
-        const mock = new MockAdapter(axios);
-        const store = mockStore(initialState);
-        const password = 'fakeNews';
-        const token = 'asdfjfks';
-
-        mock
-          .onPost(`${API_URL}/users/reset-password?token=${token}`, {
-            password
-          })
-          .reply(200, { message: 'your password has been changed' });
-
-        await store.dispatch(actions.resetPassword(token, { password }));
-        const response = store.getActions();
-
-        expect(response.length).toEqual(3);
-        expect(response).toContainEqual(
-          {
-            type: types.RESET_PASSWORD_REQUEST
-          },
-          {
-            type: types.RESET_PASSWORD_SUCCESS,
-            payload: 'your password has been changed'
-          },
-          {
-            type: types.CLEAR_FLASH_MESSAGE
+    it('should dispatch RESET_PASSWORD_REQUEST', done => {
+      axiosMock.post = jest.fn();
+      axiosMock.post.mockImplementationOnce(() =>
+        Promise.reject({
+          response: {
+            data: {
+              message: 'as'
+            }
           }
-        );
-      },
-      10000
-    );
+        })
+      );
+
+      const store = mockStore(initialState);
+      const password = 'fakeNews';
+      const token = 'asdfjfks';
+
+      store.dispatch(actions.resetPassword(token, { password }));
+
+      try {
+        setImmediate(() => {
+          const response = store.getActions();
+
+          expect(response.length).toEqual(3);
+          expect(response).toEqual([
+            {
+              type: types.RESET_PASSWORD_REQUEST
+            },
+            {
+              type: types.RESET_PASSWORD_SUCCESS,
+              payload: 'your password has been changed'
+            },
+            {
+              type: types.CLEAR_FLASH_MESSAGE
+            }
+          ]);
+        });
+      } catch (error) {
+        done.fail(error);
+      }
+
+      expect(axiosMock.post).toHaveBeenCalledTimes(1);
+      expect(axiosMock.post).toHaveBeenCalledWith(
+        `${API_URL}/users/reset-password?token=${token}`,
+        {
+          password
+        }
+      );
+      done();
+    });
   });
 
   describe('confirmEmail', () => {
-    it('should dispatch LOGIN_SUCCESS', async () => {
-      const mock = new MockAdapter(axios);
+    it('should dispatch LOGIN_SUCCESS', done => {
+      axiosMock.post = jest.fn();
+      axiosMock.post.mockImplementationOnce(() =>
+        Promise.resolve({
+          data: {
+            jwt: 'jwt token',
+            user: 'user'
+          }
+        })
+      );
+
       const store = mockStore(initialState);
       const token = 'asdfjfks';
 
-      mock
-        .onPost(`${API_URL}/users/verify-email?token=${token}`)
-        .reply(200, { jwt: 'jwt token', user: 'user' });
+      try {
+        setImmediate(() => {
+          store.dispatch(actions.confirmEmail(token));
+          const response = store.getActions();
 
-      await store.dispatch(actions.confirmEmail(token));
-      const response = store.getActions();
+          expect(response.length).toEqual(1);
+          expect(response).toEqual([
+            {
+              type: types.LOGIN_SUCCESS,
+              payload: { user: 'user', jwt: 'jwt token' }
+            }
+          ]);
+          expect(axiosMock.post).toHaveBeenCalledTimes(1);
+          expect(axiosMock.post).toHaveBeenCalledWith(
+            `${API_URL}/users/verify-email?token=${token}`
+          );
+        });
+      } catch (error) {
+        done.fail(error);
+      }
 
-      expect(response.length).toEqual(1);
-      expect(response).toContainEqual({
-        type: types.LOGIN_SUCCESS,
-        payload: { user: 'user', jwt: 'jwt token' }
-      });
+      done();
     });
   });
 });
 
 describe('table actions', () => {
   describe('getProductDetails', () => {
-    it('should get back a POST_UPC response from a valid post upc', () => {
-      const mock = new MockAdapter(axios);
+    it('should get back a POST_UPC response from a valid post upc', done => {
+      axiosMock.post = jest.fn();
+      axiosMock.post.mockImplementationOnce(() => Promise.resolve(mockProduct));
 
-      mock.onPost(`${API_URL}/best-buy/upc`, { upc: '027242900653' }).reply(200, mockProduct);
       const store = mockStore(initialState);
-      return store.dispatch(actions.getProductDetails({ upc: '027242900653' })).then(() => {
-        const expectedActions = store.getActions();
-        expect(expectedActions.length).toEqual(1);
-        expect(expectedActions).toContainEqual({
-          type: types.POST_UPC,
-          payload: mockProduct
-        });
-      });
-    });
-    it('should get back an INVALID_UPC response from an invalid upc', () => {
-      const mock = new MockAdapter(axios);
 
-      mock.onPost(`${API_URL}/best-buy/upc`, { upc: '027242900653' }).reply(400, {
-        message: 'UPC not recognized. Please try your search again'
-      });
-      const store = mockStore(initialState);
-      return store.dispatch(actions.getProductDetails({ upc: 'abc' })).then(() => {
-        const expectedActions = store.getActions();
-        expect(expectedActions.length).toEqual(1);
-        expect(expectedActions).toContainEqual({
-          type: types.INVALID_UPC
+      try {
+        setImmediate(() => {
+          store.dispatch(actions.getProductDetails({ upc: '027242900653' }));
+          const expectedActions = store.getActions();
+
+          expect(expectedActions.length).toEqual(1);
+          expect(expectedActions).toContainEqual({
+            type: types.POST_UPC,
+            payload: mockProduct
+          });
         });
-      });
+      } catch (error) {
+        done.fail(error);
+      }
+
+      done();
     });
 
-    it("should dispatch an INCREMENT_PRODUCT_QUANTITY when the upc isn't unique to state.table.products", async () => {
+    it('should get back an INVALID_UPC response from an invalid upc', done => {
+      axiosMock.post = jest.fn();
+      axiosMock.post.mockImplementationOnce(() => Promise.resolve(mockProduct));
+
+      const store = mockStore(initialState);
+
+      try {
+        setImmediate(() => {
+          store.dispatch(actions.getProductDetails({ upc: 'abc' }));
+          const expectedActions = store.getActions();
+
+          expect(expectedActions.length).toEqual(1);
+          expect(expectedActions).toContainEqual({
+            type: types.INVALID_UPC
+          });
+        });
+      } catch (error) {
+        done.fail(error);
+      }
+      done();
+    });
+
+    it("should dispatch an INCREMENT_PRODUCT_QUANTITY when the upc isn't unique to state.table.products", done => {
       const store = mockStore({
         auth: {
           jwt: 'stub'
@@ -403,14 +450,21 @@ describe('table actions', () => {
         }
       });
 
-      await store.dispatch(actions.getProductDetails({ upc: '027242900653' }));
+      try {
+        setImmediate(() => {
+          store.dispatch(actions.getProductDetails({ upc: '027242900653' }));
+          const expectedActions = store.getActions();
 
-      const expectedActions = store.getActions();
-      expect(expectedActions.length).toEqual(1);
-      expect(expectedActions).toContainEqual({
-        type: types.INCREMENT_PRODUCT_QUANTITY,
-        payload: '027242900653'
-      });
+          expect(expectedActions.length).toEqual(1);
+          expect(expectedActions).toContainEqual({
+            type: types.INCREMENT_PRODUCT_QUANTITY,
+            payload: '027242900653'
+          });
+        });
+      } catch (error) {
+        done.fail(error);
+      }
+      done();
     });
   });
   describe('decrementProductQuantity ', () => {
@@ -455,25 +509,44 @@ describe('table actions', () => {
   });
 
   describe('printTable', () => {
-    it('hideActions should dispatch HIDE_ACTIONS', async () => {
+    it('hideActions should dispatch HIDE_ACTIONS', done => {
       const store = mockStore(initialState);
-      const response = store.getActions();
 
-      await store.dispatch(actions.hideActions());
-      expect(response.length).toEqual(1);
-      expect(response).toContainEqual({
-        type: types.HIDE_ACTIONS
-      });
+      try {
+        setImmediate(() => {
+          const response = store.getActions();
+          store.dispatch(actions.hideActions());
+
+          expect(response.length).toEqual(1);
+          expect(response).toEqual({
+            type: types.HIDE_ACTIONS
+          });
+        });
+      } catch (error) {
+        done.fail(error);
+      }
+      done();
     });
-    it('showActions should dispatch SHOW_ACTIONS', async () => {
+    it('showActions should dispatch SHOW_ACTIONS', done => {
       const store = mockStore(initialState);
-      const response = store.getActions();
 
-      await store.dispatch(actions.showActions());
-      expect(response.length).toEqual(1);
-      expect(response).toContainEqual({
-        type: types.SHOW_ACTIONS
-      });
+      try {
+        setImmediate(() => {
+          const response = store.getActions();
+
+          jest.runAllTicks();
+
+          store.dispatch(actions.showActions());
+          expect(response.length).toEqual(1);
+
+          expect(response).toContainEqual({
+            type: types.SHOW_ACTIONS
+          });
+        });
+      } catch (error) {
+        done.fail(error);
+      }
+      done();
     });
   });
 

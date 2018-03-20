@@ -49,8 +49,8 @@
     "uglify-js": "^3.3.15"
   },
   "scripts": {
-    "start": "node fuse",
-    "dist": "node fuse dist",
+    "start": "node fuse dev",
+    "prod": "node fuse prod",
     "test": "$(npm bin)/jest",
     "test-auto": "$(npm bin)/jest --watch"
   },
