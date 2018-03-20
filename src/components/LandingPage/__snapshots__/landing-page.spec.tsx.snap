@@ -1,48 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<LandingPage/> should render without crashing 1`] = `
-<div
-  className="landing-page"
->
+<div>
   <section
-    id="hero-atf"
+    className="h-screen w-screen"
   >
     <div
-      className="button-container"
+      className="w-full absolute pin-t z-10 flex justify-center md:justify-end"
     >
       <Link
-        id="sign-up-button"
         replace={false}
         to="/sign-up"
       >
         <button
-          id="btn-signup"
+          className="trans-300ms-all z-10 font-semibold rounded-full px-8 py-2 leading-normal bg-transparent border border-grey text-grey hover:border-bby-blue hover:bg-bby-blue hover:text-white m-6"
         >
           Sign Up
         </button>
       </Link>
       <Link
-        id="sign-in-button"
         replace={false}
         to="/sign-in"
       >
         <button
-          id="btn-signin"
+          className="trans-300ms-all z-10 font-semibold rounded-full px-8 py-2 leading-normal bg-transparent border border-grey text-grey hover:border-bby-blue hover:bg-bby-blue hover:text-white m-6"
         >
           Sign In
         </button>
       </Link>
     </div>
     <div
-      className="hero-img"
+      className="hero-img h-screen w-screen absolute pin"
     />
     <div
-      className="hero-content"
+      className="kinda-center z-10 w-full"
     >
-      <h1>
+      <h1
+        className="text-white italic text-center leading-none whitespace-no-wrap text-5xl md:text-massive tracking-wide mb-2"
+      >
         Quantified
       </h1>
-      <h2>
+      <h2
+        className="text-white italic text-center leading-none text-xl font-thin"
+      >
         A streamlined system for efficiently and accurately managing retail inventory.
       </h2>
     </div>

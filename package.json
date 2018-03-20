@@ -51,7 +51,8 @@
   "scripts": {
     "start": "node fuse",
     "dist": "node fuse dist",
-    "test": "jest"
+    "test": "$(npm bin)/jest",
+    "test-auto": "$(npm bin)/jest --watch"
   },
   "jest": {
     "globals": {
@@ -61,23 +62,10 @@
     },
     "verbose": true,
     "collectCoverage": true,
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,ts,tsx,jsx}"
-    ],
-    "coverageReporters": [
-      "lcov"
-    ],
-    "coveragePathIgnorePatterns": [
-      "\\.d\\.ts$"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+    "collectCoverageFrom": ["src/**/*.{js,ts,tsx,jsx}"],
+    "coverageReporters": ["lcov"],
+    "coveragePathIgnorePatterns": ["\\.d\\.ts$"],
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]",
       "\\.d\\.ts$",
@@ -89,20 +77,14 @@
       "^.+\\.scss$": "<rootDir>/config/mocks/styleMock.js",
       "^.+\\.(t|j)sx?$": "ts-jest"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
-    ],
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/config/mocks/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+        "<rootDir>/config/mocks/fileMock.js",
       "^.+\\.(scss|css)$": "<rootDir>/config/mocks/styleMock.js"
     },
-    "setupFiles": [
-      "<rootDir>/config/enzyme-setup.js",
-      "<rootDir>/config/jsdom-setup.js"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ],
+    "setupFiles": ["<rootDir>/config/enzyme-setup.js", "<rootDir>/config/jsdom-setup.js"],
+    "snapshotSerializers": ["enzyme-to-json/serializer"],
     "testRegex": "\\.spec\\.(js|ts|jsx|tsx)$"
   }
 }
