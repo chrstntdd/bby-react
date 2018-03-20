@@ -15,11 +15,13 @@ const { unlinkSync, writeFileSync } = require('fs');
 const { src, task, exec, context } = require('fuse-box/sparky');
 const { join } = require('path');
 const { info } = console;
+const tailwindcss = require('tailwindcss');
 const express = require('express');
 const autoprefixer = require('autoprefixer');
 
 const POSTCSS_PLUGINS = [
   require('postcss-flexibility'),
+  tailwindcss('./tailwind.js'),
   autoprefixer({
     browsers: [
       'Chrome >= 52',
