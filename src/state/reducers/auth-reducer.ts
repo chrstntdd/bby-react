@@ -6,7 +6,6 @@ import {
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILURE,
-  REGISTER_ERROR,
   NOT_VERIFIED_LOGIN_ERROR,
   CLEAR_FLASH_MESSAGE,
   LOGIN_REQUEST,
@@ -26,7 +25,7 @@ const INITIAL_STATE = {
   error: '',
   message: '',
   content: '',
-   isAuthenticated: false,
+  isAuthenticated: false,
   waiting: false
 };
 
@@ -38,13 +37,13 @@ export default function(state = INITIAL_STATE, action) {
         content: '',
         error: '',
         message: '',
-         isAuthenticated: true,
+        isAuthenticated: true,
         userProfile: action.payload.user,
         jwt: action.payload.jwt,
         waiting: false
       };
     case UNAUTH_USER:
-      return { ...state,  isAuthenticated: false, jwt: null, userProfile: null };
+      return { ...state, isAuthenticated: false, jwt: null, userProfile: null };
     case NOT_VERIFIED_LOGIN_ERROR:
       return {
         ...state,

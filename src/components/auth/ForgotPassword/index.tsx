@@ -6,7 +6,6 @@ import { getForgotPasswordToken } from '../../../state/actions';
 import LoadingIndicator from '../Loading';
 
 import './forgot_password.scss';
-import './form-input.scss';
 
 import Input from '../FormInput';
 

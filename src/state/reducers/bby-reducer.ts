@@ -1,16 +1,14 @@
+import * as orderBy from 'lodash.orderby';
+import * as shuffle from 'lodash.shuffle';
 import {
   POST_UPC,
   FORMAT_TABLE,
   INCREMENT_PRODUCT_QUANTITY,
-  GET_PRODUCTS_FROM_STORE,
   REMOVE_PRODUCT_FROM_TABLE,
   DECREMENT_PRODUCT_QUANTITY,
-  PRINT_TABLE,
   SHOW_ACTIONS,
   HIDE_ACTIONS,
   CLEAR_TABLE,
-  SET_NEW_TABLE_ID,
-  LOAD_BLANK_TABLE,
   LOAD_SAVED_TABLE,
   TOGGLE_LOAD_TABLE_MODAL,
   GET_USER_TABLE_DATA_SUCCESS,
@@ -19,8 +17,6 @@ import {
   LOGIN_SUCCESS,
   SHUFFLE_TABLE
 } from '../actions/types';
-const orderBy = require('lodash.orderby');
-const shuffle = require('lodash.shuffle');
 
 const INITIAL_STATE = {
   products: [],
@@ -88,9 +84,7 @@ export default function(state = INITIAL_STATE, action) {
     case REMOVE_PRODUCT_FROM_TABLE:
       return {
         ...state,
-        products: state.products.filter(
-          product => product.upc !== action.payload
-        )
+        products: state.products.filter(product => product.upc !== action.payload)
       };
     case FORMAT_TABLE:
       return {

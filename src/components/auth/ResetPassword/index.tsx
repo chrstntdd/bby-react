@@ -2,12 +2,11 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { reduxForm } from 'redux-form';
-import { resetPassword } from '../../../state/actions';
-import LoadingIndicator from '../Loading';
 import 'url-search-params-polyfill';
 
+import { resetPassword } from '../../../state/actions';
+import LoadingIndicator from '../Loading';
 import Input from '../FormInput';
-import './form-input.scss';
 
 import './reset_password.scss';
 

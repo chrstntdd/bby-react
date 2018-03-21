@@ -1,5 +1,6 @@
 import { browserHistory } from 'react-router-dom';
 import axios from 'axios';
+import * as _find from 'lodash.find';
 
 import {
   CLEAR_FLASH_MESSAGE,
@@ -33,8 +34,6 @@ import {
   TOGGLE_LOAD_TABLE_MODAL,
   UNAUTH_USER
 } from './types';
-
-const _find = require('lodash.find');
 
 let API_URL: string;
 process.env.NODE_ENV === 'production'
@@ -162,7 +161,7 @@ export const syncToDatabase = () => async (dispatch, getState) => {
 };
 
 /* loads existing table from user's collection of past tables */
-export const loadTable = (user, jwt) => async dispatch => {
+export const loadTable = (user, jwt: string) => async dispatch => {
   try {
     const response = await axios.get(`${API_URL}/users/${user.id}/table`, {
       headers: { Authorization: jwt }
@@ -354,7 +353,7 @@ export const resetPassword = (resetToken, { password }) => async dispatch => {
   }
 };
 
-export const confirmEmail = token => async dispatch => {
+export const confirmEmail = (token: string) => async dispatch => {
   try {
     const response = await axios.post(`${API_URL}/users/verify-email?token=${token}`);
     const { user, jwt } = response.data;

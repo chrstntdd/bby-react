@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
+
 import {
   POST_UPC,
   INCREMENT_PRODUCT_QUANTITY,
@@ -12,7 +14,6 @@ import {
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAILURE
 } from '../actions/types';
-import { reducer as formReducer } from 'redux-form';
 import authReducer from './auth-reducer';
 import bbyAPIReducer from './bby-reducer';
 
