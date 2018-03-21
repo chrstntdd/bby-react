@@ -35,29 +35,27 @@ const form = reduxForm({
 });
 
 export class ResetPassword extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputs: [
-        {
-          name: 'password',
-          type: 'password',
-          label: 'Password'
-        },
-        {
-          name: 'passwordConfirm',
-          type: 'password',
-          label: 'Confirm Password'
-        }
-      ]
-    };
-  }
+  state = {
+    inputs: [
+      {
+        name: 'password',
+        type: 'password',
+        label: 'Password'
+      },
+      {
+        name: 'passwordConfirm',
+        type: 'password',
+        label: 'Confirm Password'
+      }
+    ]
+  };
 
-  async handleFormSubmit({ password }, formProps) {
+  handleFormSubmit({ password }, formProps) {
     const search = this.props.location.search;
     const params = new URLSearchParams(search);
     const resetToken = params.get('token');
-    await this.props.resetPassword(resetToken, { password });
+
+    this.props.resetPassword(resetToken, { password });
     this.props.history.push('/dashboard');
   }
   renderAlert() {
@@ -88,7 +86,7 @@ export class ResetPassword extends React.Component {
           <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
             {this.renderAlert()}
             {formInputs}
-            <button action="submit">Change Password</button>
+            <button type="submit">Change Password</button>
           </form>
         </div>
       </section>

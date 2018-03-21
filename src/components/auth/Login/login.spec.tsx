@@ -19,7 +19,7 @@ const setup = () => {
       error: '',
       message: '',
       content: '',
-      authenticated: false,
+       isAuthenticated: false,
       waiting: false
     }
   };

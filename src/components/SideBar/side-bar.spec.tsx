@@ -33,7 +33,7 @@ const initialState = {
     error: '',
     message: '',
     content: '',
-    authenticated: true
+     isAuthenticated: true
   },
   table: {
     products: [],

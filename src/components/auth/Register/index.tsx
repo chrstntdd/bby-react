@@ -27,43 +27,41 @@ const validate = formProps => {
 };
 
 export class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      registerInputs: [
-        {
-          name: 'firstName',
-          type: 'text',
-          label: 'First Name'
-        },
-        {
-          name: 'lastName',
-          type: 'text',
-          label: 'Last Name'
-        },
-        {
-          name: 'storeNumber',
-          type: 'number',
-          label: 'Store Number'
-        },
-        {
-          name: 'employeeNumber',
-          type: 'text',
-          label: 'Employee Number (eg: a1234567)'
-        },
-        {
-          name: 'password',
-          type: 'password',
-          label: 'Password'
-        },
-        {
-          name: 'confirmPassword',
-          type: 'password',
-          label: 'Confirm Password'
-        }
-      ]
-    };
-  }
+  state = {
+    registerInputs: [
+      {
+        name: 'firstName',
+        type: 'text',
+        label: 'First Name'
+      },
+      {
+        name: 'lastName',
+        type: 'text',
+        label: 'Last Name'
+      },
+      {
+        name: 'storeNumber',
+        type: 'number',
+        label: 'Store Number'
+      },
+      {
+        name: 'employeeNumber',
+        type: 'text',
+        label: 'Employee Number (eg: a1234567)'
+      },
+      {
+        name: 'password',
+        type: 'password',
+        label: 'Password'
+      },
+      {
+        name: 'confirmPassword',
+        type: 'password',
+        label: 'Confirm Password'
+      }
+    ]
+  };
+
   handleFormSubmit(formProps) {
     this.props.registerUser(formProps);
   }
@@ -110,7 +108,7 @@ const mapStateToProps = state => ({
   waiting: state.auth.waiting,
   errorMessage: state.auth.error,
   message: state.auth.message,
-  authenticated: state.auth.authenticated
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 const form = reduxForm({

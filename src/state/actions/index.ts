@@ -59,17 +59,16 @@ export const getProductDetails = (upc: UPC) => async (dispatch, getState) => {
      * resetting on the text input.
      */
     await timeout(100);
-    await dispatch({ type: INCREMENT_PRODUCT_QUANTITY, payload: upc.upc });
+    dispatch({ type: INCREMENT_PRODUCT_QUANTITY, payload: upc.upc });
   } else {
     // IF THE PRODUCT IS UNIQUE AND DOESN'T EXIST WITHIN THE ARRAY
     try {
-      let response;
-      response = await axios.post(`${API_URL}/best-buy/upc`, upc, {
+      const { data } = await axios.post(`${API_URL}/best-buy/upc`, upc, {
         headers: { Authorization: jwt }
       });
-      await dispatch({ type: POST_UPC, payload: response.data });
+      dispatch({ type: POST_UPC, payload: data });
     } catch (error) {
-      await dispatch({ type: INVALID_UPC });
+      dispatch({ type: INVALID_UPC });
 
       process.env.NODE_ENV !== 'test' &&
         window.alert(
@@ -79,11 +78,11 @@ export const getProductDetails = (upc: UPC) => async (dispatch, getState) => {
   }
 };
 
-export const decrementProductQuantity = upc => dispatch => {
+export const decrementProductQuantity = (upc: UPC) => dispatch => {
   dispatch({ type: DECREMENT_PRODUCT_QUANTITY, payload: upc });
 };
 
-export const removeItemFromTable = upc => dispatch => {
+export const removeItemFromTable = (upc: UPC) => dispatch => {
   dispatch({ type: REMOVE_PRODUCT_FROM_TABLE, payload: upc });
 };
 
@@ -107,10 +106,10 @@ export const shuffleTable = () => dispatch => {
 
 export const printTable = () => async dispatch => {
   try {
-    dispatch(hideActions()(dispatch));
+    hideActions()(dispatch);
     await timeout(100);
     window.print();
-    dispatch(showActions()(dispatch));
+    showActions()(dispatch);
   } catch (error) {
     console.log(error);
   }
@@ -169,7 +168,7 @@ export const loadTable = (user, jwt) => async dispatch => {
       headers: { Authorization: jwt }
     });
 
-    await dispatch({ type: LOAD_SAVED_TABLE, payload: response.data.products });
+    dispatch({ type: LOAD_SAVED_TABLE, payload: response.data.products });
   } catch (error) {
     // console.log(error);
   }

@@ -26,7 +26,7 @@ const INITIAL_STATE = {
   error: '',
   message: '',
   content: '',
-  authenticated: false,
+   isAuthenticated: false,
   waiting: false
 };
 
@@ -38,13 +38,13 @@ export default function(state = INITIAL_STATE, action) {
         content: '',
         error: '',
         message: '',
-        authenticated: true,
+         isAuthenticated: true,
         userProfile: action.payload.user,
         jwt: action.payload.jwt,
         waiting: false
       };
     case UNAUTH_USER:
-      return { ...state, authenticated: false, jwt: null, userProfile: null };
+      return { ...state,  isAuthenticated: false, jwt: null, userProfile: null };
     case NOT_VERIFIED_LOGIN_ERROR:
       return {
         ...state,

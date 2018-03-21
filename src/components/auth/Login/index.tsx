@@ -12,23 +12,21 @@ const form = reduxForm({
 });
 
 export class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loginInputs: [
-        {
-          name: 'employeeNumber',
-          type: 'text',
-          label: 'Employee Number'
-        },
-        {
-          name: 'password',
-          type: 'password',
-          label: 'Password'
-        }
-      ]
-    };
-  }
+  state = {
+    loginInputs: [
+      {
+        name: 'employeeNumber',
+        type: 'text',
+        label: 'Employee Number'
+      },
+      {
+        name: 'password',
+        type: 'password',
+        label: 'Password'
+      }
+    ]
+  };
+
   handleFormSubmit(formProps) {
     this.props.loginUser(formProps);
   }
@@ -74,8 +72,8 @@ export class Login extends React.Component {
         </div>
       </section>
     );
-    // IF AUTHENTICATED, REDIRECT TO DASHBOARD
-    return this.props.authenticated ? <Redirect to="/dashboard" /> : form;
+    // IF  isAuthenticated, REDIRECT TO DASHBOARD
+    return this.props.isAuthenticated ? <Redirect to="/dashboard" /> : form;
   }
 }
 
@@ -83,7 +81,7 @@ const mapStateToProps = state => ({
   waiting: state.auth.waiting,
   errorMessage: state.auth.error,
   message: state.auth.message,
-  authenticated: state.auth.authenticated
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 export default withRouter(connect(mapStateToProps, { loginUser })(form(Login)));

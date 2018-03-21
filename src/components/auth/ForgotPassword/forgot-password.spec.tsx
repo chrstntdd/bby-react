@@ -18,7 +18,7 @@ const setup = tableId => {
       error: '',
       message: '',
       content: '',
-      authenticated: false,
+       isAuthenticated: false,
       waiting: false
     }
   };

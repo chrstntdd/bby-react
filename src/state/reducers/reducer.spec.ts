@@ -8,7 +8,7 @@ const AUTH_INITIAL_STATE = {
   error: '',
   message: '',
   content: '',
-  authenticated: false,
+   isAuthenticated: false,
   waiting: false
 };
 
@@ -105,7 +105,7 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-      authenticated: true,
+       isAuthenticated: true,
       waiting: false
     });
   });
@@ -118,7 +118,7 @@ describe('auth reducer', () => {
           error: '',
           message: '',
           content: '',
-          authenticated: true
+           isAuthenticated: true
         },
         {
           type: types.UNAUTH_USER
@@ -130,7 +130,7 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-      authenticated: false
+       isAuthenticated: false
     });
   });
   it('should handle NOT_VERIFIED_LOGIN_ERROR', () => {
@@ -143,7 +143,7 @@ describe('auth reducer', () => {
           error: '',
           message: '',
           content: '',
-          authenticated: false
+           isAuthenticated: false
         },
         {
           type: types.NOT_VERIFIED_LOGIN_ERROR,
@@ -156,7 +156,7 @@ describe('auth reducer', () => {
       error: errorMessage,
       message: '',
       content: '',
-      authenticated: false,
+       isAuthenticated: false,
       waiting: false
     });
   });
@@ -170,7 +170,7 @@ describe('auth reducer', () => {
           error: '',
           message: '',
           content: '',
-          authenticated: false
+           isAuthenticated: false
         },
         {
           type: types.LOGIN_FAILURE,
@@ -183,7 +183,7 @@ describe('auth reducer', () => {
       error: errorMessage,
       message: '',
       content: '',
-      authenticated: false,
+       isAuthenticated: false,
       waiting: false
     });
   });
@@ -197,7 +197,7 @@ describe('auth reducer', () => {
           error: errorMessage,
           message: '',
           content: '',
-          authenticated: false
+           isAuthenticated: false
         },
         {
           type: types.CLEAR_FLASH_MESSAGE
@@ -209,7 +209,7 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-      authenticated: false,
+       isAuthenticated: false,
       waiting: false
     });
   });
@@ -222,7 +222,7 @@ describe('auth reducer', () => {
           error: '',
           message: '',
           content: '',
-          authenticated: false,
+           isAuthenticated: false,
           waiting: false
         },
         {
@@ -235,7 +235,7 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-      authenticated: false,
+       isAuthenticated: false,
       waiting: true
     });
   });
@@ -248,7 +248,7 @@ describe('auth reducer', () => {
           error: '',
           message: '',
           content: '',
-          authenticated: false,
+           isAuthenticated: false,
           waiting: false
         },
         {
@@ -261,7 +261,7 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-      authenticated: false,
+       isAuthenticated: false,
       waiting: true
     });
   });
@@ -275,7 +275,7 @@ describe('auth reducer', () => {
           error: '',
           message: '',
           content: '',
-          authenticated: false
+           isAuthenticated: false
         },
         {
           type: types.REGISTER_SUCCESS,
@@ -288,7 +288,7 @@ describe('auth reducer', () => {
       error: '',
       message: responseMessage,
       content: '',
-      authenticated: false,
+       isAuthenticated: false,
       waiting: false
     });
   });
@@ -302,7 +302,7 @@ describe('auth reducer', () => {
           error: '',
           message: '',
           content: '',
-          authenticated: false,
+           isAuthenticated: false,
           waiting: true
         },
         {
@@ -316,7 +316,7 @@ describe('auth reducer', () => {
       error: errorMessage,
       message: '',
       content: '',
-      authenticated: false,
+       isAuthenticated: false,
       waiting: false
     });
   });

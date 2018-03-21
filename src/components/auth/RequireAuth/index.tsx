@@ -1,26 +1,26 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+interface Props {
+  isAuthenticated: boolean;
+  history: any;
+  render: Function;
+}
 
 export default ComposedComponent => {
-  class Authentication extends React.Component {
+  class RequireAuth extends React.Component<Props> {
+    public static defaultProps: Partial<Props> = {
+      isAuthenticated: false
+    };
     componentWillMount() {
-      if (!this.props.authenticated) {
-        this.props.history.push('/sign-in');
-      }
-    }
-    componentWillUpdate(nextProps) {
-      if (!nextProps.authenticated) {
-        this.props.history.push('/sign-in');
-      }
+      !this.props.isAuthenticated && this.props.history.push('/sign-in');
     }
     render() {
-      const { match, location, history, router } = this.props;
       return <ComposedComponent {...this.props} />;
     }
   }
   const mapStateToProps = state => ({
-    authenticated: state.auth.authenticated
+    isAuthenticated: state.auth.isAuthenticated
   });
-  return withRouter(connect(mapStateToProps)(Authentication));
+  return withRouter(connect(mapStateToProps)(RequireAuth));
 };

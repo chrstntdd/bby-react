@@ -15,18 +15,16 @@ const form = reduxForm({
 });
 
 export class ForgotPassword extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputs: [
-        {
-          name: 'employeeNumber',
-          type: 'text',
-          label: 'Employee Number'
-        }
-      ]
-    };
-  }
+  state = {
+    inputs: [
+      {
+        name: 'employeeNumber',
+        type: 'text',
+        label: 'Employee Number'
+      }
+    ]
+  };
+
   handleFormSubmit(formProps) {
     this.props.getForgotPasswordToken(formProps);
   }
@@ -72,7 +70,7 @@ const mapStateToProps = state => ({
   waiting: state.auth.waiting,
   errorMessage: state.auth.error,
   message: state.auth.message,
-  authenticated: state.auth.authenticated
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 export default withRouter(
