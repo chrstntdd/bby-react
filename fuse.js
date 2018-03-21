@@ -43,11 +43,10 @@ context(
     build() {
       return FuseBox.init({
         homeDir: './src',
-        output: `${outDir}/static/$name.js`,
+        output: `${CLIENT_OUT}/$name.js`,
         sourceMaps: !this.isProduction,
         target: 'browser@es5',
         cache: true,
-        allowSyntheticDefaultImports: true,
         plugins: [
           [SassPlugin({ importer: true }), PostCSSPlugin(POSTCSS_PLUGINS), CSSPlugin()],
           SVGPlugin(),
@@ -73,11 +72,11 @@ context(
 task('dev-build', async context => {
   const fuse = context.build();
 
-  fuse.dev(server => {
+  fuse.dev({ root: false }, server => {
     const app = server.httpServer.app;
     app.use(express.static(CLIENT_OUT));
     app.get('*', (req, res) => {
-      res.sendFile(TEMPLATE);
+      res.sendFile(join(CLIENT_OUT, 'index.html'));
     });
   });
 
