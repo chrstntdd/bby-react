@@ -1,5 +1,5 @@
-import * as React from 'react';
-const _debounce = require('lodash.debounce');
+import React from 'react';
+import _debounce from 'lodash.debounce';
 
 const printIcon = '/images/printer.svg';
 const formatIcon = '/images/broom.svg';

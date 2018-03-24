@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import { withRouter } from 'react-router-dom';
@@ -26,7 +26,7 @@ const validate = formProps => {
   return errors;
 };
 
-export class Register extends React.Component {
+export class Register extends Component {
   state = {
     registerInputs: [
       {

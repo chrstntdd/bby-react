@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { shallow, mount } from 'enzyme';
-import * as configureStore from 'redux-mock-store';
+import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { MemoryRouter as Router } from 'react-router-dom';
@@ -33,7 +33,7 @@ const initialState = {
     error: '',
     message: '',
     content: '',
-     isAuthenticated: true
+    isAuthenticated: true
   },
   table: {
     products: [],

@@ -31,11 +31,14 @@
     "@types/react-router-dom": "^4.2.5",
     "autoprefixer": "^7.1.1",
     "axios-mock-adapter": "^1.14.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.1",
     "fuse-box": "^3.2.0-next.12",
     "jest": "^22.4.2",
+    "jest-cli": "^22.4.3",
     "jsdom": "^11.6.2",
     "node-sass": "^4.5.3",
     "postcss-flexibility": "^2.0.0",
@@ -54,12 +57,11 @@
     "test": "$(npm bin)/jest",
     "test-auto": "$(npm bin)/jest --watch"
   },
+  "babel": {
+    "presets": ["env"],
+    "plugins": ["transform-es2015-modules-commonjs"]
+  },
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "skipBabel": true
-      }
-    },
     "verbose": true,
     "collectCoverage": true,
     "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],

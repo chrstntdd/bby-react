@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { reduxForm } from 'redux-form';
@@ -33,7 +33,7 @@ const form = reduxForm({
   validate
 });
 
-export class ResetPassword extends React.Component {
+export class ResetPassword extends Component {
   state = {
     inputs: [
       {

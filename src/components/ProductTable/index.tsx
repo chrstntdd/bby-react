@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
@@ -6,7 +6,7 @@ import { decrementProductQuantity, removeItemFromTable, printTable } from '../..
 
 import './product-table.scss';
 
-export class ProductTable extends React.PureComponent {
+export class ProductTable extends PureComponent {
   removeItem(upc) {
     this.props.removeItemFromTable(upc);
   }

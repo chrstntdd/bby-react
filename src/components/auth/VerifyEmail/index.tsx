@@ -1,13 +1,13 @@
-import './verify_email.scss';
 import 'url-search-params-polyfill';
-
-import * as React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import { confirmEmail } from '../../../state/actions';
 
-export class VerifyEmail extends React.Component {
+import './verify_email.scss';
+
+export class VerifyEmail extends Component {
   componentDidMount() {
     const search = this.props.location.search;
     const params = new URLSearchParams(search);
@@ -30,8 +30,4 @@ export class VerifyEmail extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  //
-});
-
-export default withRouter(connect(mapStateToProps, { confirmEmail })(VerifyEmail));
+export default withRouter(connect(null, { confirmEmail })(VerifyEmail));

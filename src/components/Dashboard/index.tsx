@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
@@ -45,7 +45,7 @@ interface Props {
   userProfile?: IUserProfile;
 }
 
-export class Dashboard extends React.PureComponent<Props> {
+export class Dashboard extends PureComponent<Props> {
   public static defaultProps: Partial<Props> = {
     products: [],
     syncToDatabase: noop,

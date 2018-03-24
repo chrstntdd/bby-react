@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default ComposedComponent => {
-  class RequireAuth extends React.Component<Props> {
+  class RequireAuth extends Component<Props> {
     public static defaultProps: Partial<Props> = {
       isAuthenticated: false
     };

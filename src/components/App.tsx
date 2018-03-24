@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import LandingPage from './LandingPage';
@@ -12,7 +12,7 @@ import VerifyEmail from './auth/VerifyEmail';
 import Dashboard from './Dashboard';
 import NotFoundPage from './NotFound';
 
-export default class App extends React.Component {
+export default class App extends Component {
   render() {
     return (
       <main>

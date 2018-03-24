@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { SFC } from 'react';
 import './loading.scss';
 
 interface Props {
@@ -6,7 +6,7 @@ interface Props {
   message: string;
 }
 
-const LoadingIndicator: React.SFC<Props> = ({ waiting, message }) => (
+const LoadingIndicator: SFC<Props> = ({ waiting, message }) => (
   <div id="loading-container" className={waiting ? 'show' : 'hide'}>
     <span className="loader loader-circles" />
     <p>{message}</p>

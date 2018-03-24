@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { INVALID_UPC } from '../../state/actions/types';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
@@ -12,7 +12,7 @@ const form = reduxForm({
   form: 'postUPC'
 });
 
-export class SearchBar extends React.Component {
+export class SearchBar extends Component {
   handleChange = (e, props) => {
     const { getProductDetails, dispatch } = this.props;
     const inputValue = e.currentTarget.value;

@@ -1,7 +1,7 @@
 import * as axios from 'axios';
 import axiosMock from 'axios';
-import * as React from 'react';
-import * as configureStore from 'redux-mock-store';
+import React from 'react';
+import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import * as actions from './';
@@ -42,7 +42,7 @@ const initialState = {
     error: '',
     message: '',
     content: '',
-     isAuthenticated: true
+    isAuthenticated: true
   },
   form: {
     postUPC: {

@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../../state/actions';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 
-export class Logout extends React.Component {
+export class Logout extends Component {
   componentWillMount() {
     this.props.logoutUser();
   }

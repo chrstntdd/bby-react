@@ -1,6 +1,6 @@
 import { browserHistory } from 'react-router-dom';
 import axios from 'axios';
-import * as _find from 'lodash.find';
+import _find from 'lodash.find';
 
 import {
   CLEAR_FLASH_MESSAGE,

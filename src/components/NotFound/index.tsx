@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import './not-found.scss';
 import { Route } from 'react-router-dom';
 

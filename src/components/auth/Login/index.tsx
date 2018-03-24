@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Link, Redirect, withRouter } from 'react-router-dom';
@@ -11,7 +11,7 @@ const form = reduxForm({
   form: 'login'
 });
 
-export class Login extends React.Component {
+export class Login extends Component {
   state = {
     loginInputs: [
       {

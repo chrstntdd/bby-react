@@ -1,5 +1,5 @@
-import * as orderBy from 'lodash.orderby';
-import * as shuffle from 'lodash.shuffle';
+import orderBy from 'lodash.orderby';
+import shuffle from 'lodash.shuffle';
 import {
   POST_UPC,
   FORMAT_TABLE,
