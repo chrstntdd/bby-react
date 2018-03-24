@@ -52,7 +52,7 @@ context(
           SVGPlugin(),
           WebIndexPlugin({
             template: TEMPLATE,
-            title: 'Quantified | By Christian Todd',
+            title: this.isProduction ? 'Quantified | By Christian Todd' : 'DEV Quantified',
             path: '/'
           }),
           this.isProduction &&
@@ -130,7 +130,7 @@ task('purge', () => {
 task('copy-files', ['&copy-images', '&copy-redirect', 'copy-favicons']);
 
 /* MAIN BUILD TASK CHAINS  */
-task('dev', ['clean', 'dev-build', 'copy-images'], () => {
+task('dev', ['clean', 'dev-build', 'copy-files'], () => {
   info('GET TO WORK');
 });
 
