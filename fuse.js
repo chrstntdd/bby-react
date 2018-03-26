@@ -20,7 +20,7 @@ const express = require('express');
 const autoprefixer = require('autoprefixer');
 
 const POSTCSS_PLUGINS = [
-  require('postcss-flexibility'),
+  require('postcss-flexbugs-fixes'),
   tailwindcss('./config/tailwind.js'),
   autoprefixer({
     browsers: [
@@ -47,6 +47,7 @@ context(
         sourceMaps: !this.isProduction,
         target: 'browser@es5',
         cache: true,
+        allowSyntheticDefaultImports: true,
         plugins: [
           [SassPlugin({ importer: true }), PostCSSPlugin(POSTCSS_PLUGINS), CSSPlugin()],
           SVGPlugin(),

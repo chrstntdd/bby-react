@@ -14,7 +14,7 @@
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
-    "react-table": "^6.5.1",
+    "react-table": "^6.8.0",
     "redux": "^3.7.2",
     "redux-form": "7.0.0",
     "redux-persist": "^4.8.2",
@@ -29,7 +29,7 @@
     "@types/react-redux": "^5.0.15",
     "@types/react-router": "^4.0.23",
     "@types/react-router-dom": "^4.2.5",
-    "autoprefixer": "^7.1.1",
+    "autoprefixer": "^8.2.0",
     "axios-mock-adapter": "^1.14.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-preset-env": "^1.6.1",
@@ -40,8 +40,8 @@
     "jest": "^22.4.2",
     "jest-cli": "^22.4.3",
     "jsdom": "^11.6.2",
-    "node-sass": "^4.5.3",
-    "postcss-flexibility": "^2.0.0",
+    "node-sass": "^4.8.3",
+    "postcss-flexbugs-fixes": "^3.3.0",
     "purgecss": "^0.20.1",
     "react-router-test-context": "^0.1.0",
     "react-test-renderer": "^16.2.0",
@@ -58,16 +58,33 @@
     "test-auto": "$(npm bin)/jest --watch"
   },
   "babel": {
-    "presets": ["env"],
-    "plugins": ["transform-es2015-modules-commonjs"]
+    "presets": [
+      "env"
+    ],
+    "plugins": [
+      "transform-es2015-modules-commonjs"
+    ]
   },
   "jest": {
     "verbose": true,
     "collectCoverage": true,
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
-    "collectCoverageFrom": ["src/**/*.{js,ts,tsx,jsx}"],
-    "coverageReporters": ["lcov"],
-    "coveragePathIgnorePatterns": ["\\.d\\.ts$"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,ts,tsx,jsx}"
+    ],
+    "coverageReporters": [
+      "lcov"
+    ],
+    "coveragePathIgnorePatterns": [
+      "\\.d\\.ts$"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]",
       "\\.d\\.ts$",
@@ -79,14 +96,20 @@
       "^.+\\.scss$": "<rootDir>/config/mocks/styleMock.js",
       "^.+\\.(t|j)sx?$": "ts-jest"
     },
-    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-        "<rootDir>/config/mocks/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/config/mocks/fileMock.js",
       "^.+\\.(scss|css)$": "<rootDir>/config/mocks/styleMock.js"
     },
-    "setupFiles": ["<rootDir>/config/enzyme-setup.js", "<rootDir>/config/jsdom-setup.js"],
-    "snapshotSerializers": ["enzyme-to-json/serializer"],
+    "setupFiles": [
+      "<rootDir>/config/enzyme-setup.js",
+      "<rootDir>/config/jsdom-setup.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "testRegex": "\\.spec\\.(js|ts|jsx|tsx)$"
   }
 }
