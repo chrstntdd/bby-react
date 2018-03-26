@@ -21,7 +21,7 @@ const autoprefixer = require('autoprefixer');
 
 const POSTCSS_PLUGINS = [
   require('postcss-flexibility'),
-  tailwindcss('./tailwind.js'),
+  tailwindcss('./config/tailwind.js'),
   autoprefixer({
     browsers: [
       'Chrome >= 52',
