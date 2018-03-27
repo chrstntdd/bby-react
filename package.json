@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "Christian Todd <christiantodd27@icloud.com>",
-  "license": "LicenseRef-LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrstntdd/bby-react.git"
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "lodash.debounce": "^4.0.8",

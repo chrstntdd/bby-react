@@ -1,13 +1,9 @@
+.env
 .fusebox
-client/dist*
 .vscode
-bby-wireframe.xd
 .netlify
-coverage/
 
-# Node Modules
+coverage/
 node_modules/
 
-# dotenv environment variables file
-.env
-dist
+dist/
