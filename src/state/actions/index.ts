@@ -36,13 +36,12 @@ import {
 } from './types';
 
 let API_URL: string;
+
 process.env.NODE_ENV === 'production'
   ? (API_URL = 'https://aqueous-headland-43492.herokuapp.com/api/v1')
   : (API_URL = 'http://localhost:3000/api/v1');
 
-const CLIENT_ROOT_URL = 'http://localhost:4444';
-
-let timeout = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const timeout = (ms: number): Promise<any> => new Promise(resolve => setTimeout(resolve, ms));
 
 interface UPC {
   upc: string;
@@ -138,9 +137,7 @@ export const syncToDatabase = () => async (dispatch, getState) => {
       const response = await axios.put(
         `${API_URL}/users/${userId}/table`,
         { currentTableState: products },
-        {
-          headers: { Authorization: jwt }
-        }
+        { headers: { Authorization: jwt } }
       );
       dispatch({
         type: SYNC_TABLE_SUCCESS,
