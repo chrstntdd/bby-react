@@ -113,9 +113,21 @@ task('clean', () => src('./dist/*').clean('./dist/'));
 
 /* CUSTOM BUILD TASKS */
 task('purge', () => {
+  class TailwindExtractor {
+    static extract(content) {
+      return content.match(/[A-z0-9-:\/]+/g) || [];
+    }
+  }
+
   const purged = new Purgecss({
-    content: ['src/**/*.tsx', 'src/**/*.html'],
-    css: [`${CLIENT_OUT}/styles.css`]
+    content: ['dist/**/*.js', 'dist/**/*.html'],
+    css: [`${CLIENT_OUT}/styles.css`],
+    extractors: [
+      {
+        extractor: TailwindExtractor,
+        extensions: ['html', 'js']
+      }
+    ]
   });
 
   const [result] = purged.purge();
