@@ -120,7 +120,7 @@ POST
 * [Lock Icon](https://thenounproject.com/search/?q=Lock%20check&i=821171)
 * [Rocket Icon](https://thenounproject.com/search/?q=Rocket%20ship&i=658468)
 * [Shuffle Icon](https://thenounproject.com/search/?q=shuffle&i=1104277)
-* [Other Padlock Icon by by Gabriele Malaspina](https://thenounproject.com/search/?q=shield%20check%20mark&i=195234)
+* [Padlock Icon by by Gabriele Malaspina](https://thenounproject.com/search/?q=shield%20check%20mark&i=195234)
 
 ## Future Plans
 
