@@ -1,0 +1,29 @@
+@import '$homeDir/styles/colors.scss';
+
+.hero-img {
+  background-image: url('images/hero-bg-1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+}
+
+.lp-max-width {
+  max-width: 1024px;
+}
+
+.about-copy {
+  margin: 2rem auto;
+}
+
+.how-card-cont {
+  border-top: 0.4rem solid $BESTBUY_YELLOW;
+  height: 20rem;
+  width: 13rem;
+  background-color: hsl(200, 25%, 88%);
+  box-shadow: 0 16px 18px 0 rgba(0, 0, 0, 0.13), 0 4px 6px 0 rgba(0, 0, 0, 0.16);
+}
+
+.ofc {
+  object-fit: cover;
+}

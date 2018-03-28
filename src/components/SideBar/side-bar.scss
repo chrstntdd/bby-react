@@ -1,0 +1,55 @@
+@import '$homeDir/styles/colors.scss';
+
+#side-bar {
+  background-color: $DARK_GREY;
+  display: flex;
+  flex-direction: column;
+  .btn-container {
+    z-index: 100;
+    cursor: pointer !important;
+    margin-bottom: 20px;
+    border-left: 4px solid $BESTBUY_YELLOW;
+    transition-property: background, color, border;
+    transition-duration: 0.5s;
+    background: transparent;
+    &:hover {
+      transition-property: background, color, border;
+      color: white;
+      background: $BESTBUY_YELLOW;
+    }
+    button {
+      margin-bottom: 1rem;
+      background-color: transparent;
+      border: none;
+      height: 100px;
+      width: 100px;
+      margin: 0;
+      padding: 0;
+      img {
+        display: block;
+        margin: auto;
+        height: 75px;
+        width: 75px;
+      }
+    }
+    p {
+      margin: -15px 0 5px 0;
+      color: white;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    &:last-child {
+      // CLEAR BUTTON
+      button {
+        p {
+          margin-top: -16px;
+        }
+        img {
+          margin-top: 20px;
+          margin-bottom: 20px;
+          height: 50px;
+        }
+      }
+    }
+  }
+}

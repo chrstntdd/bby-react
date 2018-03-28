@@ -1,10 +1,8 @@
 const {
   FuseBox,
-  EnvPlugin,
   CSSPlugin,
   SVGPlugin,
   SassPlugin,
-  BabelPlugin,
   PostCSSPlugin,
   QuantumPlugin,
   WebIndexPlugin,
@@ -12,12 +10,18 @@ const {
   CSSResourcePlugin,
   Sparky
 } = require('fuse-box');
-const path = require('path');
+const Purgecss = require('purgecss');
+const { unlinkSync, writeFileSync } = require('fs');
+const { src, task, exec, context } = require('fuse-box/sparky');
+const { join } = require('path');
+const { info } = console;
+const tailwindcss = require('tailwindcss');
 const express = require('express');
 const autoprefixer = require('autoprefixer');
 
 const POSTCSS_PLUGINS = [
-  require('postcss-flexibility'),
+  require('postcss-flexbugs-fixes'),
+  tailwindcss('./config/tailwind.js'),
   autoprefixer({
     browsers: [
       'Chrome >= 52',
@@ -30,99 +34,119 @@ const POSTCSS_PLUGINS = [
   })
 ];
 
-let producer;
-let isProduction = false;
+const outDir = join(__dirname, '/dist');
+const CLIENT_OUT = join(__dirname, 'dist/static');
+const TEMPLATE = join(__dirname, 'src/public/index.html');
 
-Sparky.task('build', () => {
-  const fuse = FuseBox.init({
-    homeDir: './src',
-    output: './dist/static/$name.js',
-    log: true,
-    hash: isProduction,
-    sourceMaps: !isProduction,
-    target: 'browser@es5',
-    experimentalFeatures: true,
-    cache: !isProduction,
-    plugins: [
-      EnvPlugin({ NODE_ENV: isProduction ? 'production' : 'development' }),
-      [
-        SassPlugin({
-          outputStyle: 'compressed'
-        }),
-        PostCSSPlugin(POSTCSS_PLUGINS),
-        CSSResourcePlugin({
-          inline: true
-        }),
-        CSSPlugin({
-          group: 'bundle.css',
-          outFile: `./dist/static/bundle.css`
-        })
-      ],
-      SVGPlugin(),
-      BabelPlugin(),
-      WebIndexPlugin({
-        template: './src/index.html',
-        title: 'Quantified | By Christian Todd',
-        path: '/static/'
-      }),
-      isProduction &&
-        QuantumPlugin({
-          removeExportsInterop: false,
-          bakeApiIntoBundle: 'vendor',
-          uglify: true,
-          treeshake: true
-        })
-    ]
+context(
+  class {
+    build() {
+      return FuseBox.init({
+        homeDir: './src',
+        output: `${CLIENT_OUT}/$name.js`,
+        sourceMaps: !this.isProduction,
+        target: 'browser@es5',
+        cache: true,
+        allowSyntheticDefaultImports: true,
+        plugins: [
+          [SassPlugin({ importer: true }), PostCSSPlugin(POSTCSS_PLUGINS), CSSPlugin()],
+          SVGPlugin(),
+          WebIndexPlugin({
+            template: TEMPLATE,
+            title: this.isProduction ? 'Quantified | By Christian Todd' : 'DEV Quantified',
+            path: '/'
+          }),
+          this.isProduction &&
+            QuantumPlugin({
+              bakeApiIntoBundle: 'app',
+              uglify: true,
+              treeshake: true,
+              polyfills: ['Promise'],
+              css: true
+            })
+        ]
+      });
+    }
+  }
+);
+
+task('dev-build', async context => {
+  const fuse = context.build();
+
+  fuse.dev({ root: false }, server => {
+    const app = server.httpServer.app;
+    app.use(express.static(CLIENT_OUT));
+    app.get('*', (req, res) => {
+      res.sendFile(join(CLIENT_OUT, 'index.html'));
+    });
   });
 
-  // IF NOT IN PRODUCTION
-  // CONFIG DEV SERVER
+  fuse
+    .bundle('app')
+    .hmr({ reload: true })
+    .watch()
+    .instructions('> index.tsx');
 
-  if (isProduction === false) {
-    fuse.dev({ root: false }, server => {
-      const dist = path.join(__dirname, './dist');
-      const app = server.httpServer.app;
-      app.use('/static/', express.static(path.join(dist, 'static')));
-      app.get('*', (req, res) => {
-        res.sendFile(path.join(dist, 'static/index.html'));
-      });
-    });
-  }
-  // EXTRACT VENDOR DEPENDENCIES
-  const vendor = fuse.bundle('vendor').instructions('~ index.js');
-  if (!isProduction) {
-    vendor.watch();
-  }
+  await fuse.run();
+});
 
-  // MAIN BUNDLE
-  const app = fuse.bundle('app').instructions('!> [index.js]');
-  if (!isProduction) {
-    app.watch();
-  }
+task('prod-build', async context => {
+  context.isProduction = true;
 
-  return fuse.run();
+  const fuse = context.build();
+
+  fuse.bundle('app').instructions('!> index.tsx');
+
+  await fuse.run();
 });
 
 // COPY FILES TO BUILD FOLDER
-Sparky.task('copy-redirect', () =>
-  Sparky.src('./netlify/**', { base: './config' }).dest('./dist')
-);
-Sparky.task('copy-favicons', () =>
-  Sparky.src('./favicons/**', { base: './config' }).dest('./dist/static')
+task('copy-redirect', () => src('./**', { base: './config/netlify' }).dest('./dist'));
+
+task('copy-favicons', () => src('./favicons/**', { base: './config' }).dest('./dist/static'));
+
+task('copy-images', () =>
+  src('./**', { base: './src/public/images' }).dest('./dist/static/images')
 );
 
-// YARN START
-Sparky.task('default', ['clean', 'build'], () => {});
+task('clean', () => src('./dist/*').clean('./dist/'));
 
-// YARN DIST
-Sparky.task(
-  'dist',
-  ['clean', 'set-production-env', 'build', 'copy-redirect', 'copy-favicons'],
-  () => {
-    console.log('READY FOR PROD');
+/* CUSTOM BUILD TASKS */
+task('purge', () => {
+  class TailwindExtractor {
+    static extract(content) {
+      return content.match(/[A-z0-9-:\/]+/g) || [];
+    }
   }
-);
 
-// TASKS FOR BUILD
-Sparky.task('clean', () => Sparky.src('./dist/*').clean('./dist/'));
-Sparky.task('set-production-env', () => (isProduction = true));
+  const purged = new Purgecss({
+    content: ['dist/**/*.js', 'dist/**/*.html'],
+    css: [`${CLIENT_OUT}/styles.css`],
+    extractors: [
+      {
+        extractor: TailwindExtractor,
+        extensions: ['html', 'js']
+      }
+    ]
+  });
+
+  const [result] = purged.purge();
+
+  unlinkSync(`${CLIENT_OUT}/styles.css`);
+
+  writeFileSync(result.file, result.css, 'UTF-8');
+
+  info('💎  THE CSS HAS BEEN PURGED 💎');
+});
+
+/* PARALLEL EXECUTING BUILD TASKS */
+task('copy-files', ['&copy-images', '&copy-redirect', 'copy-favicons']);
+
+/* MAIN BUILD TASK CHAINS  */
+task('dev', ['clean', 'dev-build', 'copy-files'], () => {
+  info('GET TO WORK');
+});
+
+task('prod', ['clean', 'prod-build', 'copy-files', 'purge'], () => {
+  info('READY FOR PROD');
+});

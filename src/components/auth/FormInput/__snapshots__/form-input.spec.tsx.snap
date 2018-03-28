@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FormInput/> should render without crashing 1`] = `
+<Field
+  component={[Function]}
+  label="Employee Number"
+  name="employeeNumber"
+  type="text"
+  validate={[Function]}
+/>
+`;

@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DUMB <SideBar/> should render without crashing 1`] = `
+<aside
+  id="side-bar"
+>
+  <div
+    className="btn-container"
+  >
+    <button
+      id="saveButton"
+      onClick={[Function]}
+    >
+      <img
+        alt="Save Table"
+        src="/images/database.svg"
+      />
+      <p>
+        Save
+      </p>
+    </button>
+  </div>
+  <div
+    className="btn-container"
+  >
+    <button
+      id="formatButton"
+      onClick={[Function]}
+    >
+      <img
+        alt="Format Table"
+        src="/images/broom.svg"
+      />
+      <p>
+        Format
+      </p>
+    </button>
+  </div>
+  <div
+    className="btn-container"
+  >
+    <button
+      id="printButton"
+      onClick={[Function]}
+    >
+      <img
+        alt="Print Table"
+        src="/images/printer.svg"
+      />
+      <p>
+        Print
+      </p>
+    </button>
+  </div>
+  <div
+    className="btn-container"
+  >
+    <button
+      disabled={false}
+      id="clearTableButton"
+      onClick={[Function]}
+    >
+      <img
+        alt="Clear Table"
+        id="clear-icon"
+        src="/images/x.svg"
+      />
+      <p>
+        Clear
+      </p>
+    </button>
+  </div>
+</aside>
+`;

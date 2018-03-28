@@ -1,0 +1,97 @@
+@import './colors.scss';
+@import './rwd-helpers.scss';
+
+// - - - - - - - - - - - - - - - - - - - - - - - - -
+// GLOBALS //
+// - - - - - - - - - - - - - - - - - - - - - - - - -
+html * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font: 15px/1.8 -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+body {
+  background-color: $DARK_GREY;
+  overflow-x: hidden;
+}
+
+/**
+ * This injects Tailwind's base styles, which is a combination of
+ * Normalize.css and some additional base styles.
+ *
+ * You can see the styles here:
+ * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
+ *
+ * If using `postcss-import`, you should import this line from it's own file:
+ *
+ * @import "./tailwind-preflight.css";
+ *
+ * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
+ */
+
+@tailwind preflight;
+/**
+   * Here you would add any of your custom component classes; stuff that you'd
+   * want loaded *before* the utilities so that the utilities could still
+   * override them.
+   *
+   * Example:
+   *
+   * .btn { ... }
+   * .form-input { ... }
+   *
+   * Or if using a preprocessor or `postcss-import`:
+   *
+   * @import "components/buttons";
+   * @import "components/forms";
+   */
+
+/**
+   * This injects all of Tailwind's utility classes, generated based on your
+   * config file.
+   *
+   * If using `postcss-import`, you should import this line from it's own file:
+   *
+   * @import "./tailwind-utilities.css";
+   *
+   * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
+   */
+
+@tailwind utilities;
+/**
+   * Here you would add any custom utilities you need that don't come out of the
+   * box with Tailwind.
+   *
+   * Example :
+   *
+   * .bg-pattern-graph-paper { ... }
+   * .skew-45 { ... }
+   *
+   * Or if using a preprocessor or `postcss-import`:
+   *
+   * @import "utilities/background-patterns";
+   * @import "utilities/skew-transforms";
+   */
+
+.trans-300ms-all {
+  transition: 300ms ease-in-out all;
+}
+
+.kinda-center {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+}
