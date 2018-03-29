@@ -1,4 +1,8 @@
-import './styles/index.scss';
+import 'core-js/es6/map';
+import 'core-js/es6/set';
+import 'core-js/es6/object';
+import 'core-js/es6/array';
+import 'core-js/es6/number';
 
 import React from 'react';
 import { render } from 'react-dom';
@@ -10,6 +14,8 @@ import reduxThunk from 'redux-thunk';
 
 import App from './components/App';
 import reducers from './state/reducers/index';
+
+import './styles/index.scss';
 
 // ADD IN REDUX DEBUGGER
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

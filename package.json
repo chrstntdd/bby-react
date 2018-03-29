@@ -37,6 +37,7 @@
     "axios-mock-adapter": "^1.14.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "core-js": "^2.5.4",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
@@ -60,7 +61,8 @@
     "prod": "node fuse prod",
     "test": "$(npm bin)/jest",
     "test-auto": "$(npm bin)/jest --watch",
-    "prod-test": "NODE_ENV=prod-test npm run prod && node config/mock-server.js"
+    "prod-test": "NODE_ENV=prod-test npm run prod && node config/mock-server.js",
+    "win:prod-test": "set NODE_ENV=prod-test && npm run prod && node config/mock-server.js"
   },
   "babel": {
     "presets": [
