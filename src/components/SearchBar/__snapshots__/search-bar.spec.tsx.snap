@@ -11,22 +11,15 @@ exports[`DUMB <SearchBar/> should render without crashing 1`] = `
       Last saved at: 
     </p>
   </div>
-  <form>
-    <div
-      className="input-group"
-    >
-      <Field
-        autoComplete="false"
-        autoFocus="true"
-        component="input"
-        id="upcInput"
-        name="upc"
-        onChange={[Function]}
-        placeholder="UPC"
-        type="number"
-      />
-    </div>
-  </form>
+  <input
+    id="upcInput"
+    maxLength={12}
+    name="upc"
+    onChange={[Function]}
+    pattern="\\\\d"
+    placeholder="upc"
+    value=""
+  />
   <div
     id="last-item-scanned"
   >

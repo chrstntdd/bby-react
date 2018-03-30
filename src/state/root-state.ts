@@ -11,11 +11,17 @@ import {
   RESET_PASSWORD_FAILURE,
   FORGOT_PASSWORD_SUCCESS,
   FORGOT_PASSWORD_FAILURE
-} from '../actions/types';
-import { authReducer } from './auth-reducer';
-import { tableStateReducer } from './bby-reducer';
+} from './actions/types';
 
-const rootReducer = combineReducers({
+import { authReducer, AuthState } from './reducers/auth-reducer';
+import { tableStateReducer, TableState } from './reducers/bby-reducer';
+
+export interface RootState {
+  auth: AuthState;
+  table: TableState;
+}
+
+export const rootReducer = combineReducers<RootState>({
   auth: authReducer,
   /* NO MORE FORM DATA IN REDUX. PLEASE!!!! */
   form: formReducer.plugin({
@@ -59,5 +65,3 @@ const rootReducer = combineReducers({
   }),
   table: tableStateReducer
 });
-
-export default rootReducer;

@@ -55,12 +55,17 @@ const setup = tableId => {
 
 describe('DUMB <SearchBar/>', () => {
   it('should render without crashing', () => {
+    const cdm = SearchBar.prototype.componentDidMount;
+    SearchBar.prototype.componentDidMount = jest.fn();
+
     const props = {
       lastItemScanned: '123456789632'
     };
     const wrapper = shallow(<SearchBar {...props} />);
 
     expect(wrapper).toMatchSnapshot();
+
+    SearchBar.prototype.componentDidMount = cdm;
   });
 });
 

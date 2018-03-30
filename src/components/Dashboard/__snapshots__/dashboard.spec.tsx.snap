@@ -24,7 +24,7 @@ exports[`<Dashboard/> render method should render the dashboard 1`] = `
     <section
       id="main-table-area"
     >
-      <withRouter(Connect(ReduxForm)) />
+      <Connect(SearchBar) />
       <withRouter(Connect(ProductTable)) />
     </section>
   </div>

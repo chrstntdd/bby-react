@@ -418,28 +418,6 @@ describe('table actions', () => {
       done();
     });
 
-    it('should get back an INVALID_UPC response from an invalid upc', done => {
-      axiosMock.post = jest.fn();
-      axiosMock.post.mockImplementationOnce(() => Promise.resolve(mockProduct));
-
-      const store = mockStore(initialState);
-
-      try {
-        setImmediate(() => {
-          store.dispatch(actions.getProductDetails({ upc: 'abc' }));
-          const expectedActions = store.getActions();
-
-          expect(expectedActions.length).toEqual(1);
-          expect(expectedActions).toContainEqual({
-            type: types.INVALID_UPC
-          });
-        });
-      } catch (error) {
-        done.fail(error);
-      }
-      done();
-    });
-
     it("should dispatch an INCREMENT_PRODUCT_QUANTITY when the upc isn't unique to state.table.products", done => {
       const store = mockStore({
         auth: {

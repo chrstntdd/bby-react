@@ -18,7 +18,31 @@ import {
   SHUFFLE_TABLE
 } from '../actions/types';
 
-const INITIAL_STATE = {
+export interface IProduct {
+  classId: number;
+  department: string;
+  departmentId: number;
+  modelNumber: string;
+  name: string;
+  quantity: number;
+  sku: number;
+  totalValue: number;
+  upc: 'string';
+  value: number;
+}
+
+export type TableState = {
+  readonly products: IProduct[];
+  readonly formatted: boolean;
+  readonly printing: boolean;
+  readonly tableId: string;
+  readonly showModal: boolean;
+  readonly selectOptionData: null;
+  readonly lastTimeSaved: string;
+  readonly lastItemScanned: string;
+};
+
+export const initialState: TableState = {
   products: [],
   formatted: false,
   printing: false,
@@ -29,9 +53,11 @@ const INITIAL_STATE = {
   lastItemScanned: ''
 };
 
-export default function(state = INITIAL_STATE, action) {
+export const tableStateReducer = (state: TableState = initialState, action): TableState => {
   switch (action.type) {
     /* hack to ensure redux persist doesn't load in a previous session */
+
+    /* SO WRITE YOUR OWN REDUX PERSIST THAT DONT BREAK IT */
     case LOGIN_SUCCESS: {
       return {
         ...state,
@@ -42,15 +68,16 @@ export default function(state = INITIAL_STATE, action) {
       };
     }
     case POST_UPC:
-      /* Adds a new product to the top of the array.
+      /* Adds a new IProduct to the top of the array.
        * Also flips 'formatted' to false
        */
-      return Object.assign({}, state, {
+      return {
         ...state,
         formatted: false,
         products: [action.payload, ...state.products],
         lastItemScanned: action.payload.upc
-      });
+      };
+
     case INCREMENT_PRODUCT_QUANTITY:
       // INCREMENT QUANTITY AND CALCULATE NEW VALUE BASED ON UPDATED QTY
       return {
@@ -151,4 +178,4 @@ export default function(state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};

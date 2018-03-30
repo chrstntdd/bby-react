@@ -1,6 +1,4 @@
-import { browserHistory } from 'react-router-dom';
 import axios from 'axios';
-import _find from 'lodash.find';
 
 import {
   CLEAR_FLASH_MESSAGE,
@@ -12,7 +10,6 @@ import {
   FORMAT_TABLE,
   HIDE_ACTIONS,
   INCREMENT_PRODUCT_QUANTITY,
-  INVALID_UPC,
   LOAD_SAVED_TABLE,
   LOGIN_FAILURE,
   LOGIN_REQUEST,
@@ -32,8 +29,11 @@ import {
   SYNC_TABLE_REQUEST,
   SYNC_TABLE_SUCCESS,
   TOGGLE_LOAD_TABLE_MODAL,
-  UNAUTH_USER
+  UNAUTH_USER,
+  UPC
 } from './types';
+
+import { timeout } from '../../util';
 
 let API_URL: string;
 
@@ -41,33 +41,21 @@ process.env.NODE_ENV === 'production'
   ? (API_URL = 'https://aqueous-headland-43492.herokuapp.com/api/v1')
   : (API_URL = 'http://localhost:3000/api/v1');
 
-const timeout = (ms: number): Promise<any> => new Promise(resolve => setTimeout(resolve, ms));
-
-interface UPC {
-  upc: string;
-}
-
 export const getProductDetails = (upc: UPC) => async (dispatch, getState) => {
   const state = getState();
   const jwt = state.auth.jwt;
-  const products = state.table.products;
-  if (_find(products, upc) !== undefined) {
-    /* If the product upc is already in the table state, increment the quantity.
-     * Dispatch is wrapped in a timeout to that ensures the proper timing of the
-     * resetting on the text input.
-     */
-    await timeout(100);
+  const upcMatches = state.table.products.filter(p => p.upc === upc.upc);
+
+  if (upcMatches.length > 0) {
     dispatch({ type: INCREMENT_PRODUCT_QUANTITY, payload: upc.upc });
   } else {
-    // IF THE PRODUCT IS UNIQUE AND DOESN'T EXIST WITHIN THE ARRAY
     try {
       const { data } = await axios.post(`${API_URL}/best-buy/upc`, upc, {
         headers: { Authorization: jwt }
       });
+
       dispatch({ type: POST_UPC, payload: data });
     } catch (error) {
-      dispatch({ type: INVALID_UPC });
-
       process.env.NODE_ENV !== 'test' &&
         window.alert(
           "Looks like you didn't scan the right bar code. Please make sure you scan the UPC label"

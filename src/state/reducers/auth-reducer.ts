@@ -19,7 +19,26 @@ import {
   SYNC_TABLE_FAILURE
 } from '../actions/types';
 
-const INITIAL_STATE = {
+export interface IUserProfile {
+  email: string;
+  firstName: string;
+  lastName: string;
+  id: string;
+  isVerified: boolean;
+  role: string;
+}
+
+export type AuthState = {
+  readonly userProfile: IUserProfile;
+  readonly jwt: string;
+  readonly error: string;
+  readonly message: string;
+  readonly content: string;
+  readonly isAuthenticated: boolean;
+  readonly waiting: boolean;
+};
+
+export const initialState: AuthState = {
   userProfile: null,
   jwt: null,
   error: '',
@@ -29,7 +48,7 @@ const INITIAL_STATE = {
   waiting: false
 };
 
-export default function(state = INITIAL_STATE, action) {
+export const authReducer = (state: AuthState = initialState, action): AuthState => {
   switch (action.type) {
     case LOGIN_SUCCESS:
       return {
@@ -94,4 +113,4 @@ export default function(state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};

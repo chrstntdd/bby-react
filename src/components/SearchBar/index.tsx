@@ -1,35 +1,54 @@
-import React, { Component } from 'react';
-import { INVALID_UPC } from '../../state/actions/types';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
-import { withRouter } from 'react-router-dom';
+
+import { UPC } from '../../state/actions/types';
+import { timeout } from '../../util';
 import { getProductDetails } from '../../state/actions';
 import LoadingIndicator from '../auth/Loading';
 
 import './search-bar.scss';
 
-const form = reduxForm({
-  form: 'postUPC'
-});
+interface PSearchBar {
+  getProductDetails: (a: UPC) => any;
+  waiting: boolean;
+  lastItemScanned: string;
+  lastTimeSaved: string;
+}
+interface SSearchBar {
+  upcInputValue: string;
+}
 
-export class SearchBar extends Component {
-  handleChange = (e, props) => {
-    const { getProductDetails, dispatch } = this.props;
+export class SearchBar extends PureComponent<PSearchBar, SSearchBar> {
+  state = {
+    upcInputValue: ''
+  };
+
+  upcInput: HTMLInputElement;
+
+  componentDidMount() {
+    this.upcInput.focus();
+  }
+
+  handleChange = async e => {
     const inputValue = e.currentTarget.value;
 
+    this.setState({ upcInputValue: inputValue });
+
     if (!isNaN(Number(inputValue)) && inputValue.length === 12) {
-      /* If the UPC is valid */
-      getProductDetails({ upc: inputValue.toString() });
+      this.props.getProductDetails({ upc: inputValue.toString() });
+
+      await timeout(100);
+
+      this.setState({ upcInputValue: '' });
     } else if (isNaN(Number(inputValue))) {
       /* If the input is not a number  */
-      console.log(inputValue);
-      setTimeout(() => dispatch({ type: INVALID_UPC }), 10);
       alert(`Looks like you didn't quite scan the UPC. Try again please.`);
+      this.setState({ upcInputValue: '' });
     }
   };
 
   render() {
-    const { handleSubmit, waiting, lastTimeSaved, lastItemScanned } = this.props;
+    const { waiting, lastTimeSaved, lastItemScanned } = this.props;
 
     return (
       <section id="search-section">
@@ -40,20 +59,18 @@ export class SearchBar extends Component {
             <p>Last saved at: {lastTimeSaved}</p>
           )}
         </div>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <Field
-              id="upcInput"
-              onChange={e => this.handleChange(e)}
-              autoComplete="false"
-              autoFocus="true"
-              name="upc"
-              component="input"
-              placeholder="UPC"
-              type="number"
-            />
-          </div>
-        </form>
+        <input
+          id="upcInput"
+          pattern="\d"
+          maxLength={12}
+          name="upc"
+          placeholder="upc"
+          value={this.state.upcInputValue}
+          ref={input => {
+            this.upcInput = input;
+          }}
+          onChange={e => this.handleChange(e)}
+        />
         <div id="last-item-scanned">
           <p>Last item scanned</p>
           <p className="upc">UPC: {lastItemScanned}</p>
@@ -64,15 +81,11 @@ export class SearchBar extends Component {
 }
 
 const mapStateToProps = state => ({
-  products: state.table.products,
-  tableId: state.table.tableId,
   lastTimeSaved: state.table.lastTimeSaved,
   lastItemScanned: state.table.lastItemScanned,
   waiting: state.auth.waiting
 });
 
-export default withRouter(
-  connect(mapStateToProps, {
-    getProductDetails
-  })(form(SearchBar))
-);
+export default connect(mapStateToProps, {
+  getProductDetails
+})(SearchBar);
