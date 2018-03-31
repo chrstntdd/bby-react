@@ -67,6 +67,7 @@ export const tableStateReducer = (state: TableState = initialState, action): Tab
         products: []
       };
     }
+
     case POST_UPC:
       /* Adds a new IProduct to the top of the array.
        * Also flips 'formatted' to false
@@ -94,6 +95,7 @@ export const tableStateReducer = (state: TableState = initialState, action): Tab
         ),
         lastItemScanned: action.payload
       };
+
     case DECREMENT_PRODUCT_QUANTITY:
       return {
         ...state,
@@ -113,6 +115,7 @@ export const tableStateReducer = (state: TableState = initialState, action): Tab
         ...state,
         products: state.products.filter(product => product.upc !== action.payload)
       };
+
     case FORMAT_TABLE:
       return {
         ...state,
@@ -130,51 +133,52 @@ export const tableStateReducer = (state: TableState = initialState, action): Tab
         products: shuffle(state.products),
         formatted: false
       };
+
     case SHOW_ACTIONS:
       return {
         ...state,
         printing: false
       };
+
     case HIDE_ACTIONS:
       return {
         ...state,
         printing: true
       };
+
     case CLEAR_TABLE:
       return {
         ...state,
         products: []
       };
+
     case SYNC_TABLE_SUCCESS:
       return {
         ...state,
         lastTimeSaved: action.payload
       };
+
     case LOAD_SAVED_TABLE:
       return {
         ...state,
         products: action.payload
       };
+
     case TOGGLE_LOAD_TABLE_MODAL:
       return {
         ...state,
         showModal: !state.showModal
       };
+
     case GET_USER_TABLE_DATA_SUCCESS:
       return {
         ...state,
         selectOptionData: action.payload
       };
+
     case UNAUTH_USER:
-      return {
-        ...state,
-        products: [],
-        formatted: false,
-        printing: false,
-        tableId: '',
-        showModal: false,
-        selectOptionData: null
-      };
+      return initialState;
+
     default:
       return state;
   }

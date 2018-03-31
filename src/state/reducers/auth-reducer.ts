@@ -61,20 +61,15 @@ export const authReducer = (state: AuthState = initialState, action): AuthState 
         jwt: action.payload.jwt,
         waiting: false
       };
-    case UNAUTH_USER:
-      return { ...state, isAuthenticated: false, jwt: null, userProfile: null };
+
     case NOT_VERIFIED_LOGIN_ERROR:
-      return {
-        ...state,
-        error: action.payload,
-        waiting: false
-      };
     case LOGIN_FAILURE:
       return {
         ...state,
         error: action.payload,
         waiting: false
       };
+
     case CLEAR_FLASH_MESSAGE: {
       return {
         ...state,
@@ -84,32 +79,33 @@ export const authReducer = (state: AuthState = initialState, action): AuthState 
         waiting: false
       };
     }
+    case SYNC_TABLE_REQUEST:
+    case LOGIN_REQUEST:
+    case REGISTER_REQUEST:
     case FORGOT_PASSWORD_REQUEST:
-      return { ...state, waiting: true };
-    case FORGOT_PASSWORD_SUCCESS:
-      return { ...state, message: action.payload, waiting: false };
-    case FORGOT_PASSWORD_FAILURE:
-      return { ...state, error: action.payload, waiting: false };
     case RESET_PASSWORD_REQUEST:
       return { ...state, waiting: true };
+
+    case FORGOT_PASSWORD_SUCCESS:
     case RESET_PASSWORD_SUCCESS:
-      return { ...state, message: action.payload, waiting: false };
-    case RESET_PASSWORD_FAILURE:
-      return { ...state, error: action.payload, waiting: false };
     case REGISTER_SUCCESS:
       return { ...state, message: action.payload, waiting: false };
+
+    case FORGOT_PASSWORD_FAILURE:
+    case RESET_PASSWORD_FAILURE:
     case REGISTER_FAILURE:
       return { ...state, error: action.payload, waiting: false };
+
     case SYNC_TABLE_SUCCESS:
     case SYNC_TABLE_FAILURE:
       return {
         ...state,
         waiting: false
       };
-    case SYNC_TABLE_REQUEST:
-    case LOGIN_REQUEST:
-    case REGISTER_REQUEST:
-      return { ...state, waiting: true };
+
+    case UNAUTH_USER:
+      return initialState;
+
     default:
       return state;
   }
