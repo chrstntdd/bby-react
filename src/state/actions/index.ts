@@ -162,74 +162,27 @@ export const toggleShowTableModal = () => dispatch => {
   dispatch({ type: TOGGLE_LOAD_TABLE_MODAL });
 };
 
-/* takes in props from login form */
-export const loginUser = ({ employeeNumber, password }) => async dispatch => {
-  try {
-    dispatch({ type: LOGIN_REQUEST });
+export const loginUser = (employeeNumber: string, password: string) => async dispatch => {
+  dispatch({ type: LOGIN_REQUEST });
+  dispatch({ type: CLEAR_FLASH_MESSAGE });
 
+  try {
     const response = await axios.post(`${API_URL}/users/sign-in`, {
-      email: `${employeeNumber.trim()}@bestbuy.com`,
-      password: password.trim()
+      email: `${employeeNumber}@bestbuy.com`,
+      password
     });
 
-    const { user, jwt } = response.data;
+    if (response.status === 200) {
+      const { user, jwt } = response.data;
 
-    dispatch({ type: LOGIN_SUCCESS, payload: { user, jwt } });
-    dispatch(loadTable(user, jwt));
-  } catch (err) {
-    let errorResponse = Object.keys(err.response.data)[0];
+      dispatch({ type: LOGIN_SUCCESS, payload: { user, jwt } });
 
-    switch (errorResponse) {
-      case 'validationErrors':
-        const validationErrors = [];
-        err.response.data.validationErrors.forEach(error => {
-          validationErrors.push(error.msg);
-        });
-        dispatch({ type: LOGIN_FAILURE, payload: validationErrors });
-        await timeout(8000);
-        dispatch({ type: CLEAR_FLASH_MESSAGE });
-
-        break;
-
-      case 'emailMessage':
-        dispatch({
-          type: LOGIN_FAILURE,
-          payload: err.response.data.emailMessage
-        });
-        await timeout(8000);
-        dispatch({ type: CLEAR_FLASH_MESSAGE });
-
-        break;
-
-      case 'verifyMessage':
-        dispatch({
-          type: NOT_VERIFIED_LOGIN_ERROR,
-          payload: err.response.data.verifyMessage
-        });
-        await timeout(8000);
-        dispatch({ type: CLEAR_FLASH_MESSAGE });
-
-        break;
-
-      case 'passwordMessage':
-        dispatch({
-          type: LOGIN_FAILURE,
-          payload: err.response.data.passwordMessage
-        });
-        await timeout(8000);
-        dispatch({ type: CLEAR_FLASH_MESSAGE });
-        break;
-
-      default:
-        dispatch({
-          type: LOGIN_FAILURE,
-          payload: 'An unknown error occurred.'
-        });
-        await timeout(8000);
-        dispatch({ type: CLEAR_FLASH_MESSAGE });
-
-        break;
+      loadTable(user, jwt)(dispatch);
     }
+  } catch (err) {
+    dispatch({ type: LOGIN_FAILURE, payload: err.response.data.message });
+    await timeout(8000);
+    dispatch({ type: CLEAR_FLASH_MESSAGE });
   }
 };
 

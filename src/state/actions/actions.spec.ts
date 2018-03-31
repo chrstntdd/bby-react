@@ -88,36 +88,46 @@ const API_URL = 'http://localhost:3000/api/v1';
 
 describe('auth actions', () => {
   describe('loginUser', () => {
-    it('should dispatch LOGIN_REQUEST and LOGIN_SUCCESS', async () => {
-      const mock = new MockAdapter(axios);
+    it('should dispatch LOGIN_REQUEST and LOGIN_SUCCESS', async done => {
+      axiosMock.post = jest.fn();
+      axiosMock.post.mockImplementationOnce(() =>
+        Promise.resolve({
+          response: {
+            status: 201,
+            data: {
+              jwt: 'stub',
+              user: 'yeh'
+            }
+          }
+        })
+      );
+
       const employeeNumber = 'a1075394';
       const password = 'dummy';
 
-      mock
-        .onPost(`${API_URL}/users/sign-in`, {
-          email: `${employeeNumber.trim()}@bestbuy.com`,
-          password
-        })
-        .reply(200, {
-          jwt: 'stub',
-          user: 'yeh'
-        });
-
       const store = mockStore(initialState);
-      await store.dispatch(actions.loginUser({ employeeNumber, password }));
-      const response = store.getActions();
+      try {
+        setImmediate(() => {
+          //MOCK SOME THANGS
+          store.dispatch(actions.loginUser(employeeNumber, password));
+          const response = store.getActions();
 
-      expect(response.length).toEqual(2);
-      expect(response).toEqual([
-        { type: types.LOGIN_REQUEST },
-        {
-          type: types.LOGIN_SUCCESS,
-          payload: {
-            jwt: 'stub',
-            user: 'yeh'
-          }
-        }
-      ]);
+          expect(response.length).toEqual(2);
+          expect(response).toEqual([
+            { type: types.LOGIN_REQUEST },
+            {
+              type: types.LOGIN_SUCCESS,
+              payload: {
+                jwt: 'stub',
+                user: 'yeh'
+              }
+            }
+          ]);
+        });
+      } catch (error) {
+        done.fail(error);
+      }
+      done();
     });
     it('should dispatch LOGIN_FAILURE if there was a problem', async done => {
       axiosMock.post = jest.fn();

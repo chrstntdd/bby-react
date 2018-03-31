@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, createRef } from 'react';
 import { connect } from 'react-redux';
 
 import { UPC } from '../../state/actions/types';
@@ -14,6 +14,7 @@ interface PSearchBar {
   lastItemScanned: string;
   lastTimeSaved: string;
 }
+
 interface SSearchBar {
   upcInputValue: string;
 }
@@ -23,10 +24,10 @@ export class SearchBar extends PureComponent<PSearchBar, SSearchBar> {
     upcInputValue: ''
   };
 
-  upcInput: HTMLInputElement;
+  private upcInput: HTMLInputElement = createRef();
 
   componentDidMount() {
-    this.upcInput.focus();
+    this.upcInput.current.focus();
   }
 
   handleChange = async e => {
@@ -66,9 +67,7 @@ export class SearchBar extends PureComponent<PSearchBar, SSearchBar> {
           name="upc"
           placeholder="upc"
           value={this.state.upcInputValue}
-          ref={input => {
-            this.upcInput = input;
-          }}
+          ref={this.upcInput}
           onChange={e => this.handleChange(e)}
         />
         <div id="last-item-scanned">
@@ -80,10 +79,10 @@ export class SearchBar extends PureComponent<PSearchBar, SSearchBar> {
   }
 }
 
-const mapStateToProps = state => ({
-  lastTimeSaved: state.table.lastTimeSaved,
-  lastItemScanned: state.table.lastItemScanned,
-  waiting: state.auth.waiting
+const mapStateToProps = ({ table, auth }) => ({
+  lastTimeSaved: table.lastTimeSaved,
+  lastItemScanned: table.lastItemScanned,
+  waiting: auth.waiting
 });
 
 export default connect(mapStateToProps, {
