@@ -9,43 +9,29 @@ exports[`DUMB <Login/> should render without crashing 1`] = `
     waiting={false}
   />
   <div
-    className="test-credentials"
-  >
-    <p>
-      <span>
-        Employee Number
-      </span>
-      : a1
-    </p>
-    <p>
-      <span>
-        Password
-      </span>
-      : testtesttest
-    </p>
-  </div>
-  <div
     className="show"
     id="login-card"
   >
     <h1>
       Sign In
     </h1>
-    <form>
-      <FormInput
-        key="0"
-        label="Employee Number"
-        name="employeeNumber"
+    <form
+      onSubmit={[Function]}
+    >
+      <input
+        onChange={[Function]}
+        placeholder="Employee Number"
         type="text"
       />
-      <FormInput
-        key="1"
-        label="Password"
-        name="password"
+      <input
+        maxLength={36}
+        minLength={6}
+        onChange={[Function]}
+        placeholder="Password"
         type="password"
       />
       <button
-        disabled={true}
+        disabled={false}
         type="submit"
       >
         Login
@@ -66,6 +52,22 @@ exports[`DUMB <Login/> should render without crashing 1`] = `
         Just testing? Use the temporary credentials below.
       </p>
     </form>
+  </div>
+  <div
+    className="test-credentials"
+  >
+    <p>
+      <span>
+        Employee Number
+      </span>
+      : a1
+    </p>
+    <p>
+      <span>
+        Password
+      </span>
+      : testtesttest
+    </p>
   </div>
 </section>
 `;
