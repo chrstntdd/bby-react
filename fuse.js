@@ -48,6 +48,9 @@ context(
         target: 'browser@es5',
         cache: true,
         allowSyntheticDefaultImports: true,
+        alias: {
+          '@': '~'
+        },
         plugins: [
           [SassPlugin({ importer: true }), PostCSSPlugin(POSTCSS_PLUGINS), CSSPlugin()],
           SVGPlugin(),

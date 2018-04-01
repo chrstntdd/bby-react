@@ -1,9 +1,9 @@
 import { noop } from './util';
 
 describe('noop', () => {
-  it('returns an empty string', () => {
+  it('returns null', () => {
     const result = noop();
 
-    expect(result).toBe('');
+    expect(result).toBeNull();
   });
 });

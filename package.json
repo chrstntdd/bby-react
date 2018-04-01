@@ -89,7 +89,8 @@
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
         "<rootDir>/config/mocks/fileMock.js",
-      "^.+\\.(scss|css)$": "<rootDir>/config/mocks/styleMock.js"
+      "^.+\\.(scss|css)$": "<rootDir>/config/mocks/styleMock.js",
+      "^@[/](.*)": "<rootDir>/src/$1"
     },
     "setupFiles": ["<rootDir>/config/enzyme-setup.js", "<rootDir>/config/jsdom-setup.js"],
     "snapshotSerializers": ["enzyme-to-json/serializer"],

@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"]
+      "@/*": ["src/*"]
     },
     "outDir": "dist/",
     "allowSyntheticDefaultImports": true,
@@ -32,5 +32,5 @@
     "typeRoots": ["./node_modules/@types"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "src/**/*.spec.*"]
+  "exclude": ["node_modules"]
 }

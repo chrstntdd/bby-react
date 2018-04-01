@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input component render method when the component has a label should render the component with a label element 1`] = `
+<React.Fragment>
+  <input
+    className=""
+    onChange={[Function]}
+  />
+  <label
+    htmlFor="test"
+  >
+    test-label
+  </label>
+</React.Fragment>
+`;
+
+exports[`Input component render method when the component has a validationMsg should render the component with a error message 1`] = `
+<React.Fragment>
+  <span
+    className="error-span"
+  >
+    error!
+  </span>
+  <input
+    className=""
+    onChange={[Function]}
+  />
+</React.Fragment>
+`;
+
+exports[`Input component render method when the input element has a value should add "has-content" class to the input  1`] = `
+<React.Fragment>
+  <input
+    className="has-content"
+    onChange={[Function]}
+  />
+</React.Fragment>
+`;

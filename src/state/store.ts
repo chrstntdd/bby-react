@@ -21,9 +21,7 @@ const configureStore = (initialState?: RootState) => {
 // pass an optional param to rehydrate state on app start
 const store = configureStore();
 
-persistStore(store, {}, () => {
-  console.log('Rehydrated.');
-});
+persistStore(store, {});
 
 // export store singleton instance
 export default store;
