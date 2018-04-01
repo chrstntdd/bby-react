@@ -69,6 +69,7 @@
   },
   "jest": {
     "verbose": true,
+    "automock": true,
     "collectCoverage": true,
     "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
     "collectCoverageFrom": ["src/**/*.{js,ts,tsx,jsx}"],
@@ -93,6 +94,7 @@
       "^@[/](.*)": "<rootDir>/src/$1"
     },
     "setupFiles": ["<rootDir>/config/enzyme-setup.js", "<rootDir>/config/jsdom-setup.js"],
+    "unmockedModulePathPatterns": ["react"],
     "snapshotSerializers": ["enzyme-to-json/serializer"],
     "testRegex": "\\.spec\\.(js|ts|jsx|tsx)$"
   }

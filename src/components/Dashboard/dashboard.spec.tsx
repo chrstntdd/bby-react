@@ -5,10 +5,6 @@ jest.useFakeTimers();
 
 import ConnectedDashboard, { Dashboard } from './';
 
-jest.mock('../../util', () => ({
-  noop: jest.fn()
-}));
-
 const requiredProps = {
   syncToDatabase: jest.fn(),
   printTable: jest.fn(),
@@ -22,7 +18,7 @@ describe('<Dashboard/>', () => {
     shallow(<Dashboard {...requiredProps} />);
   });
 
-  describe('componentWillMount method', () => {
+  describe('componentDidMount method', () => {
     let render;
     beforeAll(() => {
       render = Dashboard.prototype.render;
@@ -56,21 +52,21 @@ describe('<Dashboard/>', () => {
 
   describe('componentWillUnmount method', () => {
     let render;
-    let componentWillMount;
+    let componentDidMount;
     let clearInterval;
     beforeAll(() => {
       render = Dashboard.prototype.render;
-      componentWillMount = Dashboard.prototype.componentWillMount;
+      componentDidMount = Dashboard.prototype.componentDidMount;
       clearInterval = window.clearInterval;
 
       Dashboard.prototype.render = jest.fn();
-      Dashboard.prototype.componentWillMount = jest.fn();
+      Dashboard.prototype.componentDidMount = jest.fn();
       window.clearInterval = jest.fn();
     });
 
     afterAll(() => {
       Dashboard.prototype.render = render;
-      Dashboard.prototype.componentWillMount = componentWillMount;
+      Dashboard.prototype.componentDidMount = componentDidMount;
       window.clearInterval = clearInterval;
     });
 
@@ -103,14 +99,14 @@ describe('<Dashboard/>', () => {
   });
 
   describe('render method', () => {
-    let componentWillMount;
+    let componentDidMount;
     beforeAll(() => {
-      componentWillMount = Dashboard.prototype.componentWillMount;
-      Dashboard.prototype.componentWillMount = jest.fn();
+      componentDidMount = Dashboard.prototype.componentDidMount;
+      Dashboard.prototype.componentDidMount = jest.fn();
     });
 
     afterAll(() => {
-      Dashboard.prototype.componentWillMount = componentWillMount;
+      Dashboard.prototype.componentDidMount = componentDidMount;
     });
     it('should render the dashboard', () => {
       const wrapper = shallow(<Dashboard {...requiredProps} />);

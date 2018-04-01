@@ -7,11 +7,6 @@ import { Input } from './';
 
 jest.useFakeTimers();
 
-jest.mock('@/util', () => ({
-  debounce: jest.fn(fn => fn),
-  noop: jest.fn()
-}));
-
 const requiredProps = {
   name: 'test',
   inputRef: null

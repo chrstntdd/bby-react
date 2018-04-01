@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 
 // CHILD COMPONENTS
 import SearchBar from '../SearchBar';
@@ -8,7 +7,7 @@ import ProductTable from '../ProductTable';
 import SideBar from '../SideBar';
 import DashboardHeader from '../DashboardHeader';
 
-import { noop } from '../../util';
+import { noop } from '@/util';
 
 import {
   syncToDatabase,
@@ -57,7 +56,7 @@ export class Dashboard extends PureComponent<Props> {
 
   public intervalId: number | null = null;
 
-  public componentWillMount() {
+  public componentDidMount() {
     /* Autosave! (every 5 minutes) Only if there is data in the table. */
 
     if (this.props.products.length > 0) {
@@ -107,13 +106,11 @@ const mapStateToProps = state => ({
   products: state.table.products
 });
 
-export default withRouter(
-  connect(mapStateToProps, {
-    syncToDatabase,
-    loadTable,
-    formatTable,
-    printTable,
-    clearTable,
-    shuffleTable
-  })(Dashboard)
-);
+export default connect(mapStateToProps, {
+  syncToDatabase,
+  loadTable,
+  formatTable,
+  printTable,
+  clearTable,
+  shuffleTable
+})(Dashboard);
