@@ -1,14 +1,18 @@
-import React, { PureComponent, createRef } from 'react';
+import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router';
 
-import { loginUser } from '../../../state/actions';
+import { loginUser } from '@/state/actions';
+import { Input } from '@/components/Input';
+import { validateInput } from '@/util';
+
 import LoadingIndicator from '../Loading';
 
 import './login.scss';
 
 interface PLogin {
-  loginUser: (employeeNumber: string, password: string) => any;
+  loginUser: (employeeNumber: string, password: string) => (dispatch: any) => Promise<void>;
   waiting: boolean;
   errorMessage: string;
   isAuthenticated: boolean;
@@ -16,36 +20,35 @@ interface PLogin {
 
 interface SLogin {
   employeeNumberInput: {
-    value: string;
     isValid: boolean;
+    value: string;
   };
   passwordInput: {
-    value: string;
     isValid: boolean;
+    value: string;
   };
-}
-
-enum LoginInput {
-  'employeeNumberInput',
-  'passwordInput'
 }
 
 const initialState: SLogin = {
   employeeNumberInput: {
-    value: '',
-    isValid: true
+    isValid: false,
+    value: ''
   },
   passwordInput: {
-    value: '',
-    isValid: true
+    isValid: false,
+    value: ''
   }
 };
 
-export class Login extends PureComponent<PLogin, SLogin> {
+export class Login extends Component<PLogin & RouteComponentProps<{}>, SLogin> {
   state = initialState;
 
   private employeeNumberInput: HTMLInputElement = createRef();
   private passwordInput: HTMLInputElement = createRef();
+
+  componentDidMount() {
+    this.props.isAuthenticated ? this.props.history.push('/dashboard') : null;
+  }
 
   static getDerivedStateFromProps(nextProps: PLogin) {
     if (nextProps.errorMessage) {
@@ -66,27 +69,16 @@ export class Login extends PureComponent<PLogin, SLogin> {
     }
   }
 
-  handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  handleFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const { employeeNumberInput, passwordInput } = this.state;
 
     if (employeeNumberInput.isValid && passwordInput.isValid) {
       this.props.loginUser(employeeNumberInput.value.trim(), passwordInput.value.trim());
-    } else {
-      /* ERROR */
     }
   };
 
-  handleInputChange = (e: React.FormEvent<HTMLInputElement>, inputId: LoginInput) => {
-    this.setState({
-      [inputId]: {
-        ...this.state[inputId],
-        value: e.currentTarget.value
-      }
-    });
-  };
-
-  renderAlert() {
+  renderAPIMsg(): JSX.Element {
     return (
       <div className="error-message">
         <p>{this.props.errorMessage}</p>
@@ -94,42 +86,70 @@ export class Login extends PureComponent<PLogin, SLogin> {
     );
   }
 
+  handleInputChange = (inputId: any, isValid: boolean, value?: string) => {
+    this.setState({
+      [inputId]: {
+        isValid: isValid,
+        value: value
+      }
+    });
+  };
+
   render() {
     const { waiting, errorMessage } = this.props;
 
-    const isFormValid = true;
-
-    const loginPage = (
+    return (
       <section id="login-wrapper">
-        <LoadingIndicator waiting={waiting} message={'Signing you in now. Please wait.'} />
+        <LoadingIndicator waiting={waiting} message="Signing you in now. Please wait." />
 
-        {errorMessage ? this.renderAlert() : null}
+        {errorMessage ? this.renderAPIMsg() : null}
 
         <div id="login-card" className={waiting ? 'hide' : 'show'}>
           <h1>Sign In</h1>
-          <form onSubmit={e => this.handleFormSubmit(e)}>
-            <input
-              type="text"
-              placeholder="Employee Number"
-              ref={this.employeeNumberInput}
-              onChange={e => this.handleInputChange(e, 'employeeNumberInput')}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              minLength={6}
-              maxLength={36}
-              ref={this.passwordInput}
-              onChange={e => this.handleInputChange(e, 'passwordInput')}
-            />
-            <button type="submit" disabled={!isFormValid}>
+          <form onSubmit={this.handleFormSubmit}>
+            <div className="input-wrapper">
+              <Input
+                type="text"
+                name="employeeNumberInput"
+                autoComplete="off"
+                label="Employee Number"
+                inputRef={this.employeeNumberInput}
+                validationCb={this.handleInputChange}
+                validateFn={validateInput(
+                  'Please enter a valid employee number',
+                  new RegExp(/^\w{1}\d+$/, 'gi')
+                )}
+              />
+              <span className="focus-border" />
+            </div>
+            <div className="input-wrapper">
+              <Input
+                type="password"
+                name="passwordInput"
+                autoComplete="off"
+                label="Password"
+                inputRef={this.passwordInput}
+                validationCb={this.handleInputChange}
+                validateFn={validateInput(
+                  'Please enter a password with at least 6 characters',
+                  new RegExp(/.{6,}/, 'gi')
+                )}
+              />
+              <span className="focus-border" />
+            </div>
+            <button
+              type="submit"
+              disabled={
+                !(this.state.employeeNumberInput.isValid && this.state.passwordInput.isValid)
+              }
+            >
               Login
             </button>
-
-            <Link to="/forgot-password">Forgot password?</Link>
-            <Link to="/sign-up">Sign Up</Link>
-            <p>Just testing? Use the temporary credentials below.</p>
           </form>
+
+          <Link to="/forgot-password">Forgot password?</Link>
+          <Link to="/sign-up">Sign Up</Link>
+          <p>Just testing? Use the temporary credentials below.</p>
         </div>
         <div className="test-credentials">
           <p>
@@ -141,8 +161,6 @@ export class Login extends PureComponent<PLogin, SLogin> {
         </div>
       </section>
     );
-    // IF  isAuthenticated, REDIRECT TO DASHBOARD
-    return this.props.isAuthenticated ? <Redirect to="/dashboard" /> : loginPage;
   }
 }
 
@@ -154,4 +172,4 @@ const mapStateToProps = ({ auth }) => {
   };
 };
 
-export default connect(mapStateToProps, { loginUser })(Login);
+export default withRouter(connect(mapStateToProps, { loginUser })(Login));

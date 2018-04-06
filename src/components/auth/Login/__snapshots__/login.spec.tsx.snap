@@ -15,43 +15,71 @@ exports[`DUMB <Login/> should render without crashing 1`] = `
     <h1>
       Sign In
     </h1>
-    <form
-      onSubmit={[Function]}
+    <Form
+      handleSubmitCb={[Function]}
     >
-      <input
-        onChange={[Function]}
-        placeholder="Employee Number"
-        type="text"
-      />
-      <input
-        maxLength={36}
-        minLength={6}
-        onChange={[Function]}
-        placeholder="Password"
-        type="password"
-      />
+      <div
+        className="input-wrapper"
+      >
+        <Input
+          autoComplete="off"
+          inputRef={
+            Object {
+              "current": null,
+            }
+          }
+          label="Employee Number"
+          name="employeeNumberInput"
+          type="text"
+          validateFn={[Function]}
+          validationCb={[Function]}
+        />
+        <span
+          className="focus-border"
+        />
+      </div>
+      <div
+        className="input-wrapper"
+      >
+        <Input
+          autoComplete="off"
+          inputRef={
+            Object {
+              "current": null,
+            }
+          }
+          label="Password"
+          name="passwordInput"
+          type="password"
+          validateFn={[Function]}
+          validationCb={[Function]}
+        />
+        <span
+          className="focus-border"
+        />
+      </div>
       <button
-        disabled={false}
+        disabled={true}
         type="submit"
       >
         Login
       </button>
-      <Link
-        replace={false}
-        to="/forgot-password"
-      >
-        Forgot password?
-      </Link>
-      <Link
-        replace={false}
-        to="/sign-up"
-      >
-        Sign Up
-      </Link>
-      <p>
-        Just testing? Use the temporary credentials below.
-      </p>
-    </form>
+    </Form>
+    <Link
+      replace={false}
+      to="/forgot-password"
+    >
+      Forgot password?
+    </Link>
+    <Link
+      replace={false}
+      to="/sign-up"
+    >
+      Sign Up
+    </Link>
+    <p>
+      Just testing? Use the temporary credentials below.
+    </p>
   </div>
   <div
     className="test-credentials"

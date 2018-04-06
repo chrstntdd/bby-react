@@ -12,15 +12,19 @@ export default ComposedComponent => {
     public static defaultProps: Partial<Props> = {
       isAuthenticated: false
     };
-    componentWillMount() {
+
+    componentDidMount() {
       !this.props.isAuthenticated && this.props.history.push('/sign-in');
     }
+
     render() {
       return <ComposedComponent {...this.props} />;
     }
   }
+
   const mapStateToProps = state => ({
     isAuthenticated: state.auth.isAuthenticated
   });
+
   return withRouter(connect(mapStateToProps)(RequireAuth));
 };

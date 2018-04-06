@@ -12,7 +12,7 @@
   :focus {
     outline: none;
   }
-  .errorSpan {
+  .error-span {
     position: absolute;
     top: 35px;
     color: darken(#ec6d75, 10%);
@@ -39,7 +39,7 @@
     background-color: $BESTBUY_YELLOW;
     transition: 0.4s;
   }
-  .register-label {
+  label {
     position: absolute;
     left: 0;
     width: 100%;
@@ -56,8 +56,8 @@
     width: 100%;
     transition: 0.4s;
   }
-  input:focus ~ .register-label,
-  input.has-content ~ .register-label {
+  input:focus ~ label,
+  input.has-content ~ label {
     @media (min-width: $bp-xxsmall) {
       //HOW HIGH THE .register-label RAISES UP
       top: between(-15px, -25px, $bp-xxsmall, $bp-xlarge);
