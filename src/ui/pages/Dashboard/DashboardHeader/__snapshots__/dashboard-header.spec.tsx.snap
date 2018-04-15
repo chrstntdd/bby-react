@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DashboardHeader/> should render without crashing 1`] = `
+<header
+  id="dashboard-header"
+>
+  <h1>
+    Quantified Dashboard
+  </h1>
+  <h2>
+    Hello, 
+    testFirst testLast
+  </h2>
+  <Link
+    replace={false}
+    to="/"
+  >
+    <button>
+      <img
+        alt=""
+        src="images/logout.svg"
+      />
+      <p>
+        Sign out
+      </p>
+    </button>
+  </Link>
+</header>
+`;

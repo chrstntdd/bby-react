@@ -278,7 +278,7 @@ describe('auth actions', () => {
       const employeeNumber = 'a1';
       const store = mockStore(initialState);
 
-      store.dispatch(actions.getForgotPasswordToken({ employeeNumber }));
+      store.dispatch(actions.getForgotPasswordToken(employeeNumber));
 
       try {
         setImmediate(() => {
@@ -326,7 +326,7 @@ describe('auth actions', () => {
       const password = 'fakeNews';
       const token = 'asdfjfks';
 
-      store.dispatch(actions.resetPassword(token, { password }));
+      store.dispatch(actions.resetPassword(token, password));
 
       try {
         setImmediate(() => {

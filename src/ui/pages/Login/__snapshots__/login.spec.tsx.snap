@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DUMB <Login/> should render without crashing 1`] = `
+<section
+  id="login-wrapper"
+>
+  <LoadingIndicator
+    message="Signing you in now. Please wait."
+    waiting={false}
+  />
+  <div
+    className="show"
+    id="login-card"
+  >
+    <Connect(SignInForm)
+      id="sign-in"
+      legendText="Sign In"
+    />
+    <Link
+      replace={false}
+      to="/forgot-password"
+    >
+      Forgot password?
+    </Link>
+    <Link
+      replace={false}
+      to="/sign-up"
+    >
+      Sign Up
+    </Link>
+    <p>
+      Just testing? Use the temporary credentials below.
+    </p>
+  </div>
+  <div
+    className="test-credentials"
+  >
+    <p>
+      <span>
+        Employee Number
+      </span>
+      : a1
+    </p>
+    <p>
+      <span>
+        Password
+      </span>
+      : testtesttest
+    </p>
+  </div>
+</section>
+`;

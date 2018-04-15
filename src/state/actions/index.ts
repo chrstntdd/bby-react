@@ -14,7 +14,6 @@ import {
   LOGIN_FAILURE,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  NOT_VERIFIED_LOGIN_ERROR,
   POST_UPC,
   REGISTER_FAILURE,
   REGISTER_REQUEST,
@@ -33,7 +32,7 @@ import {
   UPC
 } from './types';
 
-import { timeout } from '../../util';
+import { timeout } from '@/util';
 
 let API_URL: string;
 
@@ -246,12 +245,13 @@ export const logoutUser = error => dispatch => {
   dispatch({ type: UNAUTH_USER, payload: error || '' });
 };
 
-export const getForgotPasswordToken = ({ employeeNumber }) => async dispatch => {
+export const getForgotPasswordToken = (employeeNumber: string) => async dispatch => {
   try {
     dispatch({ type: FORGOT_PASSWORD_REQUEST });
     const response = await axios.post(`${API_URL}/users/forgot-password`, {
       employeeNumber
     });
+
     dispatch({
       type: FORGOT_PASSWORD_SUCCESS,
       payload: response.data.message
@@ -268,11 +268,11 @@ export const getForgotPasswordToken = ({ employeeNumber }) => async dispatch => 
   }
 };
 
-export const resetPassword = (resetToken, { password }) => async dispatch => {
+export const resetPassword = (resetToken, newPassword) => async dispatch => {
   try {
     dispatch({ type: RESET_PASSWORD_REQUEST });
     const response = await axios.post(`${API_URL}/users/reset-password?token=${resetToken}`, {
-      password
+      password: newPassword
     });
 
     dispatch({
