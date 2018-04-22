@@ -67,26 +67,3 @@ describe('DUMB <Login/>', () => {
     expect(wrapper).toMatchSnapshot();
   });
 });
-
-describe.skip('SMART <ConnectedLogin/>', () => {
-  it('should render the connected component', () => {
-    const { enzymeWrapper } = setup();
-    expect(enzymeWrapper).not.toBe(null);
-  });
-
-  it('should render two inputs', () => {
-    const { enzymeWrapper, props } = setup();
-
-    const inputs = enzymeWrapper.find('input');
-
-    expect(inputs.length).toEqual(2);
-  });
-
-  it('should dispatch handleSubmit when the form is submitted', () => {
-    const { enzymeWrapper, props } = setup();
-    const form = enzymeWrapper.find('form');
-    form.simulate('submit');
-
-    expect(props.handleSubmit).toHaveBeenCalled();
-  });
-});

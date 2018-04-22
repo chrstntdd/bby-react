@@ -1,6 +1,7 @@
 import React from 'react';
-import './not-found.scss';
 import { Route } from 'react-router-dom';
+
+import './not-found.scss';
 
 const NotFoundPage = () => (
   <Route

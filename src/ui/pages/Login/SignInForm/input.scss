@@ -3,67 +3,32 @@
 
 .input-wrapper {
   flex: auto;
-  margin: auto 10px auto 10px;
   position: relative;
-  @media (min-width: $bp-xxsmall) {
-    width: between(200px, 350px, $bp-xxsmall, $bp-xlarge);
-  }
-  height: 30px;
-  :focus {
-    outline: none;
-  }
+
   .error-span {
-    position: absolute;
-    top: 35px;
     color: darken(#ec6d75, 10%);
   }
+
   input {
     line-height: 2px;
-    font-size: 1.5rem;
     letter-spacing: 1px;
-    height: 100%;
     width: 100%;
-    color: white;
-    border: 0;
-    padding: 4px 0;
-    border-bottom: 1px solid #aaa;
-    background-color: transparent;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    color: rgb(51, 51, 51);
+    border: 1px solid #e4e4e4;
+    background-color: #fff;
+    padding: 0.5rem;
+    &:focus {
+      outline: 1px solid $BESTBUY_BLUE;
+    }
   }
 
-  .focus-border {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: $BESTBUY_YELLOW;
-    transition: 0.4s;
-  }
   label {
-    position: absolute;
-    left: 0;
-    width: 100%;
+    display: block;
     color: #aaa;
-    transition: 0.3s;
-    z-index: -1;
+    width: auto;
     letter-spacing: 0.5px;
-    @media (min-width: $bp-xxsmall) {
-      font-size: between(18px, 16px, $bp-xxsmall, $bp-xlarge);
-    }
-  }
-  input:focus ~ .focus-border,
-  input.has-content ~ .focus-border {
-    width: 100%;
-    transition: 0.4s;
-  }
-  input:focus ~ label,
-  input.has-content ~ label {
-    @media (min-width: $bp-xxsmall) {
-      //HOW HIGH THE .register-label RAISES UP
-      top: between(-15px, -25px, $bp-xxsmall, $bp-xlarge);
-    }
-    font-size: 14px;
-    color: $BESTBUY_YELLOW;
-    transition: 0.3s;
   }
 }

@@ -8,7 +8,7 @@ import { validateInput } from '@/util';
 import { getForgotPasswordToken } from '@/state/actions';
 
 import LoadingIndicator from '@/ui/components/Loading';
-import { Input } from '@/ui/components/Input';
+import Input from '@/ui/components/Input';
 
 import './forgot_password.scss';
 
@@ -82,15 +82,14 @@ export class ForgotPassword extends Component<
               <div className="input-wrapper">
                 <Input
                   type="text"
-                  name="employeeNumberInput"
-                  autoComplete="off"
+                  id="employeeNumberInput"
                   label="Employee Number"
                   inputRef={this.employeeNumberInput}
-                  validationCb={this.handleInputChange}
-                  validateFn={validateInput(
-                    'Please enter a valid employee number',
-                    new RegExp(/^\w{1}\d+$/, 'gi')
-                  )}
+                  // validationCb={this.handleInputChange}
+                  // validateFn={validateInput(
+                  //   'Please enter a valid employee number',
+                  //   new RegExp(/^\w{1}\d+$/, 'gi')
+                  // )}
                 />
                 <span className="focus-border" />
               </div>

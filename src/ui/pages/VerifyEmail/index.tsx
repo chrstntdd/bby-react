@@ -10,7 +10,6 @@ export class VerifyEmail extends Component {
   componentDidMount() {
     /* USE WINDOW.LOCATION.SEARCH */
     const { search } = window.location;
-    console.log(search);
     // this.props.confirmEmail(token);
   }
 

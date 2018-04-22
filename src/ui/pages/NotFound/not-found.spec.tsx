@@ -30,8 +30,6 @@ describe('<NotFound/>', () => {
       const button = instance.find('#safety');
       const router = instance.find('Router');
 
-      console.log(instance);
-
       expect(router.props().history.length).toBe(1);
       expect(router.props().history.location.pathname).toBe('/');
       button.simulate('click');

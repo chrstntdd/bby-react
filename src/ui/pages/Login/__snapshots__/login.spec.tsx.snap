@@ -1,15 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DUMB <Login/> should render without crashing 1`] = `
-<section
+<main
   id="login-wrapper"
 >
   <LoadingIndicator
     message="Signing you in now. Please wait."
     waiting={false}
   />
+  <h1
+    className="text-4xl text-bby-blue text-center mx-auto"
+  >
+    Welcome to Quantified
+  </h1>
   <div
-    className="show"
+    className="show bg-white-darkest mx-auto max-w-sm shadow-lg rounded-b overflow-hidden flex flex-col items-center justify-center"
     id="login-card"
   >
     <Connect(SignInForm)
@@ -17,12 +22,14 @@ exports[`DUMB <Login/> should render without crashing 1`] = `
       legendText="Sign In"
     />
     <Link
+      className="blue-accent hover:text-bby-blue no-underline"
       replace={false}
       to="/forgot-password"
     >
       Forgot password?
     </Link>
     <Link
+      className="blue-accent hover:text-bby-blue no-underline"
       replace={false}
       to="/sign-up"
     >
@@ -48,5 +55,5 @@ exports[`DUMB <Login/> should render without crashing 1`] = `
       : testtesttest
     </p>
   </div>
-</section>
+</main>
 `;

@@ -1,10 +1,12 @@
 import React, { PureComponent, createRef } from 'react';
 import { connect } from 'react-redux';
 
+import { Maybe } from '@/fp';
+import { debounce } from '@/util';
 import { validateInput } from '@/util';
 import { loginUser } from '@/state/actions';
 
-import { Input } from '@/ui/components/Input';
+import Input from '@/ui/components/Input';
 
 import './input.scss';
 
@@ -21,29 +23,39 @@ interface SSignInForm {
   employeeNumberInput: {
     isValid: boolean;
     value: string;
+    validationMsg: string;
+    validatorFn: () => (val: any) => Maybe<string>;
   };
   passwordInput: {
     isValid: boolean;
     value: string;
+    validationMsg: string;
+    validatorFn: () => (val: any) => Maybe<string>;
   };
 }
 
-const initialState: SSignInForm = {
+export const initialState: SSignInForm = {
   employeeNumberInput: {
     isValid: false,
-    value: ''
+    value: '',
+    validationMsg: '',
+    validatorFn: () =>
+      validateInput('Please enter a valid employee number', new RegExp(/^\w{1}\d+$/, 'gi'))
   },
   passwordInput: {
     isValid: false,
-    value: ''
+    value: '',
+    validationMsg: '',
+    validatorFn: () =>
+      validateInput('Please enter a password with at least 6 characters', new RegExp(/.{6,}/, 'gi'))
   }
 };
 
 export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
   state = initialState;
 
-  private employeeNumberInput: React.RefObject<HTMLInputElement> = createRef();
-  private passwordInput: React.RefObject<HTMLInputElement> = createRef();
+  employeeNumberInput: React.RefObject<HTMLInputElement> = createRef();
+  passwordInput: React.RefObject<HTMLInputElement> = createRef();
 
   static getDerivedStateFromProps(nextProps: PSignInForm) {
     if (nextProps.errorMessage) {
@@ -75,13 +87,40 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
     }
   };
 
-  handleInputChange = (inputId: any, isValid: boolean, value?: string) => {
-    this.setState({
-      [inputId]: {
-        isValid: isValid,
-        value: value
+  handleInputChange = debounce((inputValue, fieldKey) => {
+    const field = this.state[fieldKey];
+    const validationMsg = field.validatorFn()(inputValue);
+
+    validationMsg.caseOf({
+      /* FIELD IS INVALID */
+      just: msg => {
+        this.setState({
+          [fieldKey]: {
+            ...field,
+            isValid: false,
+            validationMsg: msg
+          }
+        });
+      },
+
+      /* FIELD IS VALID */
+      nothing: () => {
+        this.setState({
+          [fieldKey]: {
+            ...field,
+            isValid: true,
+            validationMsg: ''
+          }
+        });
       }
     });
+  }, 200);
+
+  updateField = e => {
+    const inputValue = e.currentTarget.value;
+    const fieldKey = e.currentTarget.id;
+
+    this.handleInputChange(inputValue, fieldKey);
   };
 
   renderAPIMsg(): JSX.Element {
@@ -92,44 +131,49 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
     );
   }
 
+  fieldsetClass = 'flex flex-col items-center justify-center';
+  legendClass = 'text-center text-3xl mx-auto my-3 blue-accent';
+  submitButtonClass = 'mx-auto my-4 font-semibold rounded-full px-8 py-2 leading-normal bg-transparent border border-grey text-grey hover:border-bby-blue hover:bg-bby-blue hover:text-white trans-300ms-all';
+  inputClass = 'm-8';
+  formClass = 'w-full';
+
   render() {
     return (
       <React.Fragment>
         {this.props.errorMessage ? this.renderAPIMsg() : null}
-        <form aria-labelledby={this.props.id} onSubmit={this.handleFormSubmit}>
-          <fieldset>
-            <legend id={this.props.id}>{this.props.legendText}</legend>
-            <div className="input-wrapper">
+        <form
+          className={this.formClass}
+          aria-labelledby={this.props.id}
+          onSubmit={this.handleFormSubmit}
+        >
+          <fieldset className={this.fieldsetClass}>
+            <legend className={this.legendClass} id={this.props.id}>
+              {this.props.legendText}
+            </legend>
+            <div className={`input-wrapper ${this.inputClass}`}>
               <Input
                 type="text"
-                name="employeeNumberInput"
-                autoComplete="off"
+                id="employeeNumberInput"
                 label="Employee Number"
                 inputRef={this.employeeNumberInput}
-                validationCb={this.handleInputChange}
-                validateFn={validateInput(
-                  'Please enter a valid employee number',
-                  new RegExp(/^\w{1}\d+$/, 'gi')
-                )}
+                onChange={this.updateField}
+                className={this.state.employeeNumberInput.value === '' ? '' : 'has-content'}
+                validationMsg={this.state.employeeNumberInput.validationMsg}
               />
-              <span className="focus-border" />
             </div>
-            <div className="input-wrapper">
+            <div className={`input-wrapper ${this.inputClass}`}>
               <Input
                 type="password"
-                name="passwordInput"
-                autoComplete="off"
+                id="passwordInput"
                 label="Password"
                 inputRef={this.passwordInput}
-                validationCb={this.handleInputChange}
-                validateFn={validateInput(
-                  'Please enter a password with at least 6 characters',
-                  new RegExp(/.{6,}/, 'gi')
-                )}
+                onChange={this.updateField}
+                className={this.state.passwordInput.value === '' ? '' : 'has-content'}
+                validationMsg={this.state.passwordInput.validationMsg}
               />
-              <span className="focus-border" />
             </div>
             <button
+              className={this.submitButtonClass}
               type="submit"
               disabled={
                 !Object.values(this.state)

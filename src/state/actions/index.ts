@@ -105,7 +105,7 @@ export const clearTable = () => dispatch => {
 };
 
 /* PUTs all products in the current table to the DB on a timer
- * on PUT, replace previous table state with the current table 
+ * on PUT, replace previous table state with the current table
  * state (array)
  */
 
@@ -153,7 +153,7 @@ export const loadTable = (user, jwt: string) => async dispatch => {
 
     dispatch({ type: LOAD_SAVED_TABLE, payload: response.data.products });
   } catch (error) {
-    // console.log(error);
+    //TODO: handle error
   }
 };
 

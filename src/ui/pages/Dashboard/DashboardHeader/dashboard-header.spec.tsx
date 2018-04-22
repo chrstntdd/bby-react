@@ -26,29 +26,12 @@ describe('<DashboardHeader/>', () => {
     expect(greeting).toBe(`Hello, ${props.userData.firstName} ${props.userData.lastName}`);
   });
 
-  describe.skip('the Logout button', () => {
-    it('should render a Logout button', () => {
+  describe('the Logout button', () => {
+    it('should render a button to direct back to the root route', () => {
       const wrapper = shallow(<DashboardHeader {...props} />);
       const logoutButton = wrapper.find('Link');
-      expect(logoutButton.props().to).toBe('/logout');
+      expect(logoutButton.props().to).toBe('/');
       expect(logoutButton.props().children.type).toBe('button');
-    });
-    it('should render a direct to /logout', () => {
-      const context = createRouterContext();
-
-      const props = {
-        history: []
-      };
-      const instance = mount(
-        <Router context={context}>
-          <DashboardHeader {...props} />
-        </Router>
-      );
-      const router = instance.find('Router');
-      const button = instance.find('button');
-      expect(router.props().history.location.pathname).toBe('/dashboard');
-      button.simulate('click', { button: 0 });
-      expect(router.props().history.location.pathname).toBe('/');
     });
   });
 });

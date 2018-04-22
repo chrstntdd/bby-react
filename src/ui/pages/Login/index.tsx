@@ -20,18 +20,28 @@ export class Login extends PureComponent<PLogin & RouteComponentProps<{}>, SLogi
     this.props.isAuthenticated ? this.props.history.push('/dashboard') : null;
   }
 
+  cardClass = 'bg-white-darkest mx-auto max-w-sm shadow-lg rounded-b overflow-hidden flex flex-col items-center justify-center';
+  linkClass = 'blue-accent hover:text-bby-blue no-underline';
+  headingClass = 'text-4xl text-bby-blue text-center mx-auto';
+
   render() {
     const { waiting } = this.props;
 
     return (
-      <section id="login-wrapper">
+      <main id="login-wrapper">
         <LoadingIndicator waiting={waiting} message="Signing you in now. Please wait." />
 
-        <div id="login-card" className={waiting ? 'hide' : 'show'}>
+        <h1 className={this.headingClass}>Welcome to Quantified</h1>
+
+        <div id="login-card" className={waiting ? 'hide' : `show ${this.cardClass}`}>
           <SignInForm id="sign-in" legendText="Sign In" />
 
-          <Link to="/forgot-password">Forgot password?</Link>
-          <Link to="/sign-up">Sign Up</Link>
+          <Link className={this.linkClass} to="/forgot-password">
+            Forgot password?
+          </Link>
+          <Link className={this.linkClass} to="/sign-up">
+            Sign Up
+          </Link>
           <p>Just testing? Use the temporary credentials below.</p>
         </div>
         <div className="test-credentials">
@@ -42,7 +52,7 @@ export class Login extends PureComponent<PLogin & RouteComponentProps<{}>, SLogi
             <span>Password</span>: testtesttest
           </p>
         </div>
-      </section>
+      </main>
     );
   }
 }

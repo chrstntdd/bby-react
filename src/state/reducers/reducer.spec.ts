@@ -65,7 +65,7 @@ const prodArr = [
   }
 ];
 
-describe.skip('auth reducer', () => {
+describe('auth reducer', () => {
   it('should return the initial state if not passed in', () => {
     expect(authReducer(undefined, {})).toEqual(AUTH_INITIAL_STATE);
   });
@@ -109,7 +109,8 @@ describe.skip('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-      isAuthenticated: false
+      isAuthenticated: false,
+      waiting: false
     });
   });
   it('should handle NOT_VERIFIED_LOGIN_ERROR', () => {
@@ -712,5 +713,5 @@ describe('bby reducer', () => {
   });
 });
 
-/* do you think we connected the entire world before 
+/* do you think we connected the entire world before
 we could all accept eachothers differences */

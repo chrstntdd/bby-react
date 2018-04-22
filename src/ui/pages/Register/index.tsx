@@ -46,7 +46,6 @@ export class Register extends Component {
   private confirmPasswordInput: React.RefObject<HTMLInputElement> = createRef();
 
   handleFormSubmit = e => {
-    console.log(e);
     this.props.registerUser(e);
   };
 
