@@ -1,9 +1,9 @@
 import { noop } from './util';
 
 describe('noop', () => {
-  it('returns null', () => {
+  it('is void', () => {
     const result = noop();
 
-    expect(result).toBeNull();
+    expect(result).toBeUndefined();
   });
 });

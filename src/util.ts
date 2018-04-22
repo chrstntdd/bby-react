@@ -1,6 +1,6 @@
 import { Maybe } from '@/fp';
 
-export const noop = (): null => null;
+export const noop = (): void => {};
 
 export const validateInput = (errMsg: string, pattern: RegExp) => (v: string): Maybe<string> =>
   pattern.test(v) ? Maybe.nothing() : Maybe.just(errMsg);
