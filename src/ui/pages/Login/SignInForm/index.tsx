@@ -8,8 +8,6 @@ import { loginUser } from '@/state/actions';
 
 import Input from '@/ui/components/Input';
 
-import './input.scss';
-
 interface PSignInForm {
   loginUser: (employeeNumber: string, password: string) => (dispatch: any) => Promise<void>;
   id: string;
@@ -36,14 +34,14 @@ interface SSignInForm {
 
 export const initialState: SSignInForm = {
   employeeNumberInput: {
-    isValid: false,
+    isValid: true,
     value: '',
     validationMsg: '',
     validatorFn: () =>
       validateInput('Please enter a valid employee number', new RegExp(/^\w{1}\d+$/, 'gi'))
   },
   passwordInput: {
-    isValid: false,
+    isValid: true,
     value: '',
     validationMsg: '',
     validatorFn: () =>
@@ -114,7 +112,7 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
         });
       }
     });
-  }, 200);
+  }, 400);
 
   updateField = e => {
     const inputValue = e.currentTarget.value;
@@ -131,11 +129,10 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
     );
   }
 
-  fieldsetClass = 'flex flex-col items-center justify-center';
-  legendClass = 'text-center text-3xl mx-auto my-3 blue-accent';
-  submitButtonClass = 'mx-auto my-4 font-semibold rounded-full px-8 py-2 leading-normal bg-transparent border border-grey text-grey hover:border-bby-blue hover:bg-bby-blue hover:text-white trans-300ms-all';
-  inputClass = 'm-8';
-  formClass = 'w-full';
+  fieldsetClass = 'flex flex-col items-center w-5/6';
+  legendClass = 'text-center text-2xl mx-auto m-6 blue-accent';
+  submitButtonClass = 'mx-auto my-2 font-semibold rounded-full px-8 py-2 leading-normal bg-transparent border border-grey text-grey hover:border-bby-blue hover:bg-bby-blue hover:text-white trans-300ms-all';
+  formClass = 'w-full flex flex-col items-center';
 
   render() {
     return (
@@ -150,7 +147,7 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
             <legend className={this.legendClass} id={this.props.id}>
               {this.props.legendText}
             </legend>
-            <div className={`input-wrapper ${this.inputClass}`}>
+            <div className="input-wrapper">
               <Input
                 type="text"
                 id="employeeNumberInput"
@@ -158,10 +155,11 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
                 inputRef={this.employeeNumberInput}
                 onChange={this.updateField}
                 className={this.state.employeeNumberInput.value === '' ? '' : 'has-content'}
+                isValid={this.state.employeeNumberInput.isValid}
                 validationMsg={this.state.employeeNumberInput.validationMsg}
               />
             </div>
-            <div className={`input-wrapper ${this.inputClass}`}>
+            <div className="input-wrapper">
               <Input
                 type="password"
                 id="passwordInput"
@@ -169,21 +167,22 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
                 inputRef={this.passwordInput}
                 onChange={this.updateField}
                 className={this.state.passwordInput.value === '' ? '' : 'has-content'}
+                isValid={this.state.passwordInput.isValid}
                 validationMsg={this.state.passwordInput.validationMsg}
               />
             </div>
-            <button
-              className={this.submitButtonClass}
-              type="submit"
-              disabled={
-                !Object.values(this.state)
-                  .map(v => v.isValid)
-                  .every(Boolean)
-              }
-            >
-              Sign in
-            </button>
           </fieldset>
+          <button
+            className={this.submitButtonClass}
+            type="submit"
+            disabled={
+              !Object.values(this.state)
+                .map(v => v.isValid)
+                .every(Boolean)
+            }
+          >
+            LOGIN
+          </button>
         </form>
       </React.Fragment>
     );

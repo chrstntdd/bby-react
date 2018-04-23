@@ -1,61 +1,7 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-import { MemoryRouter as Router } from 'react-router-dom';
-import createRouterContext from 'react-router-test-context';
-import renderer from 'react-test-renderer';
+import { shallow } from 'enzyme';
 
-import ConnectedLogin, { Login } from './';
-
-import { Provider } from 'react-redux';
-
-const setup = () => {
-  const mockStore = configureStore();
-  const initialState = {
-    auth: {
-      userProfile: null,
-      jwt: null,
-      error: '',
-      message: '',
-      content: '',
-      isAuthenticated: false,
-      waiting: false
-    }
-  };
-  const context = createRouterContext();
-
-  const props = {
-    handleSubmit: jest.fn(),
-    valid: false,
-    loginInputs: [
-      {
-        name: 'employeeNumber',
-        type: 'text',
-        label: 'Employee Number'
-      },
-      {
-        name: 'password',
-        type: 'password',
-        label: 'Password'
-      }
-    ]
-  };
-  const store = mockStore(initialState);
-  const enzymeWrapper = mount(
-    <Router context={context}>
-      <Provider store={store}>
-        <ConnectedLogin {...props} store={store} />
-      </Provider>
-    </Router>
-  );
-
-  return {
-    props,
-    enzymeWrapper,
-    initialState
-  };
-};
+import { Login } from './';
 
 describe('DUMB <Login/>', () => {
   it('should render without crashing', () => {
