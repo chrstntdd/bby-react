@@ -12,9 +12,8 @@ interface PSignInForm {
   loginUser: (employeeNumber: string, password: string) => (dispatch: any) => Promise<void>;
   id: string;
   legendText: string;
-  waiting: boolean;
-  errorMessage: string;
-  isAuthenticated: boolean;
+  waiting?: boolean;
+  errorMessage?: string;
 }
 
 interface SSignInForm {
@@ -85,7 +84,7 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
     }
   };
 
-  handleInputChange = debounce((inputValue, fieldKey) => {
+  validateAndUpdateState = debounce((inputValue, fieldKey) => {
     const field = this.state[fieldKey];
     const validationMsg = field.validatorFn()(inputValue);
 
@@ -96,6 +95,7 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
           [fieldKey]: {
             ...field,
             isValid: false,
+            value: inputValue,
             validationMsg: msg
           }
         });
@@ -107,6 +107,7 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
           [fieldKey]: {
             ...field,
             isValid: true,
+            value: inputValue,
             validationMsg: ''
           }
         });
@@ -118,7 +119,7 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
     const inputValue = e.currentTarget.value;
     const fieldKey = e.currentTarget.id;
 
-    this.handleInputChange(inputValue, fieldKey);
+    this.validateAndUpdateState(inputValue, fieldKey);
   };
 
   renderAPIMsg(): JSX.Element {
@@ -189,13 +190,10 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
   }
 }
 
-const mapStateToProps = ({ auth }) => {
-  return {
-    waiting: auth.waiting,
-    errorMessage: auth.error,
-    isAuthenticated: auth.isAuthenticated
-  };
-};
+export const mapStateToProps = ({ auth }) => ({
+  waiting: auth.waiting,
+  errorMessage: auth.error
+});
 
 export default connect(mapStateToProps, {
   loginUser
