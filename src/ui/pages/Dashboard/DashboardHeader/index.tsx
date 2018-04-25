@@ -14,8 +14,7 @@ const DashboardHeader = props => {
     <header id="dashboard-header">
       <h1>Quantified Dashboard</h1>
       <h2>Hello, {userName}</h2>
-      {/* TODO: clean up redux store and unauth the user on click */}
-      <Link to="/">
+      <Link onClick={props.logoutUser} to="/">
         <button>
           <img src={logoutIcon} alt="" />
           <p>Sign out</p>

@@ -7,15 +7,14 @@ import ProductTable from './ProductTable';
 import SideBar from './SideBar';
 import DashboardHeader from './DashboardHeader';
 
-import { noop } from '@/util';
-
 import {
   syncToDatabase,
   loadTable,
   formatTable,
   printTable,
   clearTable,
-  shuffleTable
+  shuffleTable,
+  logoutUser
 } from '@/state/actions';
 
 /* istanbul ignore next */
@@ -43,23 +42,14 @@ interface Props {
   clearTable: Function;
   shuffleTable: Function;
   userProfile?: IUserProfile;
+  logoutUser: () => (dispatch: any) => void;
 }
 
 export class Dashboard extends PureComponent<Props> {
-  static defaultProps: Partial<Props> = {
-    products: [],
-    syncToDatabase: noop,
-    printTable: noop,
-    formatTable: noop,
-    clearTable: noop,
-    shuffleTable: noop
-  };
-
   intervalId: number | null = null;
 
   componentDidMount() {
     /* Autosave! (every 5 minutes) Only if there is data in the table. */
-
     if (this.props.products.length > 0) {
       this.intervalId = window.setInterval(() => this.props.syncToDatabase(), 300000);
     } else {
@@ -79,7 +69,7 @@ export class Dashboard extends PureComponent<Props> {
 
     return (
       <div id="dashboard-wrapper">
-        <DashboardHeader userData={userProfile} />
+        <DashboardHeader userData={userProfile} logoutUser={this.props.logoutUser} />
         <div id="main-content-area">
           <SideBar
             syncToDatabase={this.props.syncToDatabase}
@@ -108,6 +98,7 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
+  logoutUser,
   syncToDatabase,
   loadTable,
   formatTable,

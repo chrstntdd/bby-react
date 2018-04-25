@@ -241,8 +241,8 @@ export const registerUser = ({
   }
 };
 
-export const logoutUser = error => dispatch => {
-  dispatch({ type: UNAUTH_USER, payload: error || '' });
+export const logoutUser = () => dispatch => {
+  dispatch({ type: UNAUTH_USER });
 };
 
 export const getForgotPasswordToken = (employeeNumber: string) => async dispatch => {
