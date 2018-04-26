@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { validateInput } from '@/util';
 import { registerUser } from '@/state/actions';
 
-import { Input } from '@/ui/components/Input';
+import Input from '@/ui/components/Input';
 import LoadingIndicator from '@/ui/components/Loading';
 
 import './register.scss';

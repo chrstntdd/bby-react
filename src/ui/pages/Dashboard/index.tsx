@@ -46,6 +46,9 @@ interface Props {
 }
 
 export class Dashboard extends PureComponent<Props> {
+  public static defaultProps: Partial<Props> = {
+    products: []
+  };
   intervalId: number | null = null;
 
   componentDidMount() {
