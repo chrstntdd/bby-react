@@ -4,9 +4,6 @@ node_js:
 dist: trusty
 before_install:
   - npm i -g npm@6
-cache:
-  directories:
-    - "node_modules"
 install:
   - npm ci
 script:
