@@ -76,6 +76,29 @@ describe('Form Component', () => {
       expect(validateInputMock).toHaveBeenCalledTimes(1);
       expect(validateInputMock).toHaveBeenCalledWith(fieldKey);
     });
+
+    it('should **NOT** call validateInput method if a validation function does not exist', () => {
+      const fieldKey = fieldDefaultsMock[0][0];
+      const mockProps = {
+        ...requiredProps,
+        fieldDefaults: [[fieldKey, {}], requiredProps.fieldDefaults[1]]
+      };
+      const wrapper = shallow(<Form {...mockProps} />);
+      const validateInputMock = jest.fn();
+      const mockEvent = {
+        target: {
+          id: fieldKey,
+          value: 'asdf'
+        }
+      };
+
+      (wrapper.instance() as Form).validateInput = validateInputMock;
+
+      (wrapper.instance() as Form).updateField(mockEvent);
+
+      expect(wrapper.state().fields.get(fieldKey).value).toBe('asdf');
+      expect(validateInputMock).toHaveBeenCalledTimes(0);
+    });
   });
 
   describe('handleFormSubmit method', () => {

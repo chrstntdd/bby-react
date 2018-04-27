@@ -39,57 +39,53 @@
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
     "fuse-box": "^3.2.1",
+    "husky": "^0.14.3",
     "jest": "^22.4.3",
     "jest-cli": "^22.4.3",
     "jsdom": "^11.6.2",
+    "lint-staged": "^7.0.5",
     "node-sass": "^4.8.3",
     "postcss-flexbugs-fixes": "^3.3.0",
+    "prettier": "^1.12.1",
     "purgecss": "^0.21.0",
     "react-router-test-context": "^0.1.0",
     "react-test-renderer": "^16.3.2",
     "redux-mock-store": "^1.5.1",
     "tailwindcss": "^0.5.2",
     "ts-jest": "^22.4.4",
+    "tslint": "^5.9.1",
+    "tslint-config-airbnb": "^5.8.0",
+    "tslint-config-prettier": "^1.12.0",
+    "tslint-react": "^3.5.1",
     "typescript": "^2.8.1",
     "uglify-js": "^3.3.16"
   },
   "scripts": {
     "start": "node fuse dev",
     "prod": "node fuse prod",
-    "test": "$(npm bin)/jest",
-    "test-auto": "$(npm bin)/jest --watch",
-    "prod-test": "NODE_ENV=prod-test npm run prod && node config/mock-server.js",
-    "win:prod-test": "set NODE_ENV=prod-test && npm run prod && node config/mock-server.js"
+    "test": "./node_modules/.bin/jest",
+    "test-auto": "./node_modules/.bin/jest --watch",
+    "prod-test":
+      "NODE_ENV=prod-test npm run prod && node config/mock-server.js",
+    "win:prod-test":
+      "set NODE_ENV=prod-test && npm run prod && node config/mock-server.js",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "tslint --fix", "git add"]
   },
   "babel": {
-    "presets": [
-      "env"
-    ],
-    "plugins": [
-      "transform-es2015-modules-commonjs"
-    ]
+    "presets": ["env"],
+    "plugins": ["transform-es2015-modules-commonjs"]
   },
   "jest": {
     "verbose": true,
     "automock": true,
     "collectCoverage": true,
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,ts,tsx,jsx}"
-    ],
-    "coverageReporters": [
-      "lcov"
-    ],
-    "coveragePathIgnorePatterns": [
-      "\\.d\\.ts$"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+    "collectCoverageFrom": ["src/**/*.{js,ts,tsx,jsx}"],
+    "coverageReporters": ["lcov"],
+    "coveragePathIgnorePatterns": ["\\.d\\.ts$"],
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]",
       "\\.d\\.ts$",
@@ -101,11 +97,10 @@
       "^.+\\.scss$": "<rootDir>/config/mocks/styleMock.js",
       "^.+\\.(t|j)sx?$": "ts-jest"
     },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
-    ],
+    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/config/mocks/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+        "<rootDir>/config/mocks/fileMock.js",
       "^.+\\.(scss|css)$": "<rootDir>/config/mocks/styleMock.js",
       "^@[/](.*)": "<rootDir>/src/$1"
     },
@@ -113,12 +108,8 @@
       "<rootDir>/config/enzyme-setup.js",
       "<rootDir>/config/jsdom-setup.js"
     ],
-    "unmockedModulePathPatterns": [
-      "react"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ],
+    "unmockedModulePathPatterns": ["react"],
+    "snapshotSerializers": ["enzyme-to-json/serializer"],
     "testRegex": "\\.spec\\.(js|ts|jsx|tsx)$"
   }
 }

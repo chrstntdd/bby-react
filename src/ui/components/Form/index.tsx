@@ -33,7 +33,7 @@ export class Form extends Component<PForm & React.HTMLProps<HTMLFormElement>, SF
     const state = {
       fields: new Map(this.props.fieldDefaults),
       fieldKeys: this.props.fieldDefaults.map(key => key[0]),
-      allFieldsValid: false
+      allFieldsValid: !this.props.fieldDefaults.some(field => field[1].validationFn)
     };
 
     state.fieldKeys.forEach(key => {
@@ -63,7 +63,11 @@ export class Form extends Component<PForm & React.HTMLProps<HTMLFormElement>, SF
           fields: prevState.fields
         };
       },
-      () => this.validateInput(fieldKey)
+      () => {
+        if (this.state.fields.get(fieldKey).validationFn) {
+          this.validateInput(fieldKey);
+        }
+      }
     );
   };
 
@@ -164,18 +168,18 @@ export class Form extends Component<PForm & React.HTMLProps<HTMLFormElement>, SF
     });
   }
 
-  getInputProps = ({ id, onChange, onFocus, ...rest } = {}) => {
-    const field = this.state.fields.get(id);
+  getInputProps = (props) => {
+    const field = this.state.fields.get(props.id);
 
     return {
-      ...rest,
-      id,
+      ...props,
+      id: props.id,
       value: field.value,
       isValid: field.isValid,
       validationMsg: field.validationMsg,
       className: field.value === '' ? '' : 'has-content',
-      onChange: callAll(onChange, this.updateField),
-      onFocus: callAll(onFocus, this.handleInputFocus)
+      onChange: callAll(props.onChange, this.updateField),
+      onFocus: callAll(props.onFocus, this.handleInputFocus)
     };
   };
 
