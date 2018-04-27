@@ -72,7 +72,7 @@
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,json,css,md}": ["prettier --write", "tslint --fix", "git add"]
+    "*.{js,ts,tsx,json,css,md}": ["prettier --write", "tslint --fix", "git add"]
   },
   "babel": {
     "presets": ["env"],
