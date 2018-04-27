@@ -13,7 +13,7 @@ interface InputField {
 
 interface PForm {
   id: string;
-  className: string;
+  className?: string;
   fieldDefaults: (string | InputField)[][];
   onInputChange?: (any) => any;
   onFormSubmit: (any) => any;
@@ -47,6 +47,25 @@ export class Form extends Component<PForm & React.HTMLProps<HTMLFormElement>, SF
 
     this.state = state;
   }
+
+  updateField = event => {
+    const fieldKey = event.target.id;
+    const value = event.target.value;
+
+    this.setState(
+      prevState => {
+        prevState.fields.set(fieldKey, {
+          ...prevState.fields.get(fieldKey),
+          value
+        });
+
+        return {
+          fields: prevState.fields
+        };
+      },
+      () => this.validateInput(fieldKey)
+    );
+  };
 
   handleFormSubmit = e => {
     e.preventDefault();
@@ -98,16 +117,16 @@ export class Form extends Component<PForm & React.HTMLProps<HTMLFormElement>, SF
   }
 
   validateInput = debounce(fieldKey => {
-    const field = this.state.fields.get(fieldKey);
-    const validationMsg = field.validationFn()(field.value);
     let fieldsToUpdate;
+    const inputField: InputField = this.state.fields.get(fieldKey);
+    const validationMsg: Maybe<string> = inputField.validationFn()(inputField.value);
 
     validationMsg.caseOf({
       /* FIELD IS INVALID */
-      just: msg => {
+      just: validationMsg => {
         fieldsToUpdate = {
           isValid: false,
-          validationMsg: msg
+          validationMsg
         };
       },
 
@@ -144,26 +163,6 @@ export class Form extends Component<PForm & React.HTMLProps<HTMLFormElement>, SF
       })
     });
   }
-
-  updateField = event => {
-    const target = event.target;
-    const fieldKey = target.id;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-
-    this.setState(
-      prevState => {
-        prevState.fields.set(fieldKey, {
-          ...prevState.fields.get(fieldKey),
-          value
-        });
-
-        return {
-          fields: prevState.fields
-        };
-      },
-      () => this.validateInput(fieldKey)
-    );
-  };
 
   getInputProps = ({ id, onChange, onFocus, ...rest } = {}) => {
     const field = this.state.fields.get(id);
