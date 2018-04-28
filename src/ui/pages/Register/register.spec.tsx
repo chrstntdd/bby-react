@@ -1,11 +1,13 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import React from "react";
+import { shallow } from "enzyme";
 
-import Logout from './';
+import { Register } from "./";
 
-describe('<Logout/>', () => {
-  it('should render without crashing', () => {
-    const wrapper = shallow(<Logout />);
+window.scroll = jest.fn();
+
+describe("<Register/>", () => {
+  it("should render without crashing", () => {
+    const wrapper = shallow(<Register />);
 
     expect(wrapper).toMatchSnapshot();
   });

@@ -16,7 +16,7 @@ exports[`<Loading /> should render when waiting is false 1`] = `
 
 exports[`<Loading /> should render when waiting is true 1`] = `
 <div
-  className="show"
+  className="show kinda-center"
   id="loading-container"
 >
   <span
