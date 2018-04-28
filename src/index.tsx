@@ -3,9 +3,10 @@ import 'core-js/es6/set';
 import 'core-js/es6/object';
 import 'core-js/es6/array';
 import 'core-js/es6/number';
+import 'smoothscroll-polyfill';
 
-/* FOR TESTING DEV BUILD IN IE. 
-   PROMISE POLYFILL IS ADDED BY FUSEBOX WHEN BUNDLING FOR PROD 
+/* FOR TESTING DEV BUILD IN IE.
+   PROMISE POLYFILL IS ADDED BY FUSEBOX WHEN BUNDLING FOR PROD
 */
 // import 'core-js/es6/promise';
 

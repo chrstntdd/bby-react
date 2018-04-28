@@ -1,7 +1,7 @@
 import React, { PureComponent, createRef, Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import { validateInput } from '@/util';
+import { validateInput, noop } from '@/util';
 import { loginUser } from '@/state/actions';
 
 import Input from '@/ui/components/Input';
@@ -19,25 +19,7 @@ interface SSignInForm {}
 export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
   state = {
     /* TO BE USED TO CREATE AN ES6 MAP WITHIN THE FORM COMPONENT */
-    fieldDefaults: [
-      [
-        'employeeNumberInput',
-        {
-          validationFn: () =>
-            validateInput('Please enter a valid employee number', new RegExp(/^\w{1}\d+$/, 'gi'))
-        }
-      ],
-      [
-        'passwordInput',
-        {
-          validationFn: () =>
-            validateInput(
-              'Please enter a password with at least 6 characters',
-              new RegExp(/.{6,}/, 'gi')
-            )
-        }
-      ]
-    ]
+    fieldDefaults: [['employeeNumberInput', {}], ['passwordInput', {}]]
   };
 
   employeeNumberInput: React.RefObject<HTMLInputElement> = createRef();

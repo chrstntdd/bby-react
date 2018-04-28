@@ -10,7 +10,6 @@ exports[`DUMB <Login/> should render without crashing 1`] = `
   >
     <Connect(SignInForm)
       id="sign-in"
-      legendText="Login to your Account"
     />
     <div
       className="link-container w-full flex flex-col items-center"

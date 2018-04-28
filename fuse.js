@@ -23,13 +23,7 @@ const POSTCSS_PLUGINS = [
   require('postcss-flexbugs-fixes'),
   tailwindcss('./config/tailwind.js'),
   autoprefixer({
-    browsers: [
-      'Chrome >= 52',
-      'FireFox >= 44',
-      'Safari >= 7',
-      'Explorer 11',
-      'last 4 Edge versions'
-    ],
+    browsers: ['>0.25%', 'Explorer 11'],
     grid: true
   })
 ];

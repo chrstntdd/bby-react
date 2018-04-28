@@ -22,7 +22,6 @@ export class Login extends PureComponent<PLogin & RouteComponentProps<{}>, SLogi
 
   cardClass = 'bg-white-darkest mx-auto max-w-sm shadow-lg rounded-b overflow-hidden flex flex-col items-center justify-center ';
   linkClass = 'mb-2 blue-accent hover:text-bby-blue no-underline';
-  headingClass = 'text-4xl text-bby-blue text-center mx-auto';
 
   render() {
     const { waiting } = this.props;
@@ -34,7 +33,7 @@ export class Login extends PureComponent<PLogin & RouteComponentProps<{}>, SLogi
         )}
 
         <div id="login-card" className={waiting ? 'hide' : `show ${this.cardClass}`}>
-          <SignInForm id="sign-in" legendText="Login to your Account" />
+          <SignInForm id="sign-in" />
 
           <div className="link-container w-full flex flex-col items-center">
             <Link className={this.linkClass} to="/forgot-password">

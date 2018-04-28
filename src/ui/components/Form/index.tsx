@@ -168,7 +168,7 @@ export class Form extends Component<PForm & React.HTMLProps<HTMLFormElement>, SF
     });
   }
 
-  getInputProps = (props) => {
+  getInputProps = props => {
     const field = this.state.fields.get(props.id);
 
     return {
@@ -198,7 +198,11 @@ export class Form extends Component<PForm & React.HTMLProps<HTMLFormElement>, SF
 
   render() {
     return (
-      <form className={this.props.className} onSubmit={this.handleFormSubmit}>
+      <form
+        aria-labelledby={this.props.id}
+        className={this.props.className}
+        onSubmit={this.handleFormSubmit}
+      >
         {this.props.render(this.getStateAndHelpers())}
       </form>
     );

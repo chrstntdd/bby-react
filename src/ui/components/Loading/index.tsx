@@ -7,7 +7,7 @@ interface Props {
 }
 
 const LoadingIndicator: SFC<Props> = ({ waiting, message }) => (
-  <div id="loading-container" className={waiting ? 'show' : 'hide'}>
+  <div id="loading-container" className={waiting ? 'show kinda-center' : 'hide'}>
     <span className="loader loader-circles" />
     <p>{message}</p>
   </div>
