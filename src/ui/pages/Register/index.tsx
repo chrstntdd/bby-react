@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import LoadingIndicator from '@/ui/components/Loading';
-import RegisterForm from '@/ui/pages/Register/RegisterForm/Index';
+import RegisterForm from '@/ui/pages/Register/RegisterForm';
 
 import './register.scss';
 
