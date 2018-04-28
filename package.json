@@ -66,14 +66,9 @@
     "prod": "node fuse prod",
     "test": "./node_modules/.bin/jest",
     "test-auto": "./node_modules/.bin/jest --watch",
-    "prod-test":
-      "NODE_ENV=prod-test npm run prod && node config/mock-server.js",
-    "win:prod-test":
-      "set NODE_ENV=prod-test && npm run prod && node config/mock-server.js",
-    "precommit": "lint-staged test"
-  },
-  "lint-staged": {
-    "*.{js,ts,tsx,json,css,md}": ["prettier --write", "tslint --fix", "git add"]
+    "prod-test": "NODE_ENV=prod-test npm run prod && node config/mock-server.js",
+    "win:prod-test": "set NODE_ENV=prod-test && npm run prod && node config/mock-server.js",
+    "precommit": "npm run test"
   },
   "babel": {
     "presets": ["env"],
@@ -105,10 +100,7 @@
       "^.+\\.(scss|css)$": "<rootDir>/config/mocks/styleMock.js",
       "^@[/](.*)": "<rootDir>/src/$1"
     },
-    "setupFiles": [
-      "<rootDir>/config/enzyme-setup.js",
-      "<rootDir>/config/jsdom-setup.js"
-    ],
+    "setupFiles": ["<rootDir>/config/enzyme-setup.js", "<rootDir>/config/jsdom-setup.js"],
     "unmockedModulePathPatterns": ["react"],
     "snapshotSerializers": ["enzyme-to-json/serializer"],
     "testRegex": "\\.spec\\.(js|ts|jsx|tsx)$"
