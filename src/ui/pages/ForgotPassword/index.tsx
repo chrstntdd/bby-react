@@ -1,14 +1,13 @@
 import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { RouteComponentProps } from 'react-router';
 
 import { validateInput } from '@/util';
 
 import { getForgotPasswordToken } from '@/state/actions';
 
-import LoadingIndicator from '@/ui/components/Loading';
+import Form from '@/ui/components/Form';
 import Input from '@/ui/components/Input';
+import LoadingIndicator from '@/ui/components/Loading';
 
 import './forgot_password.scss';
 
@@ -19,83 +18,96 @@ interface PForgotPassword {
   errorMessage: string;
 }
 
-interface SForgotPassword {
-  employeeNumberInput: {
-    isValid: boolean;
-    value: string;
-  };
-}
+interface SForgotPassword {}
 
-export class ForgotPassword extends Component<
-  PForgotPassword & RouteComponentProps<{}>,
-  SForgotPassword
-> {
+export class ForgotPassword extends Component<PForgotPassword, SForgotPassword> {
   state = {
-    employeeNumberInput: {
-      isValid: false,
-      value: ''
+    fieldDefaults: [
+      [
+        'employeeIdInput',
+        {
+          validationFn: () =>
+            validateInput('Please enter a valid employee number', new RegExp(/^\w{1}\d+$/, 'gi'))
+        }
+      ]
+    ]
+  };
+
+  employeeIdInput: React.RefObject<HTMLInputElement> = createRef();
+
+  componentDidMount() {
+    this.employeeIdInput.current.focus();
+  }
+
+  handleFormSubmit = (formValues: string[][]): void => {
+    const [employeeIdInput] = formValues;
+
+    this.props.getForgotPasswordToken(employeeIdInput[1]);
+  };
+
+  renderAPIMsg(): JSX.Element {
+    if (this.props.errorMessage) {
+      return (
+        <div className="error-message">
+          <p>{this.props.errorMessage}</p>
+        </div>
+      );
+    } else if (this.props.message) {
+      return (
+        <div className="success-message">
+          <p>{this.props.message}</p>
+        </div>
+      );
     }
-  };
+    return null;
+  }
 
-  employeeNumberInput: React.RefObject<HTMLInputElement> = createRef();
-
-  handleFormSubmit = formProps => {
-    this.props.getForgotPasswordToken(formProps);
-  };
-
-  handleInputChange = (inputId: string, isValid: boolean, value?: string) => {
-    this.setState({
-      employeeNumberInput: {
-        isValid,
-        value
-      }
-    });
-  };
-
-  /* TODO:  handle rendering API messages */
-  // renderAlert() {
-  //   if (this.props.errorMessage) {
-  //     return (
-  //       <div className="error-message">
-  //         <p>{this.props.errorMessage}</p>
-  //       </div>
-  //     );
-  //   } else if (this.props.message) {
-  //     return (
-  //       <div className="success-message">
-  //         <p>{this.props.message}</p>
-  //       </div>
-  //     );
-  //   }
-  // }
+  legendClass = 'text-center text-3xl blue-accent mb-6';
+  fieldsetClass = 'w-full';
+  cardClass = 'bg-white-darkest mx-auto shadow-lg rounded-b';
+  submitButtonClass = 'mx-auto my-2 font-semibold rounded-full px-8 py-2 leading-normal bg-transparent border border-grey text-grey hover:border-bby-blue hover:bg-bby-blue hover:text-white trans-300ms-all';
 
   render() {
-    const { waiting } = this.props;
+    const { waiting, errorMessage, message } = this.props;
 
     return (
       <section id="forgot-password-wrapper">
         <LoadingIndicator waiting={waiting} message={'One moment please.'} />
-        <div id="forgot-password-card" className={waiting ? 'hide' : 'show'}>
-          <form aria-labelledby="forgot-password" onSubmit={this.handleFormSubmit}>
-            <fieldset>
-              <legend id="forgot-password">Forgot password</legend>
-              <div className="input-wrapper">
-                <Input
-                  type="text"
-                  id="employeeNumberInput"
-                  label="Employee Number"
-                  inputRef={this.employeeNumberInput}
-                  // validationCb={this.handleInputChange}
-                  // validateFn={validateInput(
-                  //   'Please enter a valid employee number',
-                  //   new RegExp(/^\w{1}\d+$/, 'gi')
-                  // )}
-                />
-                <span className="focus-border" />
-              </div>
-              <button type="submit">Reset Password</button>
-            </fieldset>
-          </form>
+        {errorMessage || message ? this.renderAPIMsg() : null}
+        <div id="forgot-password-card" className={waiting ? 'hide' : `show ${this.cardClass}`}>
+          <Form
+            id="forgot-password"
+            fieldDefaults={this.state.fieldDefaults}
+            onFormSubmit={this.handleFormSubmit}
+            render={({ onChange, getInputProps, getFormState }) => {
+              return (
+                <React.Fragment>
+                  <fieldset className={this.fieldsetClass}>
+                    <legend id="forgot-password" className={this.legendClass}>
+                      Forgot Password
+                    </legend>
+                    <div className="input-wrapper">
+                      <Input
+                        inputRef={this.employeeIdInput}
+                        {...getInputProps({
+                          type: 'text',
+                          label: 'Employee ID',
+                          id: 'employeeIdInput'
+                        })}
+                      />
+                    </div>
+                  </fieldset>
+                  <button
+                    type="submit"
+                    disabled={!getFormState().allFieldsValid}
+                    className={this.submitButtonClass}
+                  >
+                    Begin password reset
+                  </button>
+                </React.Fragment>
+              );
+            }}
+          />
         </div>
       </section>
     );
@@ -107,4 +119,4 @@ const mapStateToProps = state => ({
   message: state.auth.message
 });
 
-export default withRouter(connect(mapStateToProps, { getForgotPasswordToken })(ForgotPassword));
+export default connect(mapStateToProps, { getForgotPasswordToken })(ForgotPassword);

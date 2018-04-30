@@ -31,7 +31,7 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
       ['lastNameInput', {}],
       ['storeNumberInput', {}],
       [
-        'employeeNumberInput',
+        'employeeIdInput',
         {
           validationFn: () =>
             validateInput('Please enter a valid employee number', new RegExp(/^\w{1}\d+$/, 'gi'))
@@ -63,7 +63,7 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
   private firstNameInput: React.RefObject<HTMLInputElement> = createRef();
   private lastNameInput: React.RefObject<HTMLInputElement> = createRef();
   private storeNumberInput: React.RefObject<HTMLInputElement> = createRef();
-  private employeeNumberInput: React.RefObject<HTMLInputElement> = createRef();
+  private employeeIdInput: React.RefObject<HTMLInputElement> = createRef();
   private passwordInput: React.RefObject<HTMLInputElement> = createRef();
   private confirmPasswordInput: React.RefObject<HTMLInputElement> = createRef();
 
@@ -80,7 +80,7 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
       firstNameInput,
       lastNameInput,
       storeNumberInput,
-      employeeNumberInput,
+      employeeIdInput,
       passwordInput,
       confirmPasswordInput
     ] = formValues;
@@ -94,7 +94,7 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
         firstName: firstNameInput[1],
         lastName: lastNameInput[1],
         password: passwordInput[1],
-        employeeNumber: employeeNumberInput[1],
+        employeeNumber: employeeIdInput[1],
         storeNumber: storeNumberInput[1]
       };
 
@@ -154,11 +154,11 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
                     </div>
                     <div className="input-wrapper">
                       <Input
-                        inputRef={this.employeeNumberInput}
+                        inputRef={this.employeeIdInput}
                         {...getInputProps({
                           type: 'text',
                           label: 'Employee Number (eg: a1234567)',
-                          id: 'employeeNumberInput'
+                          id: 'employeeIdInput'
                         })}
                       />
                     </div>

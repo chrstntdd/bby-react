@@ -1,7 +1,6 @@
 import React, { PureComponent, createRef, Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import { validateInput, noop } from '@/util';
 import { loginUser } from '@/state/actions';
 
 import Input from '@/ui/components/Input';
@@ -19,24 +18,24 @@ interface SSignInForm {}
 export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
   state = {
     /* TO BE USED TO CREATE AN ES6 MAP WITHIN THE FORM COMPONENT */
-    fieldDefaults: [['employeeNumberInput', {}], ['passwordInput', {}]]
+    fieldDefaults: [['employeeIdInput', {}], ['passwordInput', {}]]
   };
 
-  employeeNumberInput: React.RefObject<HTMLInputElement> = createRef();
+  employeeIdInput: React.RefObject<HTMLInputElement> = createRef();
   passwordInput: React.RefObject<HTMLInputElement> = createRef();
 
   componentDidUpdate(prevProps: PSignInForm) {
     /* IF NEW ERROR MESSAGE CAME IN, RESET INPUT WITH FOCUS ON THE FIRST FIELD */
     /* ERROR MESSAGE IS CLEARED BEFORE EACH USER LOGIN ROUTINE */
     if (prevProps.errorMessage === '' && this.props.errorMessage) {
-      this.employeeNumberInput.current.focus();
+      this.employeeIdInput.current.focus();
     }
   }
 
   handleFormSubmit = (formValues): void => {
-    const [employeeNumberInput, passwordInput] = formValues;
+    const [employeeIdInput, passwordInput] = formValues;
 
-    this.props.loginUser(employeeNumberInput[1], passwordInput[1]);
+    this.props.loginUser(employeeIdInput[1], passwordInput[1]);
   };
 
   renderAPIMsg(): JSX.Element {
@@ -70,11 +69,11 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
                   </legend>
                   <div className="input-wrapper">
                     <Input
-                      inputRef={this.employeeNumberInput}
+                      inputRef={this.employeeIdInput}
                       {...getInputProps({
                         type: 'text',
-                        label: 'Employee Number',
-                        id: 'employeeNumberInput'
+                        label: 'Employee ID (eg: a1234567)',
+                        id: 'employeeIdInput'
                       })}
                     />
                   </div>

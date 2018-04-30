@@ -9,7 +9,7 @@ Object {
 exports[`Form Component getInputProps getter should return props to be spread on a form input 1`] = `
 Object {
   "className": "",
-  "id": "employeeNumberInput",
+  "id": "employeeIdInput",
   "isValid": true,
   "onChange": [Function],
   "onFocus": [Function],

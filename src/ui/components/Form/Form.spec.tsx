@@ -10,7 +10,7 @@ import Form from './';
 describe('Form Component', () => {
   const fieldDefaultsMock = [
     [
-      'employeeNumberInput',
+      'employeeIdInput',
       {
         validationFn: jest.fn()
       }
@@ -132,7 +132,7 @@ describe('Form Component', () => {
 
         expect(onFormSubmitMock).toHaveBeenCalledTimes(1);
         expect(onFormSubmitMock).toHaveBeenCalledWith([
-          ['employeeNumberInput', ''],
+          ['employeeIdInput', ''],
           ['passwordInput', '']
         ]);
         expect(clearFormValuesMock).toHaveBeenCalledTimes(1);
@@ -294,8 +294,8 @@ describe('Form Component', () => {
 
         jest.runOnlyPendingTimers();
 
-        expect(wrapper.state().fields.get('employeeNumberInput').validationMsg).toEqual('ERROR');
-        expect(wrapper.state().fields.get('employeeNumberInput').isValid).toBe(false);
+        expect(wrapper.state().fields.get('employeeIdInput').validationMsg).toEqual('ERROR');
+        expect(wrapper.state().fields.get('employeeIdInput').isValid).toBe(false);
         expect(validateWholeFormMock).toHaveBeenCalledTimes(1);
       });
     });
@@ -321,8 +321,8 @@ describe('Form Component', () => {
 
         jest.runOnlyPendingTimers();
 
-        expect(wrapper.state().fields.get('employeeNumberInput').validationMsg).toEqual('');
-        expect(wrapper.state().fields.get('employeeNumberInput').isValid).toBe(true);
+        expect(wrapper.state().fields.get('employeeIdInput').validationMsg).toEqual('');
+        expect(wrapper.state().fields.get('employeeIdInput').isValid).toBe(true);
         expect(validateWholeFormMock).toHaveBeenCalledTimes(1);
       });
     });

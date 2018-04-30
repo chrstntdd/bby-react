@@ -19,7 +19,7 @@ const footer = {
 
 const LandingPage = () => (
   <div>
-    <section className="h-screen w-screen">
+    <section className="h-screen w-screen text-black">
       <div className="w-full absolute pin-t z-10 flex justify-center md:justify-end">
         <Link to="/sign-up">
           <button className={navigationButtons}>Sign Up</button>
@@ -89,11 +89,11 @@ const LandingPage = () => (
       </div>
     </section>
     <section id="about-section">
-      <h2 className="text-4xl pt-6 text-white text-center">about</h2>
-      <blockquote className="text-xl pt-4 text-white text-center italic font-thin">
+      <h2 className="text-4xl pt-6 text-center">About</h2>
+      <blockquote className="text-xl pt-4 text-center italic font-thin">
         "A streamlined system for efficiently and accurately managing retail inventory."
       </blockquote>
-      <p className="text-lg text-white leading-normal p-4 about-copy lp-max-width">
+      <p className="text-lg leading-normal p-4 about-copy lp-max-width">
         That sounds great and all, but what does that mean exactly? Imagine for a moment that you
         are in a retail setting. When shipments of products come into your store, they will be
         accompanied by a manifest that notates exactly what products and how many of them were put

@@ -77,10 +77,10 @@ describe.skip('SignInForm componnet', () => {
     afterAll(() => {
       SignInForm.prototype.render = render;
     });
-    it('should reset the classNames and values of the inputs and focus the employeeNumberInput', () => {
+    it('should reset the classNames and values of the inputs and focus the employeeIdInput', () => {
       const wrapper = shallow(<SignInForm errorMessage="" />);
 
-      wrapper.instance().employeeNumberInput.current = {
+      wrapper.instance().employeeIdInput.current = {
         className: 'has-content',
         value: 'a12345',
         focus: jest.fn()
@@ -93,11 +93,11 @@ describe.skip('SignInForm componnet', () => {
 
       wrapper.setProps({ errorMessage: 'API failure' });
 
-      expect(wrapper.instance().employeeNumberInput.current.className).toBe('');
+      expect(wrapper.instance().employeeIdInput.current.className).toBe('');
       expect(wrapper.instance().passwordInput.current.className).toBe('');
-      expect(wrapper.instance().employeeNumberInput.current.value).toBe('');
+      expect(wrapper.instance().employeeIdInput.current.value).toBe('');
       expect(wrapper.instance().passwordInput.current.value).toBe('');
-      expect(wrapper.instance().employeeNumberInput.current.focus).toHaveBeenCalledTimes(1);
+      expect(wrapper.instance().employeeIdInput.current.focus).toHaveBeenCalledTimes(1);
     });
     it('should do nothing else', () => {
       const wrapper = shallow(<SignInForm />);
@@ -120,7 +120,7 @@ describe.skip('SignInForm componnet', () => {
         });
 
         signInForm.state = {
-          employeeNumberInput: {
+          employeeIdInput: {
             isValid: true,
             value: 'a123456'
           },
@@ -148,7 +148,7 @@ describe.skip('SignInForm componnet', () => {
         });
 
         signInForm.state = {
-          employeeNumberInput: {
+          employeeIdInput: {
             isValid: false,
             value: 'a%#</>$'
           },
@@ -182,15 +182,12 @@ describe.skip('SignInForm componnet', () => {
         const wrapper = shallow(<SignInForm {...requiredProps} />);
         const inputValue = '!@#$$#@$';
 
-        (wrapper.instance() as SignInForm).validateAndUpdateState(
-          inputValue,
-          'employeeNumberInput'
-        );
+        (wrapper.instance() as SignInForm).validateAndUpdateState(inputValue, 'employeeIdInput');
         jest.runOnlyPendingTimers();
 
-        expect(wrapper.state().employeeNumberInput.validationMsg).toEqual(expect.any(String));
-        expect(wrapper.state().employeeNumberInput.isValid).toBe(false);
-        expect(wrapper.state().employeeNumberInput.value).toBe(inputValue);
+        expect(wrapper.state().employeeIdInput.validationMsg).toEqual(expect.any(String));
+        expect(wrapper.state().employeeIdInput.isValid).toBe(false);
+        expect(wrapper.state().employeeIdInput.value).toBe(inputValue);
       });
     });
 
@@ -245,7 +242,7 @@ describe.skip('SignInForm componnet', () => {
       const wrapper = shallow(<SignInForm />);
 
       wrapper.setState({
-        employeeNumberInput: {
+        employeeIdInput: {
           value: 'something'
         },
         passwordInput: {
