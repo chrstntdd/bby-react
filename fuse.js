@@ -38,8 +38,8 @@ context(
       return FuseBox.init({
         homeDir: './src',
         output: `${CLIENT_OUT}/$name.js`,
-        sourceMaps: !this.isProduction,
-        target: 'browser@es5',
+        sourceMaps: { inline: false, vendor: false }, //Not needed as we are debugging with vscode,
+        target: this.isProduction ? 'browser@es5' : 'browser@es2017',
         cache: true,
         allowSyntheticDefaultImports: true,
         alias: {

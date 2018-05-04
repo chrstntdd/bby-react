@@ -39,7 +39,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.3",
-    "fuse-box": "^3.2.1",
+    "fuse-box": "^3.3.0-next.3",
     "husky": "^0.14.3",
     "jest": "^22.4.3",
     "jest-cli": "^22.4.3",
@@ -67,17 +67,34 @@
     "precommit": "npm run test"
   },
   "babel": {
-    "presets": ["env"],
-    "plugins": ["transform-es2015-modules-commonjs"]
+    "presets": [
+      "env"
+    ],
+    "plugins": [
+      "transform-es2015-modules-commonjs"
+    ]
   },
   "jest": {
     "verbose": true,
     "automock": true,
     "collectCoverage": true,
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
-    "collectCoverageFrom": ["src/**/*.{js,ts,tsx,jsx}"],
-    "coverageReporters": ["lcov"],
-    "coveragePathIgnorePatterns": ["\\.d\\.ts$"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,ts,tsx,jsx}"
+    ],
+    "coverageReporters": [
+      "lcov"
+    ],
+    "coveragePathIgnorePatterns": [
+      "\\.d\\.ts$"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]",
       "\\.d\\.ts$",
@@ -89,16 +106,24 @@
       "^.+\\.scss$": "<rootDir>/config/mocks/styleMock.js",
       "^.+\\.(t|j)sx?$": "ts-jest"
     },
-    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"],
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-        "<rootDir>/config/mocks/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/config/mocks/fileMock.js",
       "^.+\\.(scss|css)$": "<rootDir>/config/mocks/styleMock.js",
       "^@[/](.*)": "<rootDir>/src/$1"
     },
-    "setupFiles": ["<rootDir>/config/enzyme-setup.js", "<rootDir>/config/jsdom-setup.js"],
-    "unmockedModulePathPatterns": ["react"],
-    "snapshotSerializers": ["enzyme-to-json/serializer"],
+    "setupFiles": [
+      "<rootDir>/config/enzyme-setup.js",
+      "<rootDir>/config/jsdom-setup.js"
+    ],
+    "unmockedModulePathPatterns": [
+      "react"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "testRegex": "\\.spec\\.(js|ts|jsx|tsx)$"
   }
 }

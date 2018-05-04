@@ -15,9 +15,9 @@
     "importHelpers": true,
     "noEmitHelpers": true,
     "jsx": "react",
-    "lib": ["dom", "es6", "es7", "es2017"],
+    "lib": ["dom", "es6", "es7", "es2017", "esnext"],
     "target": "es5",
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
@@ -31,6 +31,6 @@
     "sourceMap": true,
     "typeRoots": ["./node_modules/@types"]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]
 }
