@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { validateInput } from '@/util';
 
-import { getForgotPasswordToken } from '@/state/actions';
+import { getForgotPasswordToken } from '@/state/routines';
 
 import Form from '@/ui/components/Form';
 import Input from '@/ui/components/Input';

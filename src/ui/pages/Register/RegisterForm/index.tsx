@@ -2,7 +2,7 @@ import React, { PureComponent, createRef, Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import { validateInput } from '@/util';
-import { registerUser } from '@/state/actions';
+import { registerUser } from '@/state/routines';
 
 import Input from '@/ui/components/Input';
 import Form from '@/ui/components/Form';
@@ -103,7 +103,7 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
   };
 
   fieldsetClass = 'w-full';
-  legendClass = 'text-center text-5xl blue-accent';
+  legendClass = 'text-center text-2xl blue-accent';
   submitButtonClass = 'mx-auto my-2 font-semibold rounded-full px-8 py-2 leading-normal bg-transparent border border-grey text-grey hover:border-bby-blue hover:bg-bby-blue hover:text-white trans-300ms-all';
 
   render() {

@@ -7,15 +7,8 @@ import ProductTable from './ProductTable';
 import SideBar from './SideBar';
 import DashboardHeader from './DashboardHeader';
 
-import {
-  syncToDatabase,
-  loadTable,
-  formatTable,
-  printTable,
-  clearTable,
-  shuffleTable,
-  logoutUser
-} from '@/state/actions';
+import { formatTable, printTable, clearTable, shuffleTable, logoutUser } from '@/state/actions';
+import { syncToDatabase, loadTable } from '@/state/routines';
 
 /* istanbul ignore next */
 import './dashboard.scss';

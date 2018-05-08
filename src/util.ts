@@ -20,3 +20,9 @@ export const debounce = (fn: any, delay: number) => {
     }, delay);
   };
 };
+
+export const getFirstQueryParamVal = (): string =>
+  window.location.search
+    .split('?')[1] /* Grab everything after the ? */
+    .split('&')[0] /* Only parse the first queryParam */
+    .split('=')[1]; /* Grab the first queryParam value */

@@ -9,7 +9,6 @@
     "url": "https://github.com/chrstntdd/bby-react.git"
   },
   "dependencies": {
-    "axios": "^0.18.0",
     "lodash.orderby": "^4.6.0",
     "lodash.shuffle": "^4.2.0",
     "react": "^16.3.2",
@@ -32,7 +31,6 @@
     "@types/react-router": "^4.0.23",
     "@types/react-router-dom": "^4.2.6",
     "autoprefixer": "^8.2.0",
-    "axios-mock-adapter": "^1.14.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "core-js": "^2.5.4",
@@ -101,7 +99,7 @@
       "__snapshots__"
     ],
     "testEnvironment": "node",
-    "testURL": "http://localhost",
+    "testURL": "http://localhost:3000",
     "transform": {
       "^.+\\.scss$": "<rootDir>/config/mocks/styleMock.js",
       "^.+\\.(t|j)sx?$": "ts-jest"

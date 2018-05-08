@@ -2,49 +2,16 @@
 @import '$homeDir/styles/colors.scss';
 
 #confirm-email-wrapper {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
-  background-color: $DARK_GREY;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
   #confirm-email-card {
     @media (min-width: $bp-xxsmall) {
       width: between(300px, 560px, $bp-xxsmall, $bp-xlarge);
     }
-    padding: 30px;
-    background-color: lighten($DARK_GREY, 10%);
-    display: flex;
-    align-content: center;
-    align-items: center;
-    flex-direction: column;
-    border-radius: 3px;
-    box-shadow: 0px 0px 48px -2px rgba(0, 0, 0, 0.75);
-    h1 {
-      width: 100%;
-      text-align: center;
-      color: white;
-      font-size: 4rem;
-      letter-spacing: 2px;
-    }
-    button {
-      border: 2px solid lightgrey;
-      text-transform: uppercase;
-      width: 80%;
-      padding: 1rem 1rem;
-      font-size: 1rem;
-      border-radius: 3px;
-      color: lightgrey;
-      transition-property: background, color, border;
-      transition-duration: 0.5s;
-      background: transparent;
-      &:hover {
-        transition-property: background, color, border;
-        color: white;
-        border: 2px solid $BESTBUY_YELLOW;
-        background: $BESTBUY_YELLOW;
-      }
-    }
+    margin-top: 6rem;
+    border-top: 0.3rem solid $BESTBUY_BLUE;
+    padding: 0;
+    width: between(300px, 660px, $bp-xxsmall, $bp-xlarge);
+    padding: between(0, 16px, $bp-xxsmall, $bp-xlarge);
   }
 }

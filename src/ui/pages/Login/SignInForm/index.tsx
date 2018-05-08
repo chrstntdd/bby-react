@@ -1,7 +1,7 @@
 import React, { PureComponent, createRef, Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import { loginUser } from '@/state/actions';
+import { loginUser } from '@/state/routines';
 
 import Input from '@/ui/components/Input';
 import Form from '@/ui/components/Form';

@@ -1,21 +1,8 @@
-interface IResponse {
-  ok: boolean; // 200-299 status code range
-  status: string;
-  statusText: string;
-  url: string;
-  clone: IResponse;
-  json: () => Promise<any>;
-  headers: {
-    keys: () => [string];
-    entries: () => string[][]; // 2D matrix as [key, value]
-    get: (header: string) => string;
-    has: (header: string) => Boolean; // Check for existence of key argument in the keys of the headers object
-  };
-}
+import { IResponse, IFetchOptions } from './index.d';
 
 export default (typeof fetch === 'function'
   ? fetch.bind()
-  : (url: string, options): Promise<IResponse> => {
+  : (url: string, options: IFetchOptions): Promise<IResponse> => {
       options = options || {};
 
       return new Promise((resolve, reject) => {
@@ -41,12 +28,14 @@ export default (typeof fetch === 'function'
           let headers = {};
           let header;
 
-          request.getAllResponseHeaders().replace(/^(.*?):\s*?([\s\S]*?)$/gm, (_, key, value) => {
-            keys.push((key = key.toLowerCase()));
-            all.push([key, value]);
-            header = headers[key];
-            headers[key] = header ? `${header},${value}` : value;
-          });
+          request
+            .getAllResponseHeaders()
+            .replace(/^(.*?):\s*?([\s\S]*?)$/gm, (_, key: string, value: string) => {
+              keys.push((key = key.toLowerCase()));
+              all.push([key, value]);
+              header = headers[key];
+              headers[key] = header ? `${header},${value}` : value;
+            });
 
           return {
             ok: ((request.status / 100) | 0) === 2,

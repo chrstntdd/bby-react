@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 
-import { validateInput } from '@/util';
+import { validateInput, getFirstQueryParamVal } from '@/util';
 
-import { resetPassword } from '@/state/actions';
+import { resetPassword } from '@/state/routines';
+
 import LoadingIndicator from '@/ui/components/Loading';
 import Input from '@/ui/components/Input';
+import Form from '@/ui/components/Form';
 
 import './reset_password.scss';
 
@@ -25,99 +27,125 @@ export class ResetPassword extends Component<
   SResetPassword
 > {
   state = {
-    passwordInput: {
-      isValid: false,
-      value: ''
-    },
-    passwordConfirmInput: {
-      isValid: false,
-      value: ''
+    fieldDefaults: [
+      [
+        'newPasswordInput',
+        {
+          validationFn: () =>
+            validateInput(
+              'Please enter a password with at least 6 characters',
+              new RegExp(/.{6,}/, 'gi')
+            )
+        }
+      ],
+      [
+        'confirmNewPasswordInput',
+        {
+          validationFn: () =>
+            validateInput(
+              'Please enter a password with at least 6 characters',
+              new RegExp(/.{6,}/, 'gi')
+            )
+        }
+      ]
+    ]
+  };
+
+  private newPasswordInput: React.RefObject<HTMLInputElement> = createRef();
+  private confirmNewPasswordInput: React.RefObject<HTMLInputElement> = createRef();
+
+  handleFormSubmit = (formValues): void => {
+    const [newPasswordInput, confirmNewPasswordInput] = formValues;
+    const resetToken = getFirstQueryParamVal();
+
+    if (newPasswordInput[1] !== confirmNewPasswordInput[1]) {
+      /* TODO: handle this case */
+      console.log('PASSWORD MISMATCH');
+    } else {
+      this.props.resetPassword(resetToken, newPasswordInput);
+      this.props.history.push('/dashboard');
     }
   };
 
-  private passwordInput: React.RefObject<HTMLInputElement> = createRef();
-  private passwordConfirmInput: React.RefObject<HTMLInputElement> = createRef();
-
-  handleFormSubmit() {
-    /* TODO: USE WINDOW.LOCATION.SEARCH */
-    const { search } = window.location;
-
-    // this.props.resetPassword(resetToken, newPassword);
-    this.props.history.push('/dashboard');
+  renderAPIMsg() {
+    if (this.props.errorMessage) {
+      return (
+        <div className="error-message">
+          <p>{this.props.errorMessage}</p>
+        </div>
+      );
+    } else if (this.props.message) {
+      return (
+        <div className="success-message">
+          <p>{this.props.message}</p>
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 
-  /* TODO: handle rendering api error message */
-
-  // renderAlert() {
-  //   if (this.props.errorMessage) {
-  //     return (
-  //       <div className="error-message">
-  //         <p>{this.props.errorMessage}</p>
-  //       </div>
-  //     );
-  //   } else if (this.props.message) {
-  //     return (
-  //       <div className="success-message">
-  //         <p>{this.props.message}</p>
-  //       </div>
-  //     );
-  //   }
-  // }
-
-  handleInputChange = (inputId: any, isValid: boolean, value?: string) => {
-    this.setState({
-      [inputId]: {
-        isValid: isValid,
-        value: value
-      }
-    });
-  };
+  legendClass = 'text-center text-2xl blue-accent';
+  cardClass = 'bg-white-darkest mx-auto shadow-lg rounded-b overflow-hidden flex flex-col items-center justify-center';
+  submitButtonClass = 'mx-auto my-2 font-semibold rounded-full px-8 py-2 leading-normal bg-transparent border border-grey text-grey hover:border-bby-blue hover:bg-bby-blue hover:text-white trans-300ms-all';
+  fieldsetClass = 'px-2';
 
   render() {
     const { waiting } = this.props;
 
     return (
-      <section id="reset-password-wrapper">
-        <LoadingIndicator waiting={waiting} message={'One moment please.'} />
-        <div id="reset-password-card" className={waiting ? 'hide' : 'show'}>
-          <form aria-labelledby="reset-password" onSubmit={this.handleFormSubmit}>
-            <fieldset id="reset-password">
-              <legend>Reset Password</legend>
-              <div className="input-wrapper">
-                <Input
-                  type="password"
-                  name="passwordInput"
-                  autoComplete="off"
-                  label="Password"
-                  inputRef={this.passwordInput}
-                  validationCb={this.handleInputChange}
-                  validateFn={validateInput(
-                    'Please enter a password with at least 6 characters',
-                    new RegExp(/.{6,}/, 'gi')
-                  )}
-                />
-                <span className="focus-border" />
-              </div>
-              <div className="input-wrapper">
-                <Input
-                  type="password"
-                  name="confirmPasswordInput"
-                  autoComplete="off"
-                  label="Confirm Password"
-                  inputRef={this.passwordConfirmInput}
-                  validationCb={this.handleInputChange}
-                  validateFn={validateInput(
-                    'Please enter a password with at least 6 characters',
-                    new RegExp(/.{6,}/, 'gi')
-                  )}
-                />
-                <span className="focus-border" />
-              </div>
-              <button type="submit">Change Password</button>
-            </fieldset>
-          </form>
+      <main id="reset-password-wrapper">
+        {!waiting ? null : <LoadingIndicator waiting={waiting} message={'One moment please.'} />}
+
+        {this.renderAPIMsg()}
+
+        <div id="reset-password-card" className={waiting ? 'hide' : `show ${this.cardClass}`}>
+          <Form
+            id="reset-password"
+            fieldDefaults={this.state.fieldDefaults}
+            onFormSubmit={this.handleFormSubmit}
+            className="flex flex-col"
+            render={({ onChange, getInputProps, getFormState, getFormProps }) => {
+              return (
+                <React.Fragment>
+                  <fieldset className={this.fieldsetClass}>
+                    <legend id="reset-password" className={this.legendClass}>
+                      Reset your password
+                    </legend>
+
+                    <div className="input-wrapper">
+                      <Input
+                        {...getInputProps({
+                          type: 'password',
+                          label: 'New Password',
+                          id: 'newPasswordInput'
+                        })}
+                      />
+                    </div>
+
+                    <div className="input-wrapper">
+                      <Input
+                        {...getInputProps({
+                          type: 'password',
+                          label: 'Confirm New Password',
+                          id: 'confirmNewPasswordInput'
+                        })}
+                      />
+                    </div>
+                  </fieldset>
+                  <button
+                    type="submit"
+                    disabled={!getFormState().allFieldsValid}
+                    className={this.submitButtonClass}
+                  >
+                    CHANGE PASSWORD AND LOGIN
+                  </button>
+                </React.Fragment>
+              );
+            }}
+          />
         </div>
-      </section>
+      </main>
     );
   }
 }

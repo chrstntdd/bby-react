@@ -2,9 +2,8 @@ import React, { PureComponent, createRef } from 'react';
 import { connect } from 'react-redux';
 
 import { timeout } from '@/util';
-
 import { UPC } from '@/state/actions/types';
-import { getProductDetails } from '@/state/actions';
+import { getProductDetails } from '@/state/routines';
 
 import LoadingIndicator from '@/ui/components/Loading';
 
