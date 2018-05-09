@@ -38,14 +38,6 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
     this.props.loginUser(employeeIdInput[1], passwordInput[1]);
   };
 
-  renderAPIMsg(): JSX.Element {
-    return (
-      <div className="error-message">
-        <p>{this.props.errorMessage}</p>
-      </div>
-    );
-  }
-
   fieldsetClass = 'flex flex-col items-center w-5/6';
   legendClass = 'text-center text-2xl mx-auto m-6 blue-accent';
   submitButtonClass = 'mx-auto my-2 font-semibold rounded-full px-8 py-2 leading-normal bg-transparent border border-grey text-grey hover:border-bby-blue hover:bg-bby-blue hover:text-white trans-300ms-all';
@@ -54,7 +46,6 @@ export class SignInForm extends PureComponent<PSignInForm, SSignInForm> {
   render() {
     return (
       <React.Fragment>
-        {this.props.errorMessage ? this.renderAPIMsg() : null}
         <Form
           id={this.props.id}
           fieldDefaults={this.state.fieldDefaults}
