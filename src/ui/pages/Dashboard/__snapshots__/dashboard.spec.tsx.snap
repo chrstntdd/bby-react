@@ -18,6 +18,7 @@ exports[`<Dashboard/> render method should render the dashboard 1`] = `
           "calls": Array [
             Array [],
           ],
+          "results": undefined,
         }
       }
     />

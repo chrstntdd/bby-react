@@ -15,8 +15,8 @@ const Input: React.SFC<PInput & React.HTMLProps<HTMLInputElement>> = ({
   isValid,
   inputRef,
   onChange,
-  className,
-  validationMsg,
+  className = '',
+  validationMsg = '',
   ...inputAttrs
 }) => {
   return (

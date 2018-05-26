@@ -40,6 +40,8 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
       [
         'passwordInput',
         {
+          label: 'Confirm Password',
+          match: 'confirmPasswordInput',
           validationFn: () =>
             validateInput(
               'Please enter a password with at least 6 characters',
@@ -50,6 +52,8 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
       [
         'confirmPasswordInput',
         {
+          label: 'Password',
+          match: 'passwordInput',
           validationFn: () =>
             validateInput(
               'Please enter a password with at least 6 characters',
@@ -61,11 +65,6 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
   };
 
   private firstNameInput: React.RefObject<HTMLInputElement> = createRef();
-  private lastNameInput: React.RefObject<HTMLInputElement> = createRef();
-  private storeNumberInput: React.RefObject<HTMLInputElement> = createRef();
-  private employeeIdInput: React.RefObject<HTMLInputElement> = createRef();
-  private passwordInput: React.RefObject<HTMLInputElement> = createRef();
-  private confirmPasswordInput: React.RefObject<HTMLInputElement> = createRef();
 
   componentDidUpdate(prevProps: PRegisterForm) {
     /* IF NEW ERROR MESSAGE CAME IN, RESET INPUT WITH FOCUS ON THE FIRST FIELD */
@@ -86,8 +85,6 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
     ] = formValues;
 
     if (confirmPasswordInput[1] !== passwordInput[1]) {
-      /* TODO: handle this case */
-      console.log('PASSWORD MISMATCH');
       this.firstNameInput.current.focus();
     } else {
       const registerUserObj: IRegisterUser = {
@@ -106,6 +103,84 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
   legendClass = 'text-center text-2xl blue-accent';
   submitButtonClass = 'mx-auto my-2 font-semibold rounded-full px-8 py-2 leading-normal bg-transparent border border-grey text-grey hover:border-bby-blue hover:bg-bby-blue hover:text-white trans-300ms-all';
 
+  renderForm = ({ onChange, getInputProps, getFormState, getFormProps }) => {
+    return (
+      <Fragment>
+        <fieldset>
+          <div id="register-fieldset">
+            <legend id={this.props.id} className={this.legendClass}>
+              Register for a Quantified account
+            </legend>
+            <div className="input-wrapper">
+              <Input
+                inputRef={this.firstNameInput}
+                {...getInputProps({
+                  type: 'text',
+                  label: 'First Name',
+                  id: 'firstNameInput'
+                })}
+              />
+            </div>
+            <div className="input-wrapper">
+              <Input
+                {...getInputProps({
+                  type: 'text',
+                  label: 'Last Name',
+                  id: 'lastNameInput'
+                })}
+              />
+            </div>
+
+            <div className="input-wrapper">
+              <Input
+                {...getInputProps({
+                  type: 'number',
+                  label: 'Store Number',
+                  id: 'storeNumberInput'
+                })}
+              />
+            </div>
+            <div className="input-wrapper">
+              <Input
+                {...getInputProps({
+                  type: 'text',
+                  label: 'Employee Number (eg: a1234567)',
+                  id: 'employeeIdInput'
+                })}
+              />
+            </div>
+            <div className="input-wrapper">
+              <Input
+                {...getInputProps({
+                  type: 'password',
+                  label: 'Password',
+                  id: 'passwordInput'
+                })}
+              />
+            </div>
+            <div className="input-wrapper">
+              <Input
+                {...getInputProps({
+                  type: 'password',
+                  label: 'Confirm Password',
+                  id: 'confirmPasswordInput'
+                })}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={!getFormState().allFieldsValid}
+              className={this.submitButtonClass}
+            >
+              Create Account
+            </button>
+          </div>
+        </fieldset>
+      </Fragment>
+    );
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -113,89 +188,10 @@ export class RegisterForm extends PureComponent<PRegisterForm, SRegisterForm> {
           id={this.props.id}
           fieldDefaults={this.state.fieldDefaults}
           onFormSubmit={this.handleFormSubmit}
-          render={({ onChange, getInputProps, getFormState, getFormProps }) => {
-            return (
-              <Fragment>
-                <fieldset>
-                  <div id="register-fieldset">
-                    <legend id={this.props.id} className={this.legendClass}>
-                      Register here
-                    </legend>
-                    <div className="input-wrapper">
-                      <Input
-                        inputRef={this.firstNameInput}
-                        {...getInputProps({
-                          type: 'text',
-                          label: 'First Name',
-                          id: 'firstNameInput'
-                        })}
-                      />
-                    </div>
-                    <div className="input-wrapper">
-                      <Input
-                        inputRef={this.lastNameInput}
-                        {...getInputProps({
-                          type: 'text',
-                          label: 'Last Name',
-                          id: 'lastNameInput'
-                        })}
-                      />
-                    </div>
-
-                    <div className="input-wrapper">
-                      <Input
-                        inputRef={this.storeNumberInput}
-                        {...getInputProps({
-                          type: 'number',
-                          label: 'Store Number',
-                          id: 'storeNumberInput'
-                        })}
-                      />
-                    </div>
-                    <div className="input-wrapper">
-                      <Input
-                        inputRef={this.employeeIdInput}
-                        {...getInputProps({
-                          type: 'text',
-                          label: 'Employee Number (eg: a1234567)',
-                          id: 'employeeIdInput'
-                        })}
-                      />
-                    </div>
-                    <div className="input-wrapper">
-                      <Input
-                        inputRef={this.passwordInput}
-                        {...getInputProps({
-                          type: 'password',
-                          label: 'Password',
-                          id: 'passwordInput'
-                        })}
-                      />
-                    </div>
-                    <div className="input-wrapper">
-                      <Input
-                        inputRef={this.confirmPasswordInput}
-                        {...getInputProps({
-                          type: 'password',
-                          label: 'Confirm Password',
-                          id: 'confirmPasswordInput'
-                        })}
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={!getFormState().allFieldsValid}
-                      className={this.submitButtonClass}
-                    >
-                      Create Account
-                    </button>
-                  </div>
-                </fieldset>
-              </Fragment>
-            );
-          }}
-        />
+          allFieldsRequired
+        >
+          {this.renderForm}
+        </Form>
       </React.Fragment>
     );
   }

@@ -9,7 +9,7 @@ exports[`Input component should render 1`] = `
   </label>
   <input
     autoComplete="off"
-    className="undefined invalid"
+    className=" invalid"
     id="1234"
   />
 </React.Fragment>
