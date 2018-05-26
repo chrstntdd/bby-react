@@ -42,6 +42,7 @@ context(
         target: this.isProduction ? 'browser@es5' : 'browser@es2017',
         cache: true,
         allowSyntheticDefaultImports: true,
+        hash: this.isProduction,
         alias: {
           '@': '~'
         },
