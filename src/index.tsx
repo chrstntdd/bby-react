@@ -14,8 +14,9 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { generateAsyncComponent } from '@/ui/components/AsyncComponent';
 
-import App from '@/ui/App';
+const App = generateAsyncComponent(() => import('@/ui/App'));
 import store from '@/state/store';
 
 import './styles/index.scss';

@@ -8,7 +8,7 @@ exports[`<Dashboard/> render method should render the dashboard 1`] = `
   <div
     id="main-content-area"
   >
-    <Component
+    <SideBar
       clearTable={[MockFunction]}
       formatTable={[MockFunction]}
       printTable={[MockFunction]}

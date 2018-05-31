@@ -3,14 +3,17 @@ import { Route, Switch } from 'react-router-dom';
 
 import RequireAuth from '@/ui/components/RequireAuth';
 
-import LandingPage from '@/ui/pages/LandingPage';
+import NotFoundPage from '@/ui/pages/NotFound';
+import VerifyEmail from '@/ui/pages/VerifyEmail';
 import ForgotPassword from '@/ui/pages/ForgotPassword';
-import Login from '@/ui/pages/Login';
 import Register from '@/ui/pages/Register';
 import ResetPassword from '@/ui/pages/ResetPassword';
-import VerifyEmail from '@/ui/pages/VerifyEmail';
-import Dashboard from '@/ui/pages/Dashboard';
-import NotFoundPage from '@/ui/pages/NotFound';
+import Login from '@/ui/pages/Login';
+
+import { generateAsyncComponent } from '@/ui/components/AsyncComponent';
+
+const LandingPage = generateAsyncComponent(() => import('@/ui/pages/LandingPage'));
+const Dashboard = generateAsyncComponent(() => import('@/ui/pages/Dashboard'));
 
 export default class App extends Component {
   render() {

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReactTable from 'react-table';
+
 import { decrementProductQuantity, removeItemFromTable, printTable } from '@/state/actions';
 
 import './product-table.scss';
