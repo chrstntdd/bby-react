@@ -1,9 +1,10 @@
 language: node_js
-node_js: 
-  - "node"
+node_js:
+  - "9"
 dist: trusty
-install: 
-  - npm i -g npm@5.7.1
+before_install:
+  - npm i -g npm@6
+install:
   - npm ci
 script:
   - npm test

@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Register/> should render without crashing 1`] = `
+<main
+  id="register-wrapper"
+>
+  <div
+    className="show bg-white-darkest mx-auto shadow-lg rounded-b overflow-hidden flex flex-col items-center justify-center"
+    id="register-card"
+  >
+    <Connect(RegisterForm)
+      className="bg-white-darkest mx-auto shadow-lg rounded-b overflow-hidden flex flex-col items-center justify-center"
+      id="sign-up"
+    />
+    <Link
+      className="my-4 blue-accent hover:text-bby-blue no-underline"
+      replace={false}
+      to="/sign-in"
+    >
+      Sign In
+    </Link>
+  </div>
+</main>
+`;

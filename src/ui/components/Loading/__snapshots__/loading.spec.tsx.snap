@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Loading /> should render when waiting is false 1`] = `
+<div
+  className="hide"
+  id="loading-container"
+>
+  <span
+    className="loader loader-circles"
+  />
+  <p>
+    test
+  </p>
+</div>
+`;
+
+exports[`<Loading /> should render when waiting is true 1`] = `
+<div
+  className="show kinda-center"
+  id="loading-container"
+>
+  <span
+    className="loader loader-circles"
+  />
+  <p>
+    test
+  </p>
+</div>
+`;

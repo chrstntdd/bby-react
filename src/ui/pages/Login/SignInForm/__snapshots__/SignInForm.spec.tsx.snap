@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignInForm componnet render should render Input components with "has-content" class if it has a value in state 1`] = `
+<React.Fragment>
+  <form
+    className="w-full flex flex-col items-center"
+    onSubmit={[Function]}
+  >
+    <fieldset
+      className="flex flex-col items-center w-5/6"
+    >
+      <legend
+        className="text-center text-2xl mx-auto m-6 blue-accent"
+      />
+      <div
+        className="input-wrapper"
+      >
+        <Input
+          className="has-content"
+          id="employeeNumberInput"
+          inputRef={
+            Object {
+              "current": null,
+            }
+          }
+          label="Employee Number"
+          onChange={[Function]}
+          type="text"
+        />
+      </div>
+      <div
+        className="input-wrapper"
+      >
+        <Input
+          className="has-content"
+          id="passwordInput"
+          inputRef={
+            Object {
+              "current": null,
+            }
+          }
+          label="Password"
+          onChange={[Function]}
+          type="password"
+        />
+      </div>
+    </fieldset>
+    <button
+      className="mx-auto my-2 font-semibold rounded-full px-8 py-2 leading-normal bg-transparent border border-grey text-grey hover:border-bby-blue hover:bg-bby-blue hover:text-white trans-300ms-all"
+      disabled={true}
+      type="submit"
+    >
+      LOGIN
+    </button>
+  </form>
+</React.Fragment>
+`;
+
+exports[`SignInForm componnet renderAPIMsg method should return markup 1`] = `
+<div
+  className="error-message"
+>
+  <p>
+    BOOM
+  </p>
+</div>
+`;

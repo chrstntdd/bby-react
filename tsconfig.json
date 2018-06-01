@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"]
+      "@/*": ["src/*"]
     },
     "outDir": "dist/",
     "allowSyntheticDefaultImports": true,
@@ -15,7 +15,7 @@
     "importHelpers": true,
     "noEmitHelpers": true,
     "jsx": "react",
-    "lib": ["dom", "es7"],
+    "lib": ["dom", "es6", "es7", "es2017", "esnext"],
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -25,12 +25,12 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
-    "strict": true,
+    "strict": false,
     "pretty": true,
     "removeComments": true,
     "sourceMap": true,
     "typeRoots": ["./node_modules/@types"]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "src/**/*.spec.*"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules"]
 }

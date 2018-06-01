@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Form Component getFormState getter should return form state 1`] = `
+Object {
+  "allFieldsValid": false,
+}
+`;
+
+exports[`Form Component getInputProps getter should return props to be spread on a form input 1`] = `
+Object {
+  "className": "",
+  "id": "employeeIdInput",
+  "isValid": true,
+  "onBlur": [Function],
+  "onChange": [Function],
+  "onFocus": [Function],
+  "validationMsg": undefined,
+  "value": "",
+}
+`;
+
+exports[`Form Component getStateAndHelpers getter should return an object for use in the render function 1`] = `
+Object {
+  "getFormState": [Function],
+  "getInputProps": [Function],
+}
+`;

@@ -1,0 +1,71 @@
+@import '$homeDir/styles/rwd-helpers.scss';
+@import '$homeDir/styles/colors.scss';
+
+#login-card {
+  padding: 1rem 0;
+  border-top: 0.3rem solid $BESTBUY_BLUE;
+  width: 320px;
+  display: block;
+  @media (min-width: $bp-small) {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    width: 450px;
+  }
+}
+
+.test-credentials {
+  position: block;
+  color: white;
+  background: linear-gradient(to right, #57acc6, $BLUE_ACCENT, $BESTBUY_BLUE);
+  text-align: center;
+  @media (min-width: $bp-small) {
+    top: 85%;
+    position: fixed;
+  }
+}
+
+.input-wrapper {
+  flex: auto;
+  position: relative;
+  min-height: 110px;
+
+  .errors {
+    margin-top: 0.5rem;
+    animation: slideInDown 0.3s;
+    z-index: -10;
+    @keyframes slideInDown {
+      from {
+        transform: translate3d(0, -100%, 0);
+      }
+      to {
+        transform: translate3d(0, 0, 0);
+      }
+    }
+    .error-span {
+      color: darken(#ec6d75, 10%);
+      display: block;
+    }
+  }
+
+  input {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0.8rem;
+    color: rgb(51, 51, 51);
+    outline: 1px solid #e4e4e4;
+    &:focus {
+      outline: 1px solid $BESTBUY_BLUE;
+    }
+    &.invalid {
+      outline: 1px solid darken(#ec6d75, 10%);
+    }
+  }
+
+  label {
+    font-weight: 800;
+    display: block;
+    color: #5e6573;
+  }
+}

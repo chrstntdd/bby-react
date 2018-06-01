@@ -1,27 +1,6 @@
-import auth_reducer from './auth-reducer';
-import bby_reducer from './bby-reducer';
+import { authReducer, initialState as AUTH_INITIAL_STATE } from './auth-reducer';
+import { tableStateReducer, initialState as BBY_INITIAL_STATE } from './bby-reducer';
 import * as types from '../actions/types';
-
-const AUTH_INITIAL_STATE = {
-  userProfile: null,
-  jwt: null,
-  error: '',
-  message: '',
-  content: '',
-   isAuthenticated: false,
-  waiting: false
-};
-
-const BBY_INITIAL_STATE = {
-  products: [],
-  formatted: false,
-  printing: false,
-  tableId: '',
-  showModal: false,
-  selectOptionData: null,
-  lastTimeSaved: '',
-  lastItemScanned: ''
-};
 
 const mockOptionData = [
   {
@@ -88,11 +67,11 @@ const prodArr = [
 
 describe('auth reducer', () => {
   it('should return the initial state if not passed in', () => {
-    expect(auth_reducer(undefined, {})).toEqual(AUTH_INITIAL_STATE);
+    expect(authReducer(undefined, {})).toEqual(AUTH_INITIAL_STATE);
   });
   it('should handle LOGIN_SUCCESS', () => {
     expect(
-      auth_reducer([], {
+      authReducer([], {
         type: types.LOGIN_SUCCESS,
         payload: {
           user: 'mock user',
@@ -105,20 +84,20 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-       isAuthenticated: true,
+      isAuthenticated: true,
       waiting: false
     });
   });
   it('should handle UNAUTH_USER', () => {
     expect(
-      auth_reducer(
+      authReducer(
         {
           userProfile: 'mock user',
           jwt: 'mock jwt',
           error: '',
           message: '',
           content: '',
-           isAuthenticated: true
+          isAuthenticated: true
         },
         {
           type: types.UNAUTH_USER
@@ -130,20 +109,21 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-       isAuthenticated: false
+      isAuthenticated: false,
+      waiting: false
     });
   });
   it('should handle NOT_VERIFIED_LOGIN_ERROR', () => {
     const errorMessage = "YOU'RE NOT LOGGED IN";
     expect(
-      auth_reducer(
+      authReducer(
         {
           userProfile: null,
           jwt: null,
           error: '',
           message: '',
           content: '',
-           isAuthenticated: false
+          isAuthenticated: false
         },
         {
           type: types.NOT_VERIFIED_LOGIN_ERROR,
@@ -156,21 +136,21 @@ describe('auth reducer', () => {
       error: errorMessage,
       message: '',
       content: '',
-       isAuthenticated: false,
+      isAuthenticated: false,
       waiting: false
     });
   });
   it('should handle LOGIN_FAILURE', () => {
     const errorMessage = 'THERE WAS A LOGIN FAILURE';
     expect(
-      auth_reducer(
+      authReducer(
         {
           userProfile: null,
           jwt: null,
           error: '',
           message: '',
           content: '',
-           isAuthenticated: false
+          isAuthenticated: false
         },
         {
           type: types.LOGIN_FAILURE,
@@ -183,21 +163,21 @@ describe('auth reducer', () => {
       error: errorMessage,
       message: '',
       content: '',
-       isAuthenticated: false,
+      isAuthenticated: false,
       waiting: false
     });
   });
   it('should handle CLEAR_FLASH_MESSAGE', () => {
     const errorMessage = 'THERE WAS A LOGIN FAILURE';
     expect(
-      auth_reducer(
+      authReducer(
         {
           userProfile: null,
           jwt: null,
           error: errorMessage,
           message: '',
           content: '',
-           isAuthenticated: false
+          isAuthenticated: false
         },
         {
           type: types.CLEAR_FLASH_MESSAGE
@@ -209,20 +189,20 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-       isAuthenticated: false,
+      isAuthenticated: false,
       waiting: false
     });
   });
   it('should handle FORGOT_PASSWORD_REQUEST', () => {
     expect(
-      auth_reducer(
+      authReducer(
         {
           userProfile: null,
           jwt: null,
           error: '',
           message: '',
           content: '',
-           isAuthenticated: false,
+          isAuthenticated: false,
           waiting: false
         },
         {
@@ -235,20 +215,20 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-       isAuthenticated: false,
+      isAuthenticated: false,
       waiting: true
     });
   });
   it('should handle RESET_PASSWORD_REQUEST', () => {
     expect(
-      auth_reducer(
+      authReducer(
         {
           userProfile: null,
           jwt: null,
           error: '',
           message: '',
           content: '',
-           isAuthenticated: false,
+          isAuthenticated: false,
           waiting: false
         },
         {
@@ -261,21 +241,21 @@ describe('auth reducer', () => {
       error: '',
       message: '',
       content: '',
-       isAuthenticated: false,
+      isAuthenticated: false,
       waiting: true
     });
   });
   it('should handle REGISTER_SUCCESS', () => {
     const responseMessage = 'YOU REGISTERED SUCCESSFULLY';
     expect(
-      auth_reducer(
+      authReducer(
         {
           userProfile: null,
           jwt: null,
           error: '',
           message: '',
           content: '',
-           isAuthenticated: false
+          isAuthenticated: false
         },
         {
           type: types.REGISTER_SUCCESS,
@@ -288,21 +268,21 @@ describe('auth reducer', () => {
       error: '',
       message: responseMessage,
       content: '',
-       isAuthenticated: false,
+      isAuthenticated: false,
       waiting: false
     });
   });
   it('should handle REGISTER_FAILURE', () => {
     const errorMessage = 'THERE WAS A REGISTRATION ERROR';
     expect(
-      auth_reducer(
+      authReducer(
         {
           userProfile: null,
           jwt: null,
           error: '',
           message: '',
           content: '',
-           isAuthenticated: false,
+          isAuthenticated: false,
           waiting: true
         },
         {
@@ -316,7 +296,7 @@ describe('auth reducer', () => {
       error: errorMessage,
       message: '',
       content: '',
-       isAuthenticated: false,
+      isAuthenticated: false,
       waiting: false
     });
   });
@@ -324,11 +304,11 @@ describe('auth reducer', () => {
 
 describe('bby reducer', () => {
   it('should return the initial state if not passed in', () => {
-    expect(bby_reducer(undefined, {})).toEqual(BBY_INITIAL_STATE);
+    expect(tableStateReducer(undefined, {})).toEqual(BBY_INITIAL_STATE);
   });
   it('should handle POST_UPC', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [],
           formatted: false,
@@ -357,7 +337,7 @@ describe('bby reducer', () => {
   });
   it('should handle INCREMENT_PRODUCT_QUANTITY', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [mockProduct],
           formatted: false,
@@ -401,7 +381,7 @@ describe('bby reducer', () => {
 
   it('should handle DECREMENT_PRODUCT_QUANTITY', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [mockProduct],
           formatted: false,
@@ -441,7 +421,7 @@ describe('bby reducer', () => {
 
   it('should handle REMOVE_PRODUCT_FROM_TABLE', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [mockProduct],
           formatted: false,
@@ -467,7 +447,7 @@ describe('bby reducer', () => {
 
   it('should handle FORMAT_TABLE', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [],
           formatted: false,
@@ -492,7 +472,7 @@ describe('bby reducer', () => {
 
   it('should handle FORMAT_TABLE', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [],
           formatted: false,
@@ -517,7 +497,7 @@ describe('bby reducer', () => {
 
   it('should handle HIDE_ACTIONS', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [],
           formatted: false,
@@ -541,7 +521,7 @@ describe('bby reducer', () => {
   });
   it('should handle SHOW_ACTIONS', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [],
           formatted: false,
@@ -565,7 +545,7 @@ describe('bby reducer', () => {
   });
   it('should handle CLEAR_TABLE', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: prodArr,
           formatted: false,
@@ -589,7 +569,7 @@ describe('bby reducer', () => {
   });
   it('should handle SYNC_TABLE_SUCCESS', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [],
           formatted: false,
@@ -617,7 +597,7 @@ describe('bby reducer', () => {
 
   it('should handle LOAD_SAVED_TABLE', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [],
           formatted: false,
@@ -642,7 +622,7 @@ describe('bby reducer', () => {
   });
   it('should handle TOGGLE_LOAD_TABLE_MODAL', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [],
           formatted: false,
@@ -666,7 +646,7 @@ describe('bby reducer', () => {
     });
 
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [],
           formatted: false,
@@ -691,7 +671,7 @@ describe('bby reducer', () => {
   });
   it('should handle GET_USER_TABLE_DATA_SUCCESS', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [],
           formatted: false,
@@ -716,7 +696,7 @@ describe('bby reducer', () => {
   });
   it('should handle UNAUTH_USER', () => {
     expect(
-      bby_reducer(
+      tableStateReducer(
         {
           products: [],
           formatted: false,
@@ -729,16 +709,9 @@ describe('bby reducer', () => {
           type: types.UNAUTH_USER
         }
       )
-    ).toEqual({
-      products: [],
-      formatted: false,
-      printing: false,
-      tableId: '',
-      showModal: false,
-      selectOptionData: null
-    });
+    ).toEqual(BBY_INITIAL_STATE);
   });
 });
 
-/* do you think we connected the entire world before 
+/* do you think we connected the entire world before
 we could all accept eachothers differences */

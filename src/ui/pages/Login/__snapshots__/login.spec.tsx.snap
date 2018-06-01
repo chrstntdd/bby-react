@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DUMB <Login/> should render without crashing 1`] = `
+<main
+  id="login-wrapper"
+>
+  <div
+    className="show bg-white-darkest mx-auto max-w-sm shadow-lg rounded-b overflow-hidden flex flex-col items-center justify-center "
+    id="login-card"
+  >
+    <Connect(SignInForm)
+      id="sign-in"
+    />
+    <div
+      className="link-container w-full flex flex-col items-center"
+    >
+      <Link
+        className="mb-2 blue-accent hover:text-bby-blue no-underline"
+        replace={false}
+        to="/forgot-password"
+      >
+        Forgot password?
+      </Link>
+      <Link
+        className="mb-2 blue-accent hover:text-bby-blue no-underline"
+        replace={false}
+        to="/sign-up"
+      >
+        Sign Up
+      </Link>
+    </div>
+  </div>
+  <div
+    className="test-credentials p-2 flex flex-col justify-center items-center w-full"
+  >
+    <p>
+      Just testing? Use the temporary credentials below
+    </p>
+    <p>
+      <strong>
+        Employee Number
+      </strong>
+      : a1
+    </p>
+    <p>
+      <strong>
+        Password
+      </strong>
+      : testtesttest
+    </p>
+  </div>
+</main>
+`;

@@ -18,7 +18,31 @@ import {
   SHUFFLE_TABLE
 } from '../actions/types';
 
-const INITIAL_STATE = {
+export interface IProduct {
+  classId: number;
+  department: string;
+  departmentId: number;
+  modelNumber: string;
+  name: string;
+  quantity: number;
+  sku: number;
+  totalValue: number;
+  upc: 'string';
+  value: number;
+}
+
+export type TableState = {
+  readonly products: IProduct[];
+  readonly formatted: boolean;
+  readonly printing: boolean;
+  readonly tableId: string;
+  readonly showModal: boolean;
+  readonly selectOptionData: null;
+  readonly lastTimeSaved: string;
+  readonly lastItemScanned: string;
+};
+
+export const initialState: TableState = {
   products: [],
   formatted: false,
   printing: false,
@@ -29,9 +53,11 @@ const INITIAL_STATE = {
   lastItemScanned: ''
 };
 
-export default function(state = INITIAL_STATE, action) {
+export const tableStateReducer = (state: TableState = initialState, action): TableState => {
   switch (action.type) {
     /* hack to ensure redux persist doesn't load in a previous session */
+
+    /* SO WRITE YOUR OWN REDUX PERSIST THAT DONT BREAK IT */
     case LOGIN_SUCCESS: {
       return {
         ...state,
@@ -41,16 +67,18 @@ export default function(state = INITIAL_STATE, action) {
         products: []
       };
     }
+
     case POST_UPC:
-      /* Adds a new product to the top of the array.
+      /* Adds a new IProduct to the top of the array.
        * Also flips 'formatted' to false
        */
-      return Object.assign({}, state, {
+      return {
         ...state,
         formatted: false,
         products: [action.payload, ...state.products],
         lastItemScanned: action.payload.upc
-      });
+      };
+
     case INCREMENT_PRODUCT_QUANTITY:
       // INCREMENT QUANTITY AND CALCULATE NEW VALUE BASED ON UPDATED QTY
       return {
@@ -67,6 +95,7 @@ export default function(state = INITIAL_STATE, action) {
         ),
         lastItemScanned: action.payload
       };
+
     case DECREMENT_PRODUCT_QUANTITY:
       return {
         ...state,
@@ -86,6 +115,7 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         products: state.products.filter(product => product.upc !== action.payload)
       };
+
     case FORMAT_TABLE:
       return {
         ...state,
@@ -103,52 +133,53 @@ export default function(state = INITIAL_STATE, action) {
         products: shuffle(state.products),
         formatted: false
       };
+
     case SHOW_ACTIONS:
       return {
         ...state,
         printing: false
       };
+
     case HIDE_ACTIONS:
       return {
         ...state,
         printing: true
       };
+
     case CLEAR_TABLE:
       return {
         ...state,
         products: []
       };
+
     case SYNC_TABLE_SUCCESS:
       return {
         ...state,
         lastTimeSaved: action.payload
       };
+
     case LOAD_SAVED_TABLE:
       return {
         ...state,
         products: action.payload
       };
+
     case TOGGLE_LOAD_TABLE_MODAL:
       return {
         ...state,
         showModal: !state.showModal
       };
+
     case GET_USER_TABLE_DATA_SUCCESS:
       return {
         ...state,
         selectOptionData: action.payload
       };
+
     case UNAUTH_USER:
-      return {
-        ...state,
-        products: [],
-        formatted: false,
-        printing: false,
-        tableId: '',
-        showModal: false,
-        selectOptionData: null
-      };
+      return initialState;
+
     default:
       return state;
   }
-}
+};

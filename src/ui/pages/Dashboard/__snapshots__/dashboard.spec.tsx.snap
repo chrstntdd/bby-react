@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Dashboard/> render method should render the dashboard 1`] = `
+<div
+  id="dashboard-wrapper"
+>
+  <DashboardHeader />
+  <div
+    id="main-content-area"
+  >
+    <SideBar
+      clearTable={[MockFunction]}
+      formatTable={[MockFunction]}
+      printTable={[MockFunction]}
+      shuffleTable={[MockFunction]}
+      syncToDatabase={
+        [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": undefined,
+        }
+      }
+    />
+    <section
+      id="main-table-area"
+    >
+      <Connect(SearchBar) />
+      <withRouter(Connect(ProductTable)) />
+    </section>
+  </div>
+</div>
+`;

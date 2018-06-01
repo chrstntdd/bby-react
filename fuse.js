@@ -10,31 +10,28 @@ const {
   CSSResourcePlugin,
   Sparky
 } = require('fuse-box');
-const Purgecss = require('purgecss');
-const { unlinkSync, writeFileSync } = require('fs');
 const { src, task, exec, context } = require('fuse-box/sparky');
+const { unlinkSync, writeFileSync } = require('fs');
+const { promisify } = require('util');
 const { join } = require('path');
-const { info } = console;
+const Purgecss = require('purgecss');
+const glob = require('glob');
 const tailwindcss = require('tailwindcss');
 const express = require('express');
 const autoprefixer = require('autoprefixer');
+
+const { info } = console;
+const asyncGlob = promisify(glob);
 
 const POSTCSS_PLUGINS = [
   require('postcss-flexbugs-fixes'),
   tailwindcss('./config/tailwind.js'),
   autoprefixer({
-    browsers: [
-      'Chrome >= 52',
-      'FireFox >= 44',
-      'Safari >= 7',
-      'Explorer 11',
-      'last 4 Edge versions'
-    ],
+    browsers: ['>0.25%', 'Explorer 11'],
     grid: true
   })
 ];
 
-const outDir = join(__dirname, '/dist');
 const CLIENT_OUT = join(__dirname, 'dist/static');
 const TEMPLATE = join(__dirname, 'src/public/index.html');
 
@@ -42,12 +39,16 @@ context(
   class {
     build() {
       return FuseBox.init({
-        homeDir: './src',
+        homeDir: 'src',
         output: `${CLIENT_OUT}/$name.js`,
-        sourceMaps: !this.isProduction,
-        target: 'browser@es5',
-        cache: true,
+        sourceMaps: { inline: false, vendor: false }, //Not needed as we are debugging with vscode,
+        target: this.isProduction ? 'browser@es5' : 'browser@es2017',
+        cache: !this.isProduction,
         allowSyntheticDefaultImports: true,
+        hash: this.isProduction,
+        alias: {
+          '@': '~'
+        },
         plugins: [
           [SassPlugin({ importer: true }), PostCSSPlugin(POSTCSS_PLUGINS), CSSPlugin()],
           SVGPlugin(),
@@ -62,7 +63,7 @@ context(
               uglify: true,
               treeshake: true,
               polyfills: ['Promise'],
-              css: true
+              css: { clean: true }
             })
         ]
       });
@@ -95,7 +96,12 @@ task('prod-build', async context => {
 
   const fuse = context.build();
 
-  fuse.bundle('app').instructions('!> index.tsx');
+  // fuse.bundle('vendor').instructions('~ index.tsx');
+
+  fuse
+    .bundle('app')
+    .splitConfig({ dest: '/bundles' })
+    .instructions('!> index.tsx');
 
   await fuse.run();
 });
@@ -112,16 +118,18 @@ task('copy-images', () =>
 task('clean', () => src('./dist/*').clean('./dist/'));
 
 /* CUSTOM BUILD TASKS */
-task('purge', () => {
+task('purge', async () => {
   class TailwindExtractor {
     static extract(content) {
       return content.match(/[A-z0-9-:\/]+/g) || [];
     }
   }
 
+  const cssFiles = await asyncGlob(`${CLIENT_OUT}/*.css`);
+
   const purged = new Purgecss({
     content: ['dist/**/*.js', 'dist/**/*.html'],
-    css: [`${CLIENT_OUT}/styles.css`],
+    css: cssFiles,
     extractors: [
       {
         extractor: TailwindExtractor,
@@ -132,7 +140,7 @@ task('purge', () => {
 
   const [result] = purged.purge();
 
-  unlinkSync(`${CLIENT_OUT}/styles.css`);
+  unlinkSync(cssFiles[0]);
 
   writeFileSync(result.file, result.css, 'UTF-8');
 

@@ -121,6 +121,7 @@ POST
 * [Rocket Icon](https://thenounproject.com/search/?q=Rocket%20ship&i=658468)
 * [Shuffle Icon](https://thenounproject.com/search/?q=shuffle&i=1104277)
 * [Padlock Icon by by Gabriele Malaspina](https://thenounproject.com/search/?q=shield%20check%20mark&i=195234)
+* [backup by Dinosoft Labs from the Noun Project](https://thenounproject.com/search/?q=floppy%20disk&i=801306)
 
 ## Future Plans
 

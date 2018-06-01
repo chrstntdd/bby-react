@@ -1,9 +1,9 @@
 import { noop } from './util';
 
 describe('noop', () => {
-  it('returns an empty string', () => {
+  it('is void', () => {
     const result = noop();
 
-    expect(result).toBe('');
+    expect(result).toBeUndefined();
   });
 });

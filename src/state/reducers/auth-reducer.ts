@@ -19,7 +19,26 @@ import {
   SYNC_TABLE_FAILURE
 } from '../actions/types';
 
-const INITIAL_STATE = {
+export interface IUserProfile {
+  email: string;
+  firstName: string;
+  lastName: string;
+  id: string;
+  isVerified: boolean;
+  role: string;
+}
+
+export type AuthState = {
+  readonly userProfile: IUserProfile;
+  readonly jwt: string;
+  readonly error: string;
+  readonly message: string;
+  readonly content: string;
+  readonly isAuthenticated: boolean;
+  readonly waiting: boolean;
+};
+
+export const initialState: AuthState = {
   userProfile: null,
   jwt: null,
   error: '',
@@ -29,7 +48,7 @@ const INITIAL_STATE = {
   waiting: false
 };
 
-export default function(state = INITIAL_STATE, action) {
+export const authReducer = (state: AuthState = initialState, action): AuthState => {
   switch (action.type) {
     case LOGIN_SUCCESS:
       return {
@@ -42,20 +61,15 @@ export default function(state = INITIAL_STATE, action) {
         jwt: action.payload.jwt,
         waiting: false
       };
-    case UNAUTH_USER:
-      return { ...state, isAuthenticated: false, jwt: null, userProfile: null };
+
     case NOT_VERIFIED_LOGIN_ERROR:
-      return {
-        ...state,
-        error: action.payload,
-        waiting: false
-      };
     case LOGIN_FAILURE:
       return {
         ...state,
         error: action.payload,
         waiting: false
       };
+
     case CLEAR_FLASH_MESSAGE: {
       return {
         ...state,
@@ -65,33 +79,34 @@ export default function(state = INITIAL_STATE, action) {
         waiting: false
       };
     }
+    case SYNC_TABLE_REQUEST:
+    case LOGIN_REQUEST:
+    case REGISTER_REQUEST:
     case FORGOT_PASSWORD_REQUEST:
-      return { ...state, waiting: true };
-    case FORGOT_PASSWORD_SUCCESS:
-      return { ...state, message: action.payload, waiting: false };
-    case FORGOT_PASSWORD_FAILURE:
-      return { ...state, error: action.payload, waiting: false };
     case RESET_PASSWORD_REQUEST:
       return { ...state, waiting: true };
+
+    case FORGOT_PASSWORD_SUCCESS:
     case RESET_PASSWORD_SUCCESS:
-      return { ...state, message: action.payload, waiting: false };
-    case RESET_PASSWORD_FAILURE:
-      return { ...state, error: action.payload, waiting: false };
     case REGISTER_SUCCESS:
       return { ...state, message: action.payload, waiting: false };
+
+    case FORGOT_PASSWORD_FAILURE:
+    case RESET_PASSWORD_FAILURE:
     case REGISTER_FAILURE:
       return { ...state, error: action.payload, waiting: false };
+
     case SYNC_TABLE_SUCCESS:
     case SYNC_TABLE_FAILURE:
       return {
         ...state,
         waiting: false
       };
-    case SYNC_TABLE_REQUEST:
-    case LOGIN_REQUEST:
-    case REGISTER_REQUEST:
-      return { ...state, waiting: true };
+
+    case UNAUTH_USER:
+      return initialState;
+
     default:
       return state;
   }
-}
+};
